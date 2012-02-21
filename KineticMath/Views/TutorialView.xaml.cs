@@ -11,17 +11,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KineticMath.Messaging;
 
 namespace KineticMath.Views
 {
     /// <summary>
-    /// Interaction logic for SplashScreen.xaml
+    /// Interaction logic for TutorialScreen.xaml
     /// </summary>
-    public partial class SplashScreen : BaseView
+    public partial class TutorialView : BaseView
     {
-        public SplashScreen()
+        public TutorialView()
         {
             InitializeComponent();
+        }
+
+        private void BaseView_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.SendMessage(new ChangeViewMessage(typeof(MainView)));
         }
     }
 }

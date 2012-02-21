@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace KineticMath.Views
 {
     /// <summary>
-    /// Interaction logic for TutorialScreen.xaml
+    /// Interaction logic for MainScreen.xaml
     /// </summary>
-    public partial class TutorialScreen : BaseView
+    public partial class MainView : BaseView, IView
     {
-        public TutorialScreen()
+        public MainView()
         {
             InitializeComponent();
         }

@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 
 using KineticMath.Views;
 using KineticMath.Kinect;
+using KineticMath.Messaging;
 
 namespace KineticMath
 {
@@ -23,6 +24,8 @@ namespace KineticMath
     public partial class MainWindow : Window
     {
         private SharedViewData sharedViewData;
+        private IView currentView;
+        private Dictionary<String, IView> viewCollection;
 
         public MainWindow()
         {
@@ -41,8 +44,49 @@ namespace KineticMath
                 uxNoKinectDetected.Visibility = System.Windows.Visibility.Visible;
             }
 
-            // Set up skeleton and views
+            // Set up skeleton control
             uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
+
+            // Set up views
+            viewCollection = new Dictionary<string, IView>();
+            LoadView(typeof(SplashView));
+        }
+
+        private void LoadView(Type viewType)
+        {
+            if (!viewCollection.ContainsKey(viewType.FullName))
+            {
+                IView newView = Activator.CreateInstance(viewType) as IView;
+                UserControl newViewControl = newView as UserControl;
+                if (newView == null || newViewControl == null) throw new InvalidOperationException("Invalid view type - does not inherit from UserControl and extend IView");
+
+                newView.MessageReceived += new EventHandler<MessageReceivedEventArgs>(newView_MessageReceived);
+                newView.ConfigureView(sharedViewData);
+                uxMainCanvas.Children.Add(newViewControl);
+                viewCollection[viewType.FullName] = newView;
+            }
+            if (currentView != null)
+            {
+                ((UserControl)currentView).Visibility = System.Windows.Visibility.Collapsed;
+                currentView.DeactivateView();
+            }
+            IView view = viewCollection[viewType.FullName];
+            view.ActivateView();
+            ((UserControl)view).Visibility = System.Windows.Visibility.Visible;
+            currentView = view;
+        }
+
+        void newView_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            // Handle messages from views
+            if (e.Message is ChangeViewMessage)
+            {
+                LoadView(((ChangeViewMessage)e.Message).TargetView);
+            }
+            else
+            {
+                // Dunno - go figure...
+            }
         }
     }
 }

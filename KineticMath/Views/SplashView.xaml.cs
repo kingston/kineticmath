@@ -12,16 +12,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using KineticMath.Messaging;
+
 namespace KineticMath.Views
 {
     /// <summary>
-    /// Interaction logic for MainScreen.xaml
+    /// Interaction logic for SplashScreen.xaml
     /// </summary>
-    public partial class MainScreen : BaseView, IView
+    public partial class SplashView : BaseView
     {
-        public MainScreen()
+        public SplashView()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
         }
     }
 }
