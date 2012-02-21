@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using KineticMath.Views;
+using KineticMath.Kinect;
+
 namespace KineticMath
 {
     /// <summary>
@@ -19,9 +22,27 @@ namespace KineticMath
     /// </summary>
     public partial class MainWindow : Window
     {
+        private SharedViewData sharedViewData;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            sharedViewData = new SharedViewData();
+            // Initialize Kinect service
+            sharedViewData.KinectService = new ConcreteKinectService();
+            if (!sharedViewData.KinectService.Initialize())
+            {
+                // Fallback to dummy kinect service
+                sharedViewData.KinectService = new DummyKinectService();
+                uxNoKinectDetected.Visibility = System.Windows.Visibility.Visible;
+            }
+
+            // Set up skeleton and views
+            uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
         }
     }
 }
