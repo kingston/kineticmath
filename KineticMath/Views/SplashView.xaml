@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:KineticMath.Views"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640" MouseUp="UserControl_MouseUp">
-    <Canvas>
+    <Canvas Loaded="Canvas_Loaded">
         <Label FontSize="30" Content="Kinetic Math" Canvas.Top="200" Canvas.Left="200"/>
         <Label FontSize="20" Content="Click to continue..." Canvas.Top="300" Canvas.Left="210"/>
     </Canvas>

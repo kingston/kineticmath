@@ -43,6 +43,7 @@ namespace KineticMath
                 sharedViewData.KinectService = new DummyKinectService();
                 uxNoKinectDetected.Visibility = System.Windows.Visibility.Visible;
             }
+            sharedViewData.GestureController = new GestureController(sharedViewData.KinectService);
 
             // Set up skeleton control
             uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);

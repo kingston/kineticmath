@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using KineticMath.Messaging;
+using KineticMath.Kinect.Gestures;
 
 namespace KineticMath.Views
 {
@@ -27,6 +28,19 @@ namespace KineticMath.Views
         }
 
         private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
+        }
+
+        private void Canvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Load Kinect events
+            JumpGesture jumper = new JumpGesture();
+            jumper.UserJumped += new EventHandler(jumper_UserJumped);
+            _sharedData.GestureController.AddGesture(jumper);
+        }
+
+        void jumper_UserJumped(object sender, EventArgs e)
         {
             this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
         }

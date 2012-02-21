@@ -68,6 +68,9 @@
     </ApplicationDefinition>
     <Compile Include="Kinect\ConcreteKinectService.cs" />
     <Compile Include="Kinect\DummyKinectService.cs" />
+    <Compile Include="Kinect\GestureController.cs" />
+    <Compile Include="Kinect\Gestures\IGesture.cs" />
+    <Compile Include="Kinect\Gestures\JumpGesture.cs" />
     <Compile Include="Kinect\IKinectService.cs" />
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
@@ -142,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Kinect\Gestures\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
