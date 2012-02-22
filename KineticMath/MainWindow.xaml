@@ -4,7 +4,7 @@
         Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
     <Canvas>
         <Canvas Name="uxMainCanvas" Width="800" Height="600" Canvas.Top="0" Canvas.Left="0">
-            <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5">
+            <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5" Canvas.Top="85">
                 <!--<my:KinectSkeleton.RenderTransform>
                     <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
                 </my:KinectSkeleton.RenderTransform>-->
