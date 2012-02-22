@@ -18,6 +18,7 @@ namespace KineticMath.SubControls
     /// <summary>
     /// Interaction logic for UserControl2.xaml
     /// </summary>
+
     public partial class Ball : UserControl {
 
         public static Color SELECTED_COLOR = Colors.Orange;
@@ -25,6 +26,16 @@ namespace KineticMath.SubControls
 
         private double speed = 5;
         private bool selected;
+        private String text="-";
+        
+        public String Text
+        {
+            get { return text; }
+            set { 
+                text = value;
+                ValueText = text;
+            }
+        }
 
         public double Speed
         {

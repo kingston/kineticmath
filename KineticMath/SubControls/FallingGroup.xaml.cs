@@ -34,11 +34,10 @@ namespace KineticMath.SubControls
             addBall(190, 346);
             addBall(260, 346);
             addBall(330, 346);
-            _timer = new Timer(500);
-            _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
-            _timer.Enabled = true;
-
             ballList[2].SetSelected(true);
+            //_timer = new Timer(500);
+            //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
+            //_timer.Enabled = true;
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -69,10 +68,8 @@ namespace KineticMath.SubControls
                 Ball b = ballList[i];
                 if (b.IsSelected())
                 {
-                    int previousIndex = i - 1;
-                    if (previousIndex < 0) previousIndex = ballList.Count;
                     b.SetSelected(false);
-                    ballList[previousIndex].SetSelected(true);
+                    ballList[(i - 1) % ballList.Count].SetSelected(true);
                 }
             }
         }
@@ -81,6 +78,7 @@ namespace KineticMath.SubControls
         private void addBall(double x,double y)
         {
             Ball b = new Ball();
+            b.Text = "5";
             ballList.Add(b);
             Canvas.Children.Add(b);
             Canvas.SetTop(b, y);

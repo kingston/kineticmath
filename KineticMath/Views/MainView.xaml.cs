@@ -22,6 +22,15 @@ namespace KineticMath.Views
         public MainView()
         {
             InitializeComponent();
+            Loaded += new RoutedEventHandler(MainView_Loaded);
+
+          
         }
+
+        void MainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.Out.WriteLine("MainView loaded");
+        }
+         
     }
 }
