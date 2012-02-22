@@ -22,12 +22,17 @@ namespace KineticMath.Kinect
 
         void kinect_SkeletonUpdated(object sender, SkeletonEventArgs e)
         {
+           
             Skeleton skel = (from s in e.Skeletons
                                      where s.TrackingState == SkeletonTrackingState.Tracked
                                      select s).FirstOrDefault();
-            foreach (var gesture in gestures)
+
+            if (skel != null)
             {
-                gesture.ProcessSkeleton(skel);
+                foreach (var gesture in gestures)
+                {
+                    gesture.ProcessSkeleton(skel);
+                }
             }
         }
 

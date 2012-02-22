@@ -22,6 +22,8 @@ namespace KineticMath.Views
     /// </summary>
     public partial class SplashView : BaseView
     {
+        
+
         public SplashView()
         {
             InitializeComponent();
@@ -35,14 +37,39 @@ namespace KineticMath.Views
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
         {
             // Load Kinect events
-            JumpGesture jumper = new JumpGesture();
-            jumper.UserJumped += new EventHandler(jumper_UserJumped);
-            _sharedData.GestureController.AddGesture(jumper);
+            //JumpGesture jumper = new JumpGesture();
+            //jumper.UserJumped += new EventHandler(jumper_UserJumped);
+            //_sharedData.GestureController.AddGesture(jumper);
+            HoldGesture holder = new HoldGesture();
+            holder.UserHolded += new EventHandler(Holder_hold);
+            _sharedData.GestureController.AddGesture(holder);
+
+            EnergizeGesture energizer = new EnergizeGesture();
+            energizer.UserEnergized += Energizer_energize;
+            _sharedData.GestureController.AddGesture(energizer);
+
+            MoveGesture mover = new MoveGesture();
+            mover.UserMoved += Mover_move;
+            _sharedData.GestureController.AddGesture(mover);
         }
 
-        void jumper_UserJumped(object sender, EventArgs e)
+        void Holder_hold(object sender, EventArgs e)
         {
             this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
+        }
+
+        void Energizer_energize(object sender, EnergyEventArgs e)
+        {
+            System.Console.WriteLine("Scale = " + e.GetEnergy());
+            this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
+        }
+
+        void Mover_move(object sender, MoveEventArgs m)
+        {
+            if(m.GetDirection() == 1)
+                System.Console.WriteLine("Move Right");
+            else
+                System.Console.WriteLine("Move Left");
         }
     }
 }
