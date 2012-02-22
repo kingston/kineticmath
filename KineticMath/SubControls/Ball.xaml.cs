@@ -65,6 +65,7 @@ namespace KineticMath.SubControls
         private void init(String text, double weight)
         {
             selected = false;
+            BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
         }
 
 

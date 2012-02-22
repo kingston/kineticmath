@@ -48,12 +48,13 @@ namespace KineticMath.Views
         void Holder_hold(object sender, EventArgs e)
         {
             System.Console.WriteLine("Holder_hold");
+
             selectItem();
         }
 
         void selectItem()
         {
-            Ball b = fallingGroup.removeSelected();
+            Ball b = fallingGroup.RemoveSelected();
             seesaw1.AddBall(b);
         }
 
@@ -62,12 +63,12 @@ namespace KineticMath.Views
             if (m.GetDirection() == 1)
             {
                 System.Console.WriteLine("Move Right");
-                fallingGroup.chooseNext();
+                fallingGroup.ChooseNext();
             }
             else
             {
                 System.Console.WriteLine("Move Left");
-                fallingGroup.choosePrevious();
+                fallingGroup.ChoosePrevious();
             }
 
         }
@@ -98,11 +99,11 @@ namespace KineticMath.Views
                     selectItem();
                     break;
                 case Key.Left:
-                    fallingGroup.choosePrevious();
+                    fallingGroup.ChoosePrevious();
                     break;
                 case Key.Right:
 
-                    fallingGroup.chooseNext();
+                    fallingGroup.ChooseNext();
                     break;
             }
         }
