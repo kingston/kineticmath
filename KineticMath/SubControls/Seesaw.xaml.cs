@@ -29,6 +29,7 @@ namespace KineticMath.SubControls
         public Seesaw()
         {
             InitializeComponent();
+            rightBallPanel.LastChildFill = false;
         }
 
 
@@ -43,6 +44,7 @@ namespace KineticMath.SubControls
             }
             else
             {
+                DockPanel.SetDock(b, Dock.Right);
                 _rightBalls.Add(b);
                 rightBallPanel.Children.Add(b);
 

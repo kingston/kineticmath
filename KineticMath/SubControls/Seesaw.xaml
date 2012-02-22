@@ -18,7 +18,7 @@
                     <ScaleTransform ScaleY="-1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
-            <StackPanel Canvas.Left="165" Canvas.Top="200" Height="50" Name="rightBallPanel" Width="150" VerticalAlignment="Bottom" Orientation="Horizontal" />
+            <DockPanel Canvas.Left="165" Canvas.Top="200" Height="50" Name="rightBallPanel" Width="150" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
         </Canvas>
         <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
         
