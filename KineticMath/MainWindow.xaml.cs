@@ -51,6 +51,25 @@ namespace KineticMath
             // Set up views
             viewCollection = new Dictionary<string, IView>();
             LoadView(typeof(MainView));
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
+        }
+
+        
+        private void HandleKeyDownEvent(object sender, KeyEventArgs e)
+        {
+            //Console.Out.WriteLine("Keydown");
+            switch (e.Key)
+            {
+                case Key.T:
+                    if (currentView is MainView)
+                    {
+                        MainView mv = (MainView)currentView;
+                        mv.seesaw1.AddBall(new SubControls.Ball());
+                        //Console.Out.WriteLine("ball add");
+                    }
+                    break;
+            }
+
         }
 
         private void LoadView(Type viewType)

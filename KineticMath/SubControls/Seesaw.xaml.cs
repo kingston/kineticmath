@@ -15,16 +15,26 @@ using System.Windows.Shapes;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 
-namespace KineticMath.Views
+
+namespace KineticMath.SubControls
 {
     /// <summary>
     /// Interaction logic for SplashScreen.xaml
     /// </summary>
-    public partial class Seesaw : BaseView
+    public partial class Seesaw : UserControl
     {
+        HashSet<Ball> _leftBalls = new HashSet<Ball>();
+
         public Seesaw()
         {
             InitializeComponent();
+        }
+
+
+        public void AddBall(Ball b)
+        {
+            _leftBalls.Add(b);
+            ballStackPanel.Children.Add(b);
         }
     }
 }

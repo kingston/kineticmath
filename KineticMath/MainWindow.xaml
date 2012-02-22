@@ -3,7 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded">
     <Canvas Name="uxMainCanvas">
-        <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5" />
+        <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5">
+            <!--<my:KinectSkeleton.RenderTransform>
+                <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+            </my:KinectSkeleton.RenderTransform>-->
+        </my:KinectSkeleton>
         <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
     </Canvas>
 </Window>

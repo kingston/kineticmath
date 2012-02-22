@@ -20,6 +20,17 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class Ball : UserControl{
         private double speed=5;
+        private String text="-";
+
+        
+        public String Text
+        {
+            get { return text; }
+            set { 
+                text = value;
+                ValueText = text;
+            }
+        }
 
         public double Speed
         {

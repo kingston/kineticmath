@@ -35,12 +35,11 @@ namespace KineticMath.SubControls
             addBall(190, 346);
             addBall(260, 346);
             addBall(330, 346);
-            _timer = new Timer(500);
-            _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
-            _timer.Enabled = true;
-
+            //_timer = new Timer(500);
+            //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
+            //_timer.Enabled = true;
+          
         }
-
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             foreach (Ball b in ballSet)
@@ -53,6 +52,7 @@ namespace KineticMath.SubControls
         private void addBall(double x,double y)
         {
             Ball b = new Ball();
+            b.Text = "5";
             ballSet.Add(b);
             Canvas.Children.Add(b);
             Canvas.SetTop(b, y);
