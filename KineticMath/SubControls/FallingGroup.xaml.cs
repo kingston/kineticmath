@@ -20,8 +20,10 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class FallingGroup : UserControl
     {
-        private List<Ball> ballList = new List<Ball>();
-        private Ball selected;
+        private static int NUM_BALLS = 5;
+
+        private Ball[] ballArray = new Ball[NUM_BALLS];
+        private int selectedIndex;
         //private Timer _timer;
         public FallingGroup()
         {
@@ -30,57 +32,58 @@ namespace KineticMath.SubControls
 
         private void FallingCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            addBall(50, 346);
-            addBall(120, 346);
-            addBall(190, 346);
-            addBall(260, 346);
-            addBall(330, 346);
-            ballList[2].SetSelected(true);
-            selected = ballList[2];
+            addBall();
+            ballArray[2].SetSelected(true);
+            selectedIndex = 2;
             //_timer = new Timer(500);
             //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
             //_timer.Enabled = true;
         }
 
-        void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        public void ChoosePrevious()
         {
-            foreach (Ball b in ballList)
+            if (ballArray[selectedIndex] != null)
+                ballArray[selectedIndex].SetSelected(false);
+            selectedIndex = (selectedIndex - 1) % NUM_BALLS;
+            if (ballArray[selectedIndex] != null)
+                ballArray[selectedIndex].SetSelected(false);
+        }
+
+        public void ChooseNext()
+        {
+            if (ballArray[selectedIndex] != null)
+                ballArray[selectedIndex].SetSelected(false);
+            selectedIndex = (selectedIndex + 1) % NUM_BALLS;
+            if (ballArray[selectedIndex] != null)
+                ballArray[selectedIndex].SetSelected(false);
+        }
+
+        public Ball RemoveSelected()
+        {
+            if (ballArray[selectedIndex] != null)
             {
-                
+                Ball b = ballArray[selectedIndex];
+                Canvas.Children.Remove(b);
+                ChooseNext();
+                return b;
             }
+            return null;
         }
 
-        public void choosePrevious()
+        private void addBall()
         {
-            selected.SetSelected(false);
-            int targetIndex = (ballList.IndexOf(selected) - 1) % ballList.Count;
-            ballList[targetIndex].SetSelected(true);
-            selected = ballList[targetIndex];
-        }
-
-        public void chooseNext()
-        {
-            selected.SetSelected(false);
-            int targetIndex = (ballList.IndexOf(selected) + 1) % ballList.Count;
-            ballList[targetIndex].SetSelected(true);
-            selected = ballList[targetIndex];
-        }
-
-        public Ball removeSelected()
-        {
-            Ball temp = selected;
-            chooseNext();
-            return temp;
-        }
-
-        private void addBall(double x,double y)
-        {
-            Ball b = new Ball();
-            b.Text = "5";
-            ballList.Add(b);
-            Canvas.Children.Add(b);
-            Canvas.SetTop(b, y);
-            Canvas.SetLeft(b,x);
+            int startingX = 50;
+            int startingY = 346;
+            int gapX = 70;
+            for (int i = 0; i < NUM_BALLS; i++)
+            {
+                Ball b = new Ball();
+                b.Text = "5";
+                ballArray[i] = b;
+                Canvas.Children.Add(b);
+                Canvas.SetTop(b, startingY);
+                Canvas.SetLeft(b, startingX + i * gapX);
+            }
         }
     }
 }

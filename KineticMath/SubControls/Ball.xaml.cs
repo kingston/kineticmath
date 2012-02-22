@@ -47,6 +47,7 @@ namespace KineticMath.SubControls
         {
             InitializeComponent();
             selected = false;
+            BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
         }
 
         public bool IsSelected() {
