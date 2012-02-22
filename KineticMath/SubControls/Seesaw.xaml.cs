@@ -87,7 +87,10 @@ namespace KineticMath.SubControls
             // Work out rotation
             double leftSideWeight = _leftBalls.Select(x => x.Weight).Sum();
             double rightSideWeight = _rightBalls.Select(x => x.Weight).Sum();
-            double angle = (rightSideWeight - leftSideWeight);
+            double ratio = 0.25;
+            double max = Math.Max(leftSideWeight, rightSideWeight);
+            if (25 / max < 0.25) ratio = 25 / max;
+            double angle = (rightSideWeight - leftSideWeight)*0.25;
             Console.Out.WriteLine("angle:"+angle);
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
         }
