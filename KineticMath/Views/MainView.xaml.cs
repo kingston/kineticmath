@@ -28,6 +28,8 @@ namespace KineticMath.Views
         private static int NUM_WEIGHTS = 5;
         public static Color SELECTED_COLOR = Colors.Orange;
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
+
+        private int difficulty = 1;
        
         public MainView()
         {
@@ -107,6 +109,8 @@ namespace KineticMath.Views
                     Setup();
                     uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
                     uxWinLabel.Opacity = 1;
+
+                    difficulty += 1;
 
                     // Hide it when we're done
                     DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
@@ -196,7 +200,7 @@ namespace KineticMath.Views
             Random random = new Random();
             int[] tmp  = new int[NUM_WEIGHTS];
             for (int i = 0; i < NUM_WEIGHTS; i++)
-                tmp[i] = weightsArray[i] = random.Next(1, 8);
+                tmp[i] = weightsArray[i] = random.Next(1, difficulty * 5 + 7);
 
             int numOfDiscards = random.Next(1, 4);
 

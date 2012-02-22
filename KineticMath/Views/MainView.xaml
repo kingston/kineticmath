@@ -15,8 +15,8 @@
         <Rectangle AllowDrop="True" Canvas.Left="90" Canvas.Top="396" Fill="#FF964A27" Height="18" Name="rectangle3" Stroke="{x:Null}" Width="352" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxWinLabel" />
 
-        <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" Name="uxResetRectangle" Canvas.Top="345" Canvas.Left="455" Width="150" Height="50" Background="#FFFFCC99">
-            <Label FontSize="30" Content="Start Over" Canvas.Left="460" Canvas.Top="338"></Label>
+        <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" Name="uxResetRectangle" Canvas.Top="300" Canvas.Left="455" Width="90" Height="50" Background="#FFFFCC99">
+            <Label FontSize="30" Content="Reset" Canvas.Left="460" Canvas.Top="338"></Label>
         </Border>
         <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
             <TextBlock.RenderTransform>
