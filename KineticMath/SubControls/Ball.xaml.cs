@@ -38,7 +38,7 @@ namespace KineticMath.SubControls
             }
         }
 
-        public double weight { get; set; }
+        public double Weight { get; set; }
 
         public double Speed
         {
@@ -66,6 +66,8 @@ namespace KineticMath.SubControls
         {
             selected = false;
             BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
+            this.text = text;
+            this.Weight = weight;
         }
 
 
