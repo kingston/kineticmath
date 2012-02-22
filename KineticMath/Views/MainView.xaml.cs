@@ -47,7 +47,7 @@ namespace KineticMath.Views
         void Holder_hold(object sender, EventArgs e)
         {
             System.Console.WriteLine("Holder_hold");
-            fallingGroup.removeSelected();
+            fallingGroup.RemoveSelected();
         }
 
 
@@ -56,12 +56,12 @@ namespace KineticMath.Views
             if (m.GetDirection() == 1)
             {
                 System.Console.WriteLine("Move Right");
-                fallingGroup.chooseNext();
+                fallingGroup.ChooseNext();
             }
             else
             {
                 System.Console.WriteLine("Move Left");
-                fallingGroup.choosePrevious();
+                fallingGroup.ChoosePrevious();
             }
 
         }
