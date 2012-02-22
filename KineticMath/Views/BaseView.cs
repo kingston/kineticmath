@@ -4,11 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using KineticMath.Messaging;
+using System.Windows;
 
 namespace KineticMath.Views
 {
-    public class BaseView : UserControl, IView
+    abstract public class BaseView : UserControl, IView
     {
+        protected Window _parentWindow;
+
+        public Window ParentWindow
+        {
+            get { return _parentWindow; }
+            set { _parentWindow = value; }
+        }
+
         protected SharedViewData _sharedData;
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 

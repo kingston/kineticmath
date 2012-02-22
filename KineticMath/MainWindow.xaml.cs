@@ -51,25 +51,6 @@ namespace KineticMath
             // Set up views
             viewCollection = new Dictionary<string, IView>();
             LoadView(typeof(MainView));
-            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
-        }
-
-        
-        private void HandleKeyDownEvent(object sender, KeyEventArgs e)
-        {
-            //Console.Out.WriteLine("Keydown");
-            switch (e.Key)
-            {
-                case Key.T:
-                    if (currentView is MainView)
-                    {
-                        MainView mv = (MainView)currentView;
-                        mv.seesaw1.AddBall(new SubControls.Ball());
-                        //Console.Out.WriteLine("ball add");
-                    }
-                    break;
-            }
-
         }
 
         private void LoadView(Type viewType)
@@ -77,7 +58,8 @@ namespace KineticMath
             if (!viewCollection.ContainsKey(viewType.FullName))
             {
                 IView newView = Activator.CreateInstance(viewType) as IView;
-                UserControl newViewControl = newView as UserControl;
+                BaseView newViewControl = newView as BaseView;
+                newViewControl.ParentWindow = this;
                 if (newView == null || newViewControl == null) throw new InvalidOperationException("Invalid view type - does not inherit from UserControl and extend IView");
 
                 newView.MessageReceived += new EventHandler<MessageReceivedEventArgs>(newView_MessageReceived);

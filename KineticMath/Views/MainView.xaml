@@ -9,7 +9,7 @@
              d:DesignHeight="600" d:DesignWidth="800" xmlns:my="clr-namespace:KineticMath.SubControls">
     <Canvas>
         <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="349" x:Name="seesaw1" />
-        <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup1" Width="702" Height="600"/>
+        <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup" Width="702" Height="600"/>
         <Rectangle Canvas.Left="63" Canvas.Top="411" Height="141" Name="rectangle1" Stroke="{x:Null}" Width="15" Fill="#FF964A27" AllowDrop="True" />
         <Rectangle AllowDrop="True" Canvas.Left="354" Canvas.Top="411" Fill="#FF964A27" Height="141" Name="rectangle2" Stroke="{x:Null}" Width="15" />
         <Rectangle AllowDrop="True" Canvas.Left="40" Canvas.Top="396" Fill="#FF964A27" Height="18" Name="rectangle3" Stroke="{x:Null}" Width="352" />
