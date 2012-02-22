@@ -34,16 +34,33 @@ namespace KineticMath.SubControls
 
         public void AddBall(Ball b,bool isLeft=true)
         {
-            _leftBalls.Add(b);
-            leftBallPanel.Children.Add(b);
+            if (isLeft)
+            {
+                _leftBalls.Add(b);
+                leftBallPanel.Children.Add(b);
+            }
+            else
+            {
+                _rightBalls.Add(b);
+                rightBallPanel.Children.Add(b);
+
+            }
             RenderWeights();
         }
 
 
         public void RemoveBall(Ball b, bool isLeft = true)
         {
-            _leftBalls.Remove(b);
-            leftBallPanel.Children.Remove(b);
+            if (isLeft)
+            {
+                _leftBalls.Remove(b);
+                leftBallPanel.Children.Remove(b);
+            }
+            else
+            {
+                _rightBalls.Remove(b);
+                rightBallPanel.Children.Remove(b);
+            }
             RenderWeights();
         }
 
