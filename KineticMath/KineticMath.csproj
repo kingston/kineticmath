@@ -83,6 +83,9 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Seesaw.xaml.cs">
+      <DependentUpon>Seesaw.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SharedViewData.cs" />
     <Compile Include="Views\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
@@ -107,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Seesaw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
