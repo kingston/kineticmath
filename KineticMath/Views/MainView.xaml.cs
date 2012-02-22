@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
+using KineticMath.SubControls;
 
 namespace KineticMath.Views
 {
@@ -47,9 +48,14 @@ namespace KineticMath.Views
         void Holder_hold(object sender, EventArgs e)
         {
             System.Console.WriteLine("Holder_hold");
-            fallingGroup.removeSelected();
+            selectItem();
         }
 
+        void selectItem()
+        {
+            Ball b = fallingGroup.removeSelected();
+            seesaw1.AddBall(b);
+        }
 
         void Mover_move(object sender, MoveEventArgs m)
         {
@@ -87,6 +93,16 @@ namespace KineticMath.Views
                     seesaw1.AddBall(new SubControls.Ball());
                         //Console.Out.WriteLine("ball add");
                     
+                    break;
+                case Key.S:
+                    selectItem();
+                    break;
+                case Key.Left:
+                    fallingGroup.choosePrevious();
+                    break;
+                case Key.Right:
+
+                    fallingGroup.chooseNext();
                     break;
             }
         }

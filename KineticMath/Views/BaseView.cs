@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace KineticMath.Views
 {
-    abstract public class BaseView : UserControl, IView
+     public class BaseView : UserControl, IView
     {
         protected Window _parentWindow;
 

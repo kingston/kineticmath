@@ -22,11 +22,12 @@ namespace KineticMath.SubControls
     public partial class Ball : UserControl {
 
         public static Color SELECTED_COLOR = Colors.Orange;
-        public static Color DESELECTED_COLOR = Colors.Red;
+        public static Color DESELECTED_COLOR = Color.FromRgb(0xE2, 0x51, 0x51);
 
         private double speed = 5;
         private bool selected;
         private String text="-";
+
         
         public String Text
         {
@@ -37,6 +38,8 @@ namespace KineticMath.SubControls
             }
         }
 
+        public double weight { get; set; }
+
         public double Speed
         {
           get { return speed; }
@@ -46,8 +49,24 @@ namespace KineticMath.SubControls
         public Ball()
         {
             InitializeComponent();
+            init("-",1);
+            
+        }
+
+        
+
+        public Ball(String text,double weight)
+        {
+            InitializeComponent();
+            init(text, weight);
+            
+        }
+
+        private void init(String text, double weight)
+        {
             selected = false;
         }
+
 
         public bool IsSelected() {
             return selected;

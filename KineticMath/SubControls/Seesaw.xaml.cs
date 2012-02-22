@@ -24,6 +24,7 @@ namespace KineticMath.SubControls
     public partial class Seesaw : UserControl
     {
         HashSet<Ball> _leftBalls = new HashSet<Ball>();
+        HashSet<Ball> _rightBalls = new HashSet<Ball>();
 
         public Seesaw()
         {
@@ -31,10 +32,17 @@ namespace KineticMath.SubControls
         }
 
 
-        public void AddBall(Ball b)
+        public void AddBall(Ball b,bool isLeft=true)
         {
             _leftBalls.Add(b);
-            ballStackPanel.Children.Add(b);
+            leftBallPanel.Children.Add(b);
+        }
+
+        public void RemoveBall(Ball b, bool isLeft = true)
+        {
+            _leftBalls.Remove(b);
+            leftBallPanel.Children.Remove(b);
+
         }
     }
 }

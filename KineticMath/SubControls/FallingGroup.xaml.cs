@@ -54,6 +54,7 @@ namespace KineticMath.SubControls
         {
             selected.SetSelected(false);
             int targetIndex = (ballList.IndexOf(selected) - 1) % ballList.Count;
+            if (targetIndex < 0) targetIndex += ballList.Count;
             ballList[targetIndex].SetSelected(true);
             selected = ballList[targetIndex];
         }
