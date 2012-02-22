@@ -13,7 +13,7 @@
                 <RotateTransform Angle="0" />
             </Canvas.RenderTransform>
             <Rectangle Width="320" Height="20" Fill="Orange" Canvas.Left="0" Name="uxBalanceRectangle" Canvas.Top="250" />
-            <WrapPanel Canvas.Left="5" Canvas.Top="98" Height="152" Name="leftBallPanel" Width="150" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5">
+            <WrapPanel Canvas.Left="5" Canvas.Top="98" Height="152" Name="leftBallPanel" Width="150" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
                 <WrapPanel.RenderTransform>
                     <ScaleTransform ScaleY="-1"/>
                 </WrapPanel.RenderTransform>
