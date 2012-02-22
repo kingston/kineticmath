@@ -19,6 +19,7 @@ namespace KineticMath.Views
     /// </summary>
     public partial class MainView : BaseView, IView
     {
+       
         public MainView()
         {
             InitializeComponent();
@@ -30,6 +31,33 @@ namespace KineticMath.Views
         void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             Console.Out.WriteLine("MainView loaded");
+            Console.Out.WriteLine(this.VisualParent.ToString());
+            //
+        }
+
+        public override void OnViewActivated()
+        {
+             base.OnViewActivated();
+             ParentWindow.AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
+        }
+
+        public override void  OnViewDeactivated()
+        {
+ 	         base.OnViewDeactivated();
+             ParentWindow.RemoveHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
+        }
+
+        private void HandleKeyDownEvent(object sender, KeyEventArgs e)
+        {
+            //Console.Out.WriteLine("Keydown");
+            switch (e.Key)
+            {
+                case Key.T:
+                    seesaw1.AddBall(new SubControls.Ball());
+                        //Console.Out.WriteLine("ball add");
+                    
+                    break;
+            }
         }
          
     }
