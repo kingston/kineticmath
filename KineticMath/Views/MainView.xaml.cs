@@ -58,6 +58,7 @@ namespace KineticMath.Views
             Ball b = fallingGroup.RemoveSelected();
             if (b != null)
                 seesaw1.AddBall(b);
+
         }
 
         void Mover_move(object sender, MoveEventArgs m)

@@ -7,6 +7,10 @@
              d:DesignHeight="50" d:DesignWidth="50">
     <Canvas Name="canvas" Width="50" Height="50">
         <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="50" Height="50"/>
-        <TextBlock Canvas.Left="0" Canvas.Top="17" Height="23" Name="ValueText" Text="1" TextAlignment="Center" Width="50" />
+        <TextBlock Canvas.Left="0" Canvas.Top="16" Height="18" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
+            <TextBlock.RenderTransform>
+                <ScaleTransform ScaleY="1"/>
+            </TextBlock.RenderTransform>
+        </TextBlock>
     </Canvas>
 </UserControl>

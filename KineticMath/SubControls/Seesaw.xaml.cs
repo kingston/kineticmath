@@ -34,8 +34,10 @@ namespace KineticMath.SubControls
 
         public void AddBall(Ball b,bool isLeft=true)
         {
+            
             if (isLeft)
             {
+                b.OnLeftSeeSaw = true;
                 _leftBalls.Add(b);
                 leftBallPanel.Children.Add(b);
             }
@@ -53,6 +55,7 @@ namespace KineticMath.SubControls
         {
             if (isLeft)
             {
+                b.OnLeftSeeSaw = false;
                 _leftBalls.Remove(b);
                 leftBallPanel.Children.Remove(b);
             }

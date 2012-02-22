@@ -28,6 +28,16 @@ namespace KineticMath.SubControls
         private bool selected;
         private String text;
 
+        private bool _onLeftSeeSaw;
+        public bool OnLeftSeeSaw
+        {
+            get { return _onLeftSeeSaw; }
+            set { 
+                _onLeftSeeSaw = value;
+                if (value)
+                    ValueText.RenderTransform = new ScaleTransform(1, -1);
+            }
+        }
         
         public String Text
         {
