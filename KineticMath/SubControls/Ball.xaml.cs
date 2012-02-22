@@ -60,5 +60,12 @@ namespace KineticMath.SubControls
             else
                 BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
         }
+
+        public void SetSize(int width, int height) {
+            BallEllipse.Width = width;
+            BallEllipse.Height = height;
+            canvas.Width = width;
+            canvas.Height = height;
+        }
     }
 }
