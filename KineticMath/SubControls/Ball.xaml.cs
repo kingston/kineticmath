@@ -28,7 +28,7 @@ namespace KineticMath.SubControls
             get { return text; }
             set { 
                 text = value;
-                ValueText = text;
+                ValueText.Text = text;
             }
         }
 
