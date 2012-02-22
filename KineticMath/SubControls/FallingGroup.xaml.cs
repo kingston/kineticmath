@@ -68,9 +68,11 @@ namespace KineticMath.SubControls
         {
             if (ballArray[selectedIndex] != null)
             {
-                Canvas.Children.Remove(ballArray[selectedIndex]);
-                // to be edited
-                return new Ball();
+                Ball b = ballArray[selectedIndex];
+                ballArray[selectedIndex] = null;
+                // Remove the ball from the canvas
+                Canvas.Children.Remove(b);
+                return new Ball(b.Text, b.Weight);
             }
             return null;
         }

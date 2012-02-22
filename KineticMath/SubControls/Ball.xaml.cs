@@ -38,7 +38,7 @@ namespace KineticMath.SubControls
             }
         }
 
-        public double weight { get; set; }
+        public double Weight { get; set; }
 
         public double Speed
         {
