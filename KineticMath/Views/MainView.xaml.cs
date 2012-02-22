@@ -48,8 +48,9 @@ namespace KineticMath.Views
         void Holder_hold(object sender, EventArgs e)
         {
             System.Console.WriteLine("Holder_hold");
-
             selectItem();
+            if (seesaw1.checkAnswer())
+                this.SendMessage(new ChangeViewMessage(typeof(MainView)));
         }
 
         void selectItem()
@@ -112,7 +113,7 @@ namespace KineticMath.Views
         {
             int[] weightsArray = new int[NUM_WEIGHTS];
             int answer = generateAnswer(weightsArray);
-            seesaw1.placeFirstWeight(answer);
+            seesaw1.AddBall(new Ball(answer.ToString(), answer), false);
             fallingGroup.addBall(weightsArray);
             
         }
@@ -124,7 +125,7 @@ namespace KineticMath.Views
             for (int i = 0; i < NUM_WEIGHTS; i++)
                 tmp[i] = weightsArray[i] = random.Next(1, 8);
 
-            int numOfDiscards = random.Next(1, 3);
+            int numOfDiscards = random.Next(1, 4);
 
             for (int i = 0; i < numOfDiscards; i++)
             {

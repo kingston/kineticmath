@@ -75,10 +75,12 @@ namespace KineticMath.SubControls
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
         }
 
-        public void placeFirstWeight(int weight)
+        public bool checkAnswer()
         {
-            rightBallPanel.Children.Add(new Ball(weight.ToString(), weight));
-            RenderWeights();
+            double leftSideWeight = _leftBalls.Select(x => x.Weight).Sum();
+            double rightSideWeight = _rightBalls.Select(x => x.Weight).Sum();
+            System.Console.WriteLine("leftSideWeight: " + leftSideWeight + " rightSideWeight: " + rightSideWeight);
+            return leftSideWeight == rightSideWeight;
         }
     }
 }

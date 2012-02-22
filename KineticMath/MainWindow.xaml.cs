@@ -55,7 +55,7 @@ namespace KineticMath
 
         private void LoadView(Type viewType)
         {
-            if (!viewCollection.ContainsKey(viewType.FullName))
+            if (!viewCollection.ContainsKey(viewType.FullName) || (currentView == viewCollection[viewType.FullName]))
             {
                 IView newView = Activator.CreateInstance(viewType) as IView;
                 BaseView newViewControl = newView as BaseView;
