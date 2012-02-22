@@ -24,10 +24,12 @@ namespace KineticMath.Views
     /// </summary>
     public partial class MainView : BaseView, IView
     {
+        private static int NUM_WEIGHTS = 5;
        
         public MainView()
         {
             InitializeComponent();
+            Setup();
             Loaded += new RoutedEventHandler(MainView_Loaded);
         }
 
@@ -105,6 +107,36 @@ namespace KineticMath.Views
                     break;
             }
         }
-         
+
+        private void Setup()
+        {
+            int[] weightsArray = new int[NUM_WEIGHTS];
+            int answer = generateAnswer(weightsArray);
+            seesaw1.placeFirstWeight(answer);
+            fallingGroup.addBall(weightsArray);
+            
+        }
+
+        private int generateAnswer(int[] weightsArray)
+        {
+            Random random = new Random();
+            int[] tmp  = new int[NUM_WEIGHTS];
+            for (int i = 0; i < NUM_WEIGHTS; i++)
+                tmp[i] = weightsArray[i] = random.Next(1, 8);
+
+            int numOfDiscards = random.Next(1, 3);
+
+            for (int i = 0; i < numOfDiscards; i++)
+            {
+                int r = random.Next(0, 4);
+                tmp[r] = 0;
+            }
+
+            int sum = 0;
+            for (int i = 0; i < NUM_WEIGHTS; i++)
+                sum += tmp[i];
+
+            return sum;
+        }
     }
 }

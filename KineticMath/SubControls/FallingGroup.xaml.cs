@@ -32,7 +32,6 @@ namespace KineticMath.SubControls
 
         private void FallingCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            addBall();
             ballArray[2].SetSelected(true);
             selectedIndex = 2;
             //_timer = new Timer(500);
@@ -77,20 +76,21 @@ namespace KineticMath.SubControls
             return null;
         }
 
-        private void addBall()
+        public void addBall(int[] weightsArray)
         {
             int startingX = 50;
             int startingY = 346;
             int gapX = 70;
-            for (int i = 0; i < NUM_BALLS; i++)
+           
+            for (int i = 0; i < weightsArray.Count(); i++)
             {
-                Ball b = new Ball();
-                b.Text = "5";
+                Ball b = new Ball(weightsArray[i].ToString(), weightsArray[i]);
                 ballArray[i] = b;
                 Canvas.Children.Add(b);
                 Canvas.SetTop(b, startingY);
                 Canvas.SetLeft(b, startingX + i * gapX);
             }
+
         }
     }
 }

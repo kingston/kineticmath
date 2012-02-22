@@ -57,5 +57,11 @@ namespace KineticMath.SubControls
             Console.Out.WriteLine("angle:"+angle);
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
         }
+
+        public void placeFirstWeight(int weight)
+        {
+            rightBallPanel.Children.Add(new Ball(weight.ToString(), weight));
+            RenderWeights();
+        }
     }
 }
