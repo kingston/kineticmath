@@ -36,13 +36,25 @@ namespace KineticMath.SubControls
         {
             _leftBalls.Add(b);
             leftBallPanel.Children.Add(b);
+            RenderWeights();
         }
 
         public void RemoveBall(Ball b, bool isLeft = true)
         {
             _leftBalls.Remove(b);
             leftBallPanel.Children.Remove(b);
+            RenderWeights();
+        }
 
+        private void RenderWeights()
+        {
+
+            // Work out rotation
+            double leftSideWeight = _leftBalls.Select(x => x.Weight).Sum();
+            double rightSideWeight = _rightBalls.Select(x => x.Weight).Sum();
+            double angle = (rightSideWeight - leftSideWeight)*3;
+            Console.Out.WriteLine("angle:"+angle);
+            uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
         }
     }
 }
