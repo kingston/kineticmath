@@ -89,7 +89,7 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Seesaw.xaml.cs">
+    <Compile Include="SubControls\Seesaw.xaml.cs">
       <DependentUpon>Seesaw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SharedViewData.cs" />
@@ -127,7 +127,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Seesaw.xaml">
+    <Page Include="SubControls\Seesaw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
