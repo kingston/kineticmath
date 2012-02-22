@@ -18,18 +18,36 @@ namespace KineticMath.SubControls
     /// <summary>
     /// Interaction logic for UserControl2.xaml
     /// </summary>
-    public partial class Ball : UserControl{
-        private double speed=5;
+    public partial class Ball : UserControl {
+
+        public static Color SELECTED_COLOR = Colors.Orange;
+        public static Color DESELECTED_COLOR = Colors.Red;
+
+        private double speed = 5;
+        private bool selected;
 
         public double Speed
         {
           get { return speed; }
           set { speed = value; }
         }
+
         public Ball()
         {
             InitializeComponent();
+            selected = false;
         }
 
+        public bool IsSelected() {
+            return selected;
+        }
+
+        public void SetSelected(bool status) {
+            selected = status;
+            if (selected)
+                BallEllipse.Fill = new SolidColorBrush(SELECTED_COLOR);
+            else
+                BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
+        }
     }
 }

@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Canvas Width="50" Height="50">
-        <Ellipse Fill="#FFE25151" Width="50" Height="50"/>
+        <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="50" Height="50"/>
         <TextBlock Canvas.Left="0" Canvas.Top="17" Height="23" Name="ValueText" Text="1" TextAlignment="Center" Width="50" />
     </Canvas>
 </UserControl>

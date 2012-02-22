@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace KineticMath.SubControls
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for FallingGroup.xaml
     /// </summary>
     public partial class FallingGroup : UserControl
     {
-        HashSet<Ball> ballSet = new HashSet<Ball>();
+        List<Ball> ballList = new List<Ball>();
         private Timer _timer;
         public FallingGroup()
         {
@@ -29,7 +29,6 @@ namespace KineticMath.SubControls
 
         private void FallingCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            Console.Out.WriteLine("loaded");
             addBall(50, 346);
             addBall(120, 346);
             addBall(190, 346);
@@ -39,13 +38,42 @@ namespace KineticMath.SubControls
             _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
             _timer.Enabled = true;
 
+            ballList[2].SetSelected(true);
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (Ball b in ballSet)
+            foreach (Ball b in ballList)
             {
                 
+            }
+        }
+
+        private void chooseNext()
+        {
+            for (int i = 0; i < ballList.Count; i++)
+            {
+                Ball b = ballList[i];
+                if (b.IsSelected())
+                {
+                    b.SetSelected(false);
+                    ballList[(i + 1) % ballList.Count].SetSelected(true);
+                }
+            }
+        }
+
+        private void choosePrevious()
+        {
+            for (int i = 0; i < ballList.Count; i++)
+            {
+                Ball b = ballList[i];
+                if (b.IsSelected())
+                {
+                    int previousIndex = i - 1;
+                    if (previousIndex < 0) previousIndex = ballList.Count;
+                    b.SetSelected(false);
+                    ballList[previousIndex].SetSelected(true);
+                }
             }
         }
 
@@ -53,15 +81,10 @@ namespace KineticMath.SubControls
         private void addBall(double x,double y)
         {
             Ball b = new Ball();
-            ballSet.Add(b);
+            ballList.Add(b);
             Canvas.Children.Add(b);
             Canvas.SetTop(b, y);
             Canvas.SetLeft(b,x);
-        }
-
-        private void FallingCanvas_KeyUp(object sender, KeyEventArgs e)
-        {
-
         }
     }
 }
