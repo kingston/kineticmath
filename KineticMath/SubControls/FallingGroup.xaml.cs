@@ -69,6 +69,7 @@ namespace KineticMath.SubControls
         public Ball removeSelected()
         {
             Ball temp = selected;
+            Canvas.Children.Remove(temp);
             chooseNext();
             return temp;
         }
