@@ -24,6 +24,9 @@ namespace KineticMath.SubControls
     public partial class KinectSkeleton : UserControl
     {
         private IKinectService kinectService;
+        //Scaling constants
+        public static float k_xMaxJointScale = 1.5f;
+        public static float k_yMaxJointScale = 1.5f;
 
         public KinectSkeleton()
         {
@@ -34,7 +37,7 @@ namespace KineticMath.SubControls
 
         public void InitializeSkeleton(IKinectService kinectService)
         {
-            kinectService.ImageFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(kinectService_ImageFrameReady);
+            //kinectService.ImageFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(kinectService_ImageFrameReady);
             kinectService.SkeletonUpdated += new EventHandler<SkeletonEventArgs>(kinectService_SkeletonUpdated);
             this.kinectService = kinectService;
         }
@@ -75,9 +78,7 @@ namespace KineticMath.SubControls
             }
         }
 
-        //Scaling constants
-        private float k_xMaxJointScale = 1.5f;
-        private float k_yMaxJointScale = 1.5f;
+       
 
         private void SetEllipsePosition(Ellipse ellipse, Joint joint)
         {

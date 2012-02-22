@@ -13,7 +13,6 @@ namespace KineticMath.Kinect
     public class DummyKinectService : IKinectService
     {
         public event EventHandler<SkeletonEventArgs> SkeletonUpdated = null;
-
         public event EventHandler<ColorImageFrameReadyEventArgs> ImageFrameReady = null;
 
         public bool Initialize()
