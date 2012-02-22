@@ -90,5 +90,15 @@ namespace KineticMath
                 // Dunno - go figure...
             }
         }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var size = e.NewSize;
+            uxMainCanvas.RenderTransform = new ScaleTransform(1, 1);
+            double xScale = (size.Width - 50) / uxMainCanvas.ActualWidth;
+            double yScale = (size.Height - 100) / uxMainCanvas.ActualHeight;
+            double scale = Math.Min(xScale, yScale);
+            uxMainCanvas.RenderTransform = new ScaleTransform(scale, scale);
+        }
     }
 }

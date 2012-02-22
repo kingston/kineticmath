@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\EnergyEventArgs.cs" />
+    <Compile Include="Kinect\Gestures\SwipeGesture.cs" />
     <Compile Include="MoveEventArgs.cs" />
     <Compile Include="Kinect\ConcreteKinectService.cs" />
     <Compile Include="Kinect\DummyKinectService.cs" />

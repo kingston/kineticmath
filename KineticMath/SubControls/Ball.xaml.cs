@@ -22,7 +22,7 @@ namespace KineticMath.SubControls
     public partial class Ball : UserControl {
 
         public static Color SELECTED_COLOR = Colors.Orange;
-        public static Color DESELECTED_COLOR = Color.FromRgb(0xE2, 0x51, 0x51);
+        public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
         private double speed = 5;
         private bool selected;

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Timers;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace KineticMath.SubControls
 {
@@ -32,11 +33,53 @@ namespace KineticMath.SubControls
 
         private void FallingCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            ballArray[2].SetSelected(true);
-            selectedIndex = 2;
-            //_timer = new Timer(500);
-            //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
-            //_timer.Enabled = true;
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                ballArray[2].SetSelected(true);
+                selectedIndex = 2;
+                //_timer = new Timer(500);
+                //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
+                //_timer.Enabled = true;
+            }
+        }
+
+        public void SelectBall(double x)
+        {
+            if (x == -1)
+            {
+                if (ballArray[selectedIndex] != null)
+                    ballArray[selectedIndex].SetSelected(false);
+            }
+            else
+            {
+                if (ballArray[selectedIndex] != null)
+                    ballArray[selectedIndex].SetSelected(false);
+                int gapX = 70;
+                for (int i = ballArray.Length - 1; i >= 0; i--)
+                {
+                    var ball = ballArray[i];
+                    if (ball != null)
+                    {
+                        if (Canvas.GetLeft(ball) < x)
+                        {
+                            selectedIndex = i;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // Estimate
+                        if (i * gapX < x)
+                        {
+                            selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (ballArray[selectedIndex] != null)
+                    ballArray[selectedIndex].SetSelected(true);
+            }
         }
 
         public void ChoosePrevious()
@@ -65,7 +108,7 @@ namespace KineticMath.SubControls
 
         public Ball RemoveSelected()
         {
-            if (ballArray[selectedIndex] != null)
+            if (ballArray[selectedIndex] != null && ballArray[selectedIndex].IsSelected())
             {
                 Ball b = ballArray[selectedIndex];
                 ballArray[selectedIndex] = null;
@@ -78,8 +121,8 @@ namespace KineticMath.SubControls
 
         public void addBall(int[] weightsArray)
         {
-            int startingX = 50;
-            int startingY = 346;
+            int startingX = 0; // 50;
+            int startingY = 0; // 346;
             int gapX = 70;
            
             for (int i = 0; i < weightsArray.Count(); i++)
@@ -91,6 +134,17 @@ namespace KineticMath.SubControls
                 Canvas.SetLeft(b, startingX + i * gapX);
             }
 
+        }
+
+        public void RemoveAllBalls()
+        {
+            for (int i = 0; i < ballArray.Length; i++)
+            {
+                if (ballArray[i] != null)
+                {
+                    Canvas.Children.Remove(ballArray[i]);
+                }
+            }
         }
     }
 }

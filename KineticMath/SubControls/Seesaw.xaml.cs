@@ -67,6 +67,20 @@ namespace KineticMath.SubControls
             RenderWeights();
         }
 
+        public void RemoveAllBalls()
+        {
+            foreach (var ball in _leftBalls)
+            {
+                leftBallPanel.Children.Remove(ball);
+            }
+            foreach (var ball in _rightBalls)
+            {
+                rightBallPanel.Children.Remove(ball);
+            }
+            _leftBalls.Clear();
+            _rightBalls.Clear();
+        }
+
         private void RenderWeights()
         {
 

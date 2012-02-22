@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 using KineticMath.SubControls;
+using System.Windows.Media.Animation;
 
 namespace KineticMath.Views
 {
@@ -25,6 +26,8 @@ namespace KineticMath.Views
     public partial class MainView : BaseView, IView
     {
         private static int NUM_WEIGHTS = 5;
+        public static Color SELECTED_COLOR = Colors.Orange;
+        public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
        
         public MainView()
         {
@@ -38,27 +41,89 @@ namespace KineticMath.Views
             Console.Out.WriteLine("MainView loaded");
             MoveGesture mover = new MoveGesture();
             mover.UserMoved += Mover_move;
+            mover.BodyMoved += new EventHandler<BodyMoveEventArgs>(mover_BodyMoved);
             _sharedData.GestureController.AddGesture(mover);
+
+            //SwipeGesture swipe = new SwipeGesture();
+            //swipe.SwipeGestureMade += new EventHandler(swipe_SwipeGestureMade);
+            //_sharedData.GestureController.AddGesture(swipe);
 
             HoldGesture holder = new HoldGesture();
             holder.UserHolded += new EventHandler(Holder_hold);
             _sharedData.GestureController.AddGesture(holder);
         }
 
+        void swipe_SwipeGestureMade(object sender, EventArgs e)
+        {
+            MessageBox.Show("HI");
+        }
+
+        private bool ResetSelected = false;
+
+        void mover_BodyMoved(object sender, BodyMoveEventArgs e)
+        {
+            float pos = e.ScreenX;
+            // Check where the body is
+            if (Canvas.GetLeft(fallingGroup) < pos && pos < Canvas.GetLeft(fallingGroup) + rectangle3.ActualWidth)
+            {
+                fallingGroup.SelectBall(pos - Canvas.GetLeft(fallingGroup));
+            } else {
+                fallingGroup.SelectBall(-1);
+            }
+            if (Canvas.GetLeft(uxResetRectangle) < pos && pos < Canvas.GetLeft(uxResetRectangle) + uxResetRectangle.ActualWidth)
+            {
+                uxResetRectangle.Background = new SolidColorBrush(SELECTED_COLOR);
+                ResetSelected = true;
+            }
+            else
+            {
+                uxResetRectangle.Background = new SolidColorBrush(DESELECTED_COLOR);
+                ResetSelected = false;
+            }
+        }
+
         void Holder_hold(object sender, EventArgs e)
         {
             System.Console.WriteLine("Holder_hold");
             selectItem();
-            if (seesaw1.checkAnswer())
-                this.SendMessage(new ChangeViewMessage(typeof(MainView)));
         }
 
         void selectItem()
         {
-            Ball b = fallingGroup.RemoveSelected();
-            if (b != null)
-                seesaw1.AddBall(b);
+            if (ResetSelected)
+            {
+                ClearBalls();
+                SetupBalls();
+            }
+            else
+            {
+                Ball b = fallingGroup.RemoveSelected();
+                if (b != null)
+                    seesaw1.AddBall(b);
 
+                if (seesaw1.checkAnswer())
+                {
+                    ClearBalls();
+                    Setup();
+                    uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+                    uxWinLabel.Opacity = 1;
+
+                    // Hide it when we're done
+                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+                    labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+                    Storyboard.SetTarget(labelAnimation, uxWinLabel);
+                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard labelSb = new Storyboard();
+                    labelSb.Children.Add(labelAnimation);
+                    labelSb.Begin();
+                }
+            }
+        }
+
+        void ClearBalls()
+        {
+            fallingGroup.RemoveAllBalls();
+            seesaw1.RemoveAllBalls();
         }
 
         void Mover_move(object sender, MoveEventArgs m)
@@ -110,13 +175,20 @@ namespace KineticMath.Views
             }
         }
 
+        private int[] weightsArray;
+        private int answer;
+
         private void Setup()
         {
-            int[] weightsArray = new int[NUM_WEIGHTS];
-            int answer = generateAnswer(weightsArray);
+            weightsArray = new int[NUM_WEIGHTS];
+            answer = generateAnswer(weightsArray);
+            SetupBalls();
+        }
+
+        private void SetupBalls()
+        {
             seesaw1.AddBall(new Ball(answer.ToString(), answer), false);
             fallingGroup.addBall(weightsArray);
-            
         }
 
         private int generateAnswer(int[] weightsArray)

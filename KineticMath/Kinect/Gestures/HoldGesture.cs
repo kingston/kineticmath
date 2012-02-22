@@ -33,7 +33,7 @@ namespace KineticMath.Kinect.Gestures
             float frontLeft = handLeft.Position.X - shoulderLeft.Position.X;
             float frontRight = handRight.Position.X - shoulderRight.Position.X;
 
-            if (DateTime.Now.Subtract(lastAction) >= TimeSpan.FromMilliseconds(500))
+            if (DateTime.Now.Subtract(lastAction) >= TimeSpan.FromMilliseconds(1000))
             {
 
                 if (Math.Abs(heightLeft) < heightThreshould && Math.Abs(heightRight) < heightThreshould
