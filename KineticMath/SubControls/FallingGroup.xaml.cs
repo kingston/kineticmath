@@ -20,8 +20,9 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class FallingGroup : UserControl
     {
-        List<Ball> ballList = new List<Ball>();
-        private Timer _timer;
+        private List<Ball> ballList = new List<Ball>();
+        private Ball selected;
+        //private Timer _timer;
         public FallingGroup()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace KineticMath.SubControls
             addBall(260, 346);
             addBall(330, 346);
             ballList[2].SetSelected(true);
+            selected = ballList[2];
             //_timer = new Timer(500);
             //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
             //_timer.Enabled = true;
@@ -48,32 +50,28 @@ namespace KineticMath.SubControls
             }
         }
 
-        private void chooseNext()
+        public void choosePrevious()
         {
-            for (int i = 0; i < ballList.Count; i++)
-            {
-                Ball b = ballList[i];
-                if (b.IsSelected())
-                {
-                    b.SetSelected(false);
-                    ballList[(i + 1) % ballList.Count].SetSelected(true);
-                }
-            }
+            selected.SetSelected(false);
+            int targetIndex = (ballList.IndexOf(selected) - 1) % ballList.Count;
+            ballList[targetIndex].SetSelected(true);
+            selected = ballList[targetIndex];
         }
 
-        private void choosePrevious()
+        public void chooseNext()
         {
-            for (int i = 0; i < ballList.Count; i++)
-            {
-                Ball b = ballList[i];
-                if (b.IsSelected())
-                {
-                    b.SetSelected(false);
-                    ballList[(i - 1) % ballList.Count].SetSelected(true);
-                }
-            }
+            selected.SetSelected(false);
+            int targetIndex = (ballList.IndexOf(selected) + 1) % ballList.Count;
+            ballList[targetIndex].SetSelected(true);
+            selected = ballList[targetIndex];
         }
 
+        public Ball removeSelected()
+        {
+            Ball temp = selected;
+            chooseNext();
+            return temp;
+        }
 
         private void addBall(double x,double y)
         {
