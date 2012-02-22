@@ -29,8 +29,6 @@ namespace KineticMath.Views
         {
             InitializeComponent();
             Loaded += new RoutedEventHandler(MainView_Loaded);
-
-          
         }
 
         void MainView_Loaded(object sender, RoutedEventArgs e)
@@ -70,7 +68,6 @@ namespace KineticMath.Views
                 System.Console.WriteLine("Move Left");
                 fallingGroup.ChoosePrevious();
             }
-
         }
 
         public override void OnViewActivated()

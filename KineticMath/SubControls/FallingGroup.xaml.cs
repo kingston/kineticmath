@@ -44,29 +44,33 @@ namespace KineticMath.SubControls
         {
             if (ballArray[selectedIndex] != null)
                 ballArray[selectedIndex].SetSelected(false);
-            selectedIndex = (selectedIndex - 1) % NUM_BALLS;
-            if(selectedIndex < 0) selectedIndex+= NUM_BALLS;
+
+            if (selectedIndex != 0)
+                selectedIndex--;
+
             if (ballArray[selectedIndex] != null)
-                ballArray[selectedIndex].SetSelected(false);
+                ballArray[selectedIndex].SetSelected(true);
         }
 
         public void ChooseNext()
         {
             if (ballArray[selectedIndex] != null)
                 ballArray[selectedIndex].SetSelected(false);
-            selectedIndex = (selectedIndex + 1) % NUM_BALLS;
+
+            if (selectedIndex != NUM_BALLS - 1)
+                selectedIndex++;
+
             if (ballArray[selectedIndex] != null)
-                ballArray[selectedIndex].SetSelected(false);
+                ballArray[selectedIndex].SetSelected(true);
         }
 
         public Ball RemoveSelected()
         {
             if (ballArray[selectedIndex] != null)
             {
-                Ball b = ballArray[selectedIndex];
-                Canvas.Children.Remove(b);
-                ChooseNext();
-                return b;
+                Canvas.Children.Remove(ballArray[selectedIndex]);
+                // to be edited
+                return new Ball();
             }
             return null;
         }
