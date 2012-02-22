@@ -50,7 +50,7 @@ namespace KineticMath
 
             // Set up views
             viewCollection = new Dictionary<string, IView>();
-            LoadView(typeof(SplashView));
+            LoadView(typeof(MainView));
         }
 
         private void LoadView(Type viewType)
