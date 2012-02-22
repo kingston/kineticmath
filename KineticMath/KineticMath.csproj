@@ -83,10 +83,19 @@
     <Compile Include="SubControls\KinectSkeleton.xaml.cs">
       <DependentUpon>KinectSkeleton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubControls\FallingGroup.xaml.cs">
+      <DependentUpon>FallingGroup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\Ball.xaml.cs">
+      <DependentUpon>Ball.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\Seesaw.xaml.cs">
+      <DependentUpon>Seesaw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SharedViewData.cs" />
     <Compile Include="Views\SplashView.xaml.cs">
@@ -111,7 +120,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SubControls\FallingGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControls\Ball.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControls\Seesaw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
