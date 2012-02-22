@@ -26,7 +26,7 @@ namespace KineticMath.SubControls
 
         private double speed = 5;
         private bool selected;
-        private String text="-";
+        private String text;
 
         
         public String Text
@@ -66,7 +66,7 @@ namespace KineticMath.SubControls
         {
             selected = false;
             BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
-            this.text = text;
+            this.Text = text;
             this.Weight = weight;
         }
 
