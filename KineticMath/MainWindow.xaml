@@ -1,7 +1,7 @@
 ﻿<Window xmlns:my="clr-namespace:KineticMath.SubControls"  x:Class="KineticMath.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="480" Width="640" Loaded="Window_Loaded">
+        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded">
     <Canvas Name="uxMainCanvas">
         <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5" />
         <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
