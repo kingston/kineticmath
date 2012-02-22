@@ -39,6 +39,7 @@ namespace KineticMath.SubControls
             RenderWeights();
         }
 
+
         public void RemoveBall(Ball b, bool isLeft = true)
         {
             _leftBalls.Remove(b);
