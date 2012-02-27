@@ -44,7 +44,7 @@ namespace KineticMath.SubControls
             }
             else
             {
-                DockPanel.SetDock(b, Dock.Right);
+                DockPanel.SetDock(b, Dock.Bottom);
                 _rightBalls.Add(b);
                 rightBallPanel.Children.Add(b);
 

@@ -26,6 +26,7 @@ namespace KineticMath.Views
     public partial class MainView : BaseView, IView
     {
         private static int NUM_WEIGHTS = 5;
+        private static int MAX_NUMBERS_TO_ADD = 4;
         public static Color SELECTED_COLOR = Colors.Orange;
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
@@ -90,12 +91,17 @@ namespace KineticMath.Views
             selectItem();
         }
 
+        void Reset()
+        {
+            ClearBalls();
+            SetupBalls();
+        }
+
         void selectItem()
         {
             if (ResetSelected)
             {
-                ClearBalls();
-                SetupBalls();
+                Reset();
             }
             else
             {
@@ -169,6 +175,9 @@ namespace KineticMath.Views
                 case Key.S:
                     selectItem();
                     break;
+                case Key.R:
+                    Reset();
+                    break;
                 case Key.Left:
                     fallingGroup.ChoosePrevious();
                     break;
@@ -179,42 +188,52 @@ namespace KineticMath.Views
             }
         }
 
-        private int[] weightsArray;
+        private List<int> lhs, rhs;
         private int answer;
 
         private void Setup()
         {
-            weightsArray = new int[NUM_WEIGHTS];
-            answer = generateAnswer(weightsArray);
+            lhs = new List<int>();
+            rhs = new List<int>();
+            answer = GenerateQuestion(lhs, rhs);
             SetupBalls();
         }
 
         private void SetupBalls()
         {
-            seesaw1.AddBall(new Ball(answer.ToString(), answer), false);
-            fallingGroup.addBall(weightsArray);
+            for (int i = 0; i < rhs.Count; i++) {
+                seesaw1.AddBall(new Ball(rhs[i].ToString(), rhs[i]), false);
+            }
+            fallingGroup.addBall(lhs);
         }
 
-        private int generateAnswer(int[] weightsArray)
+        private int GenerateQuestion(List<int> lhsArray, List<int> rhsArray)
         {
-            Random random = new Random();
-            int[] tmp  = new int[NUM_WEIGHTS];
-            for (int i = 0; i < NUM_WEIGHTS; i++)
-                tmp[i] = weightsArray[i] = random.Next(1, difficulty * 5 + 7);
-
-            int numOfDiscards = random.Next(1, 4);
-
-            for (int i = 0; i < numOfDiscards; i++)
+            Random rand = new Random();
+            // Generate the answer options
+            while (lhsArray.Count < NUM_WEIGHTS)
             {
-                int r = random.Next(0, 4);
-                tmp[r] = 0;
+                int candidate = rand.Next(3, difficulty * 5 + 7);
+                if (!lhsArray.Contains(candidate))
+                {
+                    lhsArray.Add(candidate);
+                }
             }
-
+            // Pick one to be the correct answer
+            int answer = lhsArray[rand.Next(0, NUM_WEIGHTS - 1)];
+            // Generate the question
             int sum = 0;
-            for (int i = 0; i < NUM_WEIGHTS; i++)
-                sum += tmp[i];
-
-            return sum;
+            while (sum < answer && rhsArray.Count < MAX_NUMBERS_TO_ADD - 1)
+            {
+                int part = rand.Next(1, answer - sum);
+                rhsArray.Add(part);
+                sum += part;
+            }
+            if (sum < answer)
+            {
+                rhsArray.Add(answer - sum);
+            }
+            return answer;
         }
     }
 }

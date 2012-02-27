@@ -119,7 +119,7 @@ namespace KineticMath.SubControls
             return null;
         }
 
-        public void addBall(int[] weightsArray)
+        public void addBall(List<int> weightsArray)
         {
             int startingX = 0; // 50;
             int startingY = 0; // 346;
