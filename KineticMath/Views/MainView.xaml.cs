@@ -97,6 +97,30 @@ namespace KineticMath.Views
             SetupBalls();
         }
 
+        void NewRound(object sender, EventArgs args)
+        {
+            ClearBalls();
+            Setup();
+        }
+
+        void RoundComplete()
+        {
+            uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxWinLabel.Opacity = 1;
+
+            difficulty += 1;
+
+            // Hide it when we're done
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+            Storyboard.SetTarget(labelAnimation, uxWinLabel);
+            Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard labelSb = new Storyboard();
+            labelSb.Children.Add(labelAnimation);
+            labelAnimation.Completed += new EventHandler(NewRound);
+            labelSb.Begin();
+        }
+
         void selectItem()
         {
             if (ResetSelected)
@@ -111,21 +135,7 @@ namespace KineticMath.Views
 
                 if (seesaw1.checkAnswer())
                 {
-                    ClearBalls();
-                    Setup();
-                    uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-                    uxWinLabel.Opacity = 1;
-
-                    difficulty += 1;
-
-                    // Hide it when we're done
-                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
-                    labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
-                    Storyboard.SetTarget(labelAnimation, uxWinLabel);
-                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard labelSb = new Storyboard();
-                    labelSb.Children.Add(labelAnimation);
-                    labelSb.Begin();
+                    RoundComplete();
                 }
             }
         }
