@@ -13,12 +13,12 @@
                 <RotateTransform Angle="0" />
             </Canvas.RenderTransform>
             <Rectangle Width="320" Height="20" Fill="Orange" Canvas.Left="0" Name="uxBalanceRectangle" Canvas.Top="250" />
-            <WrapPanel Canvas.Left="5" Canvas.Top="98" Height="152" Name="leftBallPanel" Width="150" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
+            <WrapPanel Canvas.Left="0" Canvas.Top="10" Height="240" Name="leftBallPanel" Width="50" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
                 <WrapPanel.RenderTransform>
                     <ScaleTransform ScaleY="-1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
-            <DockPanel Canvas.Left="264" Canvas.Top="10" Height="240" Name="rightBallPanel" Width="51" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            <DockPanel Canvas.Left="264" Canvas.Top="10" Height="240" Name="rightBallPanel" Width="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
         </Canvas>
         <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
         

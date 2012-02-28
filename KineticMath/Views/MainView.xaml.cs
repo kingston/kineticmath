@@ -31,6 +31,7 @@ namespace KineticMath.Views
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
         private int difficulty = 1;
+        private int levelsCompleted = 0;
        
         public MainView()
         {
@@ -108,7 +109,8 @@ namespace KineticMath.Views
             uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxWinLabel.Opacity = 1;
 
-            difficulty += 1;
+            levelsCompleted++;
+            difficulty = levelsCompleted / 3 + 1;
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
@@ -233,7 +235,8 @@ namespace KineticMath.Views
             int answer = lhsArray[rand.Next(0, NUM_WEIGHTS - 1)];
             // Generate the question
             int sum = 0;
-            while (sum < answer && rhsArray.Count < MAX_NUMBERS_TO_ADD - 1)
+            int maxParts = Math.Min(difficulty + 1, MAX_NUMBERS_TO_ADD);
+            while (sum < answer && rhsArray.Count < maxParts - 1)
             {
                 int part = rand.Next(1, answer - sum);
                 rhsArray.Add(part);
