@@ -20,6 +20,7 @@ namespace KineticMath.Controllers
         {
         }
 
+
         /// <summary>
         /// Called when the balance has stopped moving and is good to go
         /// </summary>

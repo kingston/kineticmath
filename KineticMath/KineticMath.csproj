@@ -99,17 +99,17 @@
     </Compile>
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />
-    <Compile Include="Views\MainView.xaml.cs">
+    <Compile Include="Views\BalanceGame\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubControls\Seesaw.xaml.cs">
       <DependentUpon>Seesaw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SharedViewData.cs" />
-    <Compile Include="Views\SplashView.xaml.cs">
+    <Compile Include="Views\BalanceGame\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TutorialView.xaml.cs">
+    <Compile Include="Views\BalanceGame\TutorialView.xaml.cs">
       <DependentUpon>TutorialView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -136,7 +136,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainView.xaml">
+    <Page Include="Views\BalanceGame\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,11 +144,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SplashView.xaml">
+    <Page Include="Views\BalanceGame\SplashView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TutorialView.xaml">
+    <Page Include="Views\BalanceGame\TutorialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
