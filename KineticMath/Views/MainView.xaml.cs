@@ -46,7 +46,7 @@ namespace KineticMath.Views
             MoveGesture mover = new MoveGesture();
             mover.UserMoved += Mover_move;
             mover.BodyMoved += new EventHandler<BodyMoveEventArgs>(mover_BodyMoved);
-            _sharedData.GestureController.AddGesture(mover);
+            _sharedData.GestureController.AddGesture(this, mover);
 
             //SwipeGesture swipe = new SwipeGesture();
             //swipe.SwipeGestureMade += new EventHandler(swipe_SwipeGestureMade);
@@ -54,7 +54,7 @@ namespace KineticMath.Views
 
             HoldGesture holder = new HoldGesture();
             holder.UserHolded += new EventHandler(Holder_hold);
-            _sharedData.GestureController.AddGesture(holder);
+            _sharedData.GestureController.AddGesture(this, holder);
         }
 
         void swipe_SwipeGestureMade(object sender, EventArgs e)

@@ -42,15 +42,15 @@ namespace KineticMath.Views
             //_sharedData.GestureController.AddGesture(jumper);
             HoldGesture holder = new HoldGesture();
             holder.UserHolded += new EventHandler(Holder_hold);
-            _sharedData.GestureController.AddGesture(holder);
+            _sharedData.GestureController.AddGesture(this, holder);
 
             EnergizeGesture energizer = new EnergizeGesture();
             energizer.UserEnergized += Energizer_energize;
-            _sharedData.GestureController.AddGesture(energizer);
+            _sharedData.GestureController.AddGesture(this, energizer);
 
             MoveGesture mover = new MoveGesture();
             mover.UserMoved += Mover_move;
-            _sharedData.GestureController.AddGesture(mover);
+            _sharedData.GestureController.AddGesture(this, mover);
         }
 
         void Holder_hold(object sender, EventArgs e)
