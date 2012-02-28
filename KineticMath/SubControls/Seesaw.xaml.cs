@@ -26,6 +26,9 @@ namespace KineticMath.SubControls
         HashSet<Ball> _leftBalls = new HashSet<Ball>();
         HashSet<Ball> _rightBalls = new HashSet<Ball>();
 
+        HashSet<Brick> _leftBricks = new HashSet<Brick>();
+        HashSet<Brick> _rightBricks = new HashSet<Brick>();
+
         public Seesaw()
         {
             InitializeComponent();
@@ -46,6 +49,25 @@ namespace KineticMath.SubControls
             {
                 DockPanel.SetDock(b, Dock.Bottom);
                 _rightBalls.Add(b);
+                rightBallPanel.Children.Add(b);
+
+            }
+            RenderWeights();
+        }
+
+        public void AddBrick(Brick b, bool isLeft = true)
+        {
+
+            if (isLeft)
+            {
+                b.OnLeftSeeSaw = true;
+                _leftBricks.Add(b);
+                leftBallPanel.Children.Add(b);
+            }
+            else
+            {
+                DockPanel.SetDock(b, Dock.Bottom);
+                _rightBricks.Add(b);
                 rightBallPanel.Children.Add(b);
 
             }

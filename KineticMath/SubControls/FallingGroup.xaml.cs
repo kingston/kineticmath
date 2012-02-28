@@ -136,6 +136,23 @@ namespace KineticMath.SubControls
 
         }
 
+        public void addBrick(List<int> weightsArray)
+        {
+            int startingX = 0; // 50;
+            int startingY = 0; // 346;
+            int gapX = 70;
+
+            for (int i = 0; i < weightsArray.Count(); i++)
+            {
+                Ball b = new Ball(weightsArray[i].ToString(), weightsArray[i]);
+                ballArray[i] = b;
+                Canvas.Children.Add(b);
+                Canvas.SetTop(b, startingY);
+                Canvas.SetLeft(b, startingX + i * gapX);
+            }
+
+        }
+
         public void RemoveAllBalls()
         {
             for (int i = 0; i < ballArray.Length; i++)
