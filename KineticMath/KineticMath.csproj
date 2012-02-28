@@ -66,9 +66,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controllers\BalanceGame.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
+    <Compile Include="Kinect\Gestures\HistoryGestureBase.cs" />
+    <Compile Include="Kinect\Gestures\JointMoveGestures.cs" />
+    <Compile Include="Kinect\Gestures\HandPushGesture.cs" />
     <Compile Include="Kinect\Gestures\SwipeGesture.cs" />
     <Compile Include="Kinect\Gestures\MoveEventArgs.cs" />
     <Compile Include="Kinect\ConcreteKinectService.cs" />
@@ -79,6 +83,8 @@
     <Compile Include="Kinect\Gestures\IGesture.cs" />
     <Compile Include="Kinect\Gestures\JumpGesture.cs" />
     <Compile Include="Kinect\IKinectService.cs" />
+    <Compile Include="Kinect\PointConverters\BodyRelativePointConverter.cs" />
+    <Compile Include="Kinect\PointConverters\IPointConverter.cs" />
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
@@ -171,9 +177,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
