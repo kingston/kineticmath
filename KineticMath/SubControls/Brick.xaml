@@ -1,16 +1,17 @@
-﻿<UserControl x:Class="KineticMath.SubControls.Brick"
+﻿<src:SeesawObject x:Class="KineticMath.SubControls.Brick"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:src="clr-namespace:KineticMath.SubControls" 
              mc:Ignorable="d"
-             Height="50" Width="50">
+             Height="50" Width="50" FontSize="99">
     <Canvas Name="canvas" Width="50" Height="50">
         <Image Source="/KineticMath;component/Images/brick.gif" Canvas.Left="-14" Canvas.Top="-17" Height="76" Width="72" />
-        <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5" Foreground="#FFFB0000">
+        <TextBlock Canvas.Left="2" FontSize="20" Canvas.Top="12" Height="40" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5" Foreground="White">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
     </Canvas>
-</UserControl>
+</src:SeesawObject>

@@ -21,96 +21,77 @@ namespace KineticMath.SubControls
     /// <summary>
     /// Interaction logic for SplashScreen.xaml
     /// </summary>
+    /// 
+
     public partial class Seesaw : UserControl
     {
-        HashSet<Ball> _leftBalls = new HashSet<Ball>();
-        HashSet<Ball> _rightBalls = new HashSet<Ball>();
+        HashSet<SeesawObject> _leftObjects = new HashSet<SeesawObject>();
+        HashSet<SeesawObject> _rightObjects = new HashSet<SeesawObject>();
 
-        HashSet<Brick> _leftBricks = new HashSet<Brick>();
-        HashSet<Brick> _rightBricks = new HashSet<Brick>();
+        private double currentBottom = 0;
 
         public Seesaw()
         {
             InitializeComponent();
-            rightBallPanel.LastChildFill = false;
+            //rightBallPanel.LastChildFill = false;
         }
 
-
-        public void AddBall(Ball b,bool isLeft=true)
-        {
-            
-            if (isLeft)
-            {
-                b.OnLeftSeeSaw = true;
-                _leftBalls.Add(b);
-                leftBallPanel.Children.Add(b);
-            }
-            else
-            {
-                DockPanel.SetDock(b, Dock.Bottom);
-                _rightBalls.Add(b);
-                rightBallPanel.Children.Add(b);
-
-            }
-            RenderWeights();
-        }
-
-        public void AddBrick(Brick b, bool isLeft = true)
+        public void AddObject(SeesawObject obj, bool isLeft = true)
         {
 
             if (isLeft)
             {
-                b.OnLeftSeeSaw = true;
-                _leftBricks.Add(b);
-                leftBallPanel.Children.Add(b);
+                obj.OnLeftSeesaw = true;
+                _leftObjects.Add(obj);
+                leftBallPanel.Children.Add(obj);
             }
             else
             {
-                DockPanel.SetDock(b, Dock.Bottom);
-                _rightBricks.Add(b);
-                rightBallPanel.Children.Add(b);
+                _rightObjects.Add(obj);
+                rightBallPanel.Children.Add(obj);
+                Canvas.SetBottom(obj, currentBottom);
+                currentBottom += obj.Height;
 
             }
             RenderWeights();
         }
 
 
-        public void RemoveBall(Ball b, bool isLeft = true)
+        public void RemoveObject(SeesawObject obj, bool isLeft = true)
         {
             if (isLeft)
             {
-                b.OnLeftSeeSaw = false;
-                _leftBalls.Remove(b);
-                leftBallPanel.Children.Remove(b);
+                obj.OnLeftSeesaw = false;
+                _leftObjects.Remove(obj);
+                leftBallPanel.Children.Remove(obj);
             }
             else
             {
-                _rightBalls.Remove(b);
-                rightBallPanel.Children.Remove(b);
+                _rightObjects.Remove(obj);
+                rightBallPanel.Children.Remove(obj);
             }
             RenderWeights();
         }
 
-        public void RemoveAllBalls()
+        public void RemoveAllObjects()
         {
-            foreach (var ball in _leftBalls)
+            foreach (var obj in _leftObjects)
             {
-                leftBallPanel.Children.Remove(ball);
+                leftBallPanel.Children.Remove(obj);
             }
-            foreach (var ball in _rightBalls)
+            foreach (var obj in _rightObjects)
             {
-                rightBallPanel.Children.Remove(ball);
+                rightBallPanel.Children.Remove(obj);
             }
-            _leftBalls.Clear();
-            _rightBalls.Clear();
+            _leftObjects.Clear();
+            _rightObjects.Clear();
         }
 
         private void RenderWeights()
         {
-
             // Work out rotation
-            double leftSideWeight = _leftBalls.Select(x => x.Weight).Sum();
-            double rightSideWeight = _rightBalls.Select(x => x.Weight).Sum();
+            double leftSideWeight = _leftObjects.Select(x => x.Weight).Sum();
+            double rightSideWeight = _rightObjects.Select(x => x.Weight).Sum();
             double ratio = 0.25;
             double max = Math.Max(leftSideWeight, rightSideWeight);
             if (25 / max < 0.25) ratio = 25 / max;
@@ -121,8 +102,8 @@ namespace KineticMath.SubControls
 
         public bool checkAnswer()
         {
-            double leftSideWeight = _leftBalls.Select(x => x.Weight).Sum();
-            double rightSideWeight = _rightBalls.Select(x => x.Weight).Sum();
+            double leftSideWeight = _leftObjects.Select(x => x.Weight).Sum();
+            double rightSideWeight = _rightObjects.Select(x => x.Weight).Sum();
             System.Console.WriteLine("leftSideWeight: " + leftSideWeight + " rightSideWeight: " + rightSideWeight);
             return leftSideWeight == rightSideWeight;
         }

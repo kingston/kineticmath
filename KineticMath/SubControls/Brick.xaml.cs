@@ -19,9 +19,10 @@ namespace KineticMath.SubControls
     /// Interaction logic for UserControl2.xaml
     /// </summary>
 
-    public partial class Brick : UserControl {
+    public partial class Brick : SeesawObject {
 
-        private double speed = 5;
+        public static double BRICK_HEIGHT = 35.5;
+
         private String text;
 
         private bool _onLeftSeeSaw;
@@ -44,14 +45,6 @@ namespace KineticMath.SubControls
             }
         }
 
-        public double Weight { get; set; }
-
-        public double Speed
-        {
-          get { return speed; }
-          set { speed = value; }
-        }
-
         public Brick()
         {
             InitializeComponent();
@@ -71,14 +64,15 @@ namespace KineticMath.SubControls
             //BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
             this.Text = text;
             this.Weight = weight;
-            for (int i = 0; i < weight; i++)
+            this.Height = BRICK_HEIGHT * weight;
+            for (int i = 1; i < weight; i++)
             {
                 Image brick = new Image();
                 brick.Height = 76;
                 brick.Width = 72;
                 brick.Source = new BitmapImage(new Uri(@"/KineticMath;component/Images/brick.gif", UriKind.Relative));
                 canvas.Children.Add(brick);
-                Canvas.SetTop(brick, -17 - i * 35.5);
+                Canvas.SetTop(brick, -17 - i * BRICK_HEIGHT);
                 Canvas.SetLeft(brick, -14);
             }
         }

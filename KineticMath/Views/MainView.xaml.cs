@@ -120,7 +120,7 @@ namespace KineticMath.Views
         void ClearBalls()
         {
             fallingGroup.RemoveAllBalls();
-            seesaw1.RemoveAllBalls();
+            seesaw1.RemoveAllObjects();
         }
 
         void Mover_move(object sender, MoveEventArgs m)
@@ -156,7 +156,7 @@ namespace KineticMath.Views
             switch (e.Key)
             {
                 case Key.T:
-                    seesaw1.AddBall(new SubControls.Ball());
+                    seesaw1.AddObject(new SubControls.Ball());
                         //Console.Out.WriteLine("ball add");
                     
                     break;
@@ -189,7 +189,7 @@ namespace KineticMath.Views
         private void SetupBalls()
         {
             for (int i = 0; i < rhs.Count; i++) {
-                seesaw1.AddBall(new Ball(rhs[i].ToString(), rhs[i]), false);
+                seesaw1.AddObject(new Ball(rhs[i].ToString(), rhs[i]), false);
             }
             fallingGroup.addBall(lhs);
         }

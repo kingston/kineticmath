@@ -113,7 +113,7 @@ namespace KineticMath.SubControls
                 Ball b = ballArray[selectedIndex];
                 ballArray[selectedIndex] = null;
                 // Remove the ball from the canvas
-                Canvas.Children.Remove(b);
+                canvas.Children.Remove(b);
                 return new Ball(b.Text, b.Weight);
             }
             return null;
@@ -129,7 +129,7 @@ namespace KineticMath.SubControls
             {
                 Ball b = new Ball(weightsArray[i].ToString(), weightsArray[i]);
                 ballArray[i] = b;
-                Canvas.Children.Add(b);
+                canvas.Children.Add(b);
                 Canvas.SetTop(b, startingY);
                 Canvas.SetLeft(b, startingX + i * gapX);
             }
@@ -146,7 +146,7 @@ namespace KineticMath.SubControls
             {
                 Ball b = new Ball(weightsArray[i].ToString(), weightsArray[i]);
                 ballArray[i] = b;
-                Canvas.Children.Add(b);
+                canvas.Children.Add(b);
                 Canvas.SetTop(b, startingY);
                 Canvas.SetLeft(b, startingX + i * gapX);
             }
@@ -159,7 +159,7 @@ namespace KineticMath.SubControls
             {
                 if (ballArray[i] != null)
                 {
-                    Canvas.Children.Remove(ballArray[i]);
+                    canvas.Children.Remove(ballArray[i]);
                 }
             }
         }

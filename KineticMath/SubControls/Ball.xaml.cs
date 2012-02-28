@@ -19,21 +19,20 @@ namespace KineticMath.SubControls
     /// Interaction logic for UserControl2.xaml
     /// </summary>
 
-    public partial class Ball : UserControl {
+    public partial class Ball : SeesawObject {
 
         public static Color SELECTED_COLOR = Colors.Orange;
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
-        private double speed = 5;
-        private bool selected;
-        private String text;
+        public static double BALL_HEIGHT = 50;
 
-        private bool _onLeftSeeSaw;
+        private bool selected;
+
         public bool OnLeftSeeSaw
         {
-            get { return _onLeftSeeSaw; }
+            get { return onLeftSeeSaw; }
             set { 
-                _onLeftSeeSaw = value;
+                onLeftSeeSaw = value;
                 if (value)
                     ValueText.RenderTransform = new ScaleTransform(1, -1);
             }
@@ -46,14 +45,6 @@ namespace KineticMath.SubControls
                 text = value;
                 ValueText.Text = text;
             }
-        }
-
-        public double Weight { get; set; }
-
-        public double Speed
-        {
-          get { return speed; }
-          set { speed = value; }
         }
 
         public Ball()
@@ -78,6 +69,7 @@ namespace KineticMath.SubControls
             BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
             this.Text = text;
             this.Weight = weight;
+            this.Height = BALL_HEIGHT;
         }
 
 
