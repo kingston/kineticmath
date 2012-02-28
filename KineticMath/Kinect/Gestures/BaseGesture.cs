@@ -10,7 +10,12 @@ namespace KineticMath.Kinect.Gestures
 {
     public abstract class BaseGesture : IGesture
     {
-        public abstract void ProcessSkeleton(Microsoft.Kinect.Skeleton skeleton);
+        public virtual void ProcessSkeleton(Skeleton skeleton)
+        {
+            OnProcessSkeleton(skeleton);
+        }
+
+        public abstract void OnProcessSkeleton(Skeleton skeleton);
 
         /// <summary>
         /// Scales a joint to a fixed 640 by 480 plane

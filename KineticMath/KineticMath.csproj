@@ -66,11 +66,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controllers\BalanceGame.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
-    <Compile Include="Kinect\EnergyEventArgs.cs" />
+    <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
+    <Compile Include="Kinect\Gestures\HistoryGestureBase.cs" />
+    <Compile Include="Kinect\Gestures\JointMoveGestures.cs" />
+    <Compile Include="Kinect\Gestures\HandPushGesture.cs" />
     <Compile Include="Kinect\Gestures\SwipeGesture.cs" />
-    <Compile Include="MoveEventArgs.cs" />
+    <Compile Include="Kinect\Gestures\MoveEventArgs.cs" />
     <Compile Include="Kinect\ConcreteKinectService.cs" />
     <Compile Include="Kinect\DummyKinectService.cs" />
     <Compile Include="Kinect\GestureController.cs" />
@@ -79,6 +83,8 @@
     <Compile Include="Kinect\Gestures\IGesture.cs" />
     <Compile Include="Kinect\Gestures\JumpGesture.cs" />
     <Compile Include="Kinect\IKinectService.cs" />
+    <Compile Include="Kinect\PointConverters\BodyRelativePointConverter.cs" />
+    <Compile Include="Kinect\PointConverters\IPointConverter.cs" />
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
@@ -183,9 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\brick.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.gif" />
