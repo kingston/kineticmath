@@ -103,7 +103,6 @@
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="SeesawObject.cs" />
     <Compile Include="SubControls\Brick.xaml.cs">
       <DependentUpon>Brick.xaml</DependentUpon>
     </Compile>
@@ -195,7 +194,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -48,12 +48,11 @@ namespace KineticMath.Views
 
         private void InitializeGame()
         {
-            bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
             game = new BalanceGame();
             DependencyPropertyDescriptor.FromProperty(BalanceGame.HeldBallsProperty, game.GetType()).AddValueChanged(game, new EventHandler(BallsChanged));
             game.NewGame();
             // TODO: Actually provide valid coordinates
-            
+            bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
         }
 
         public void BallsChanged(object sender, EventArgs e)
@@ -121,7 +120,7 @@ namespace KineticMath.Views
         void ClearBalls()
         {
             fallingGroup.RemoveAllBalls();
-            seesaw1.RemoveAllObjects();
+            seesaw.RemoveAllObjects();
         }
 
         void Mover_move(object sender, MoveEventArgs m)
@@ -157,7 +156,7 @@ namespace KineticMath.Views
             switch (e.Key)
             {
                 case Key.T:
-                    seesaw1.AddObject(new SubControls.Ball());
+                    seesaw.AddObject(new SubControls.Ball());
                         //Console.Out.WriteLine("ball add");
                     
                     break;
@@ -190,7 +189,7 @@ namespace KineticMath.Views
         private void SetupBalls()
         {
             for (int i = 0; i < rhs.Count; i++) {
-                seesaw1.AddObject(new Ball(rhs[i].ToString(), rhs[i]), false);
+                seesaw.AddObject(new Ball(rhs[i].ToString(), rhs[i]), false);
             }
             fallingGroup.addBall(lhs);
         }
