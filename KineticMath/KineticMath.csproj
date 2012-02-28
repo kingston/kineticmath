@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\EnergyEventArgs.cs" />
     <Compile Include="Kinect\Gestures\SwipeGesture.cs" />

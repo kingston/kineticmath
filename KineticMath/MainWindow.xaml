@@ -1,13 +1,10 @@
 ﻿<Window xmlns:my="clr-namespace:KineticMath.SubControls"  x:Class="KineticMath.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
+        Title="MainWindow" Height="715" Width="1225" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
     <Canvas>
-        <Canvas Name="uxMainCanvas" Width="800" Height="600" Canvas.Top="0" Canvas.Left="0">
+        <Canvas Name="uxMainCanvas" Width="1200" Height="675" Canvas.Top="0" Canvas.Left="0">
             <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5" Canvas.Top="85">
-                <!--<my:KinectSkeleton.RenderTransform>
-                    <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
-                </my:KinectSkeleton.RenderTransform>-->
             </my:KinectSkeleton>
             <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
         </Canvas>

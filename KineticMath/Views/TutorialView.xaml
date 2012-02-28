@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:KineticMath.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="480" d:DesignWidth="640" MouseUp="BaseView_MouseUp">
+             d:DesignHeight="675" d:DesignWidth="1200" MouseUp="BaseView_MouseUp">
     <Canvas>
         <Label FontSize="30" Content="Fun Video Tutorial" Canvas.Top="200" Canvas.Left="200"/>
         <Label FontSize="20" Content="Click to continue..." Canvas.Top="300" Canvas.Left="210"/>
