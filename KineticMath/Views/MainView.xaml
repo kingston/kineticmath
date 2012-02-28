@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1200" xmlns:my="clr-namespace:KineticMath.SubControls">
     <Canvas Width="1200" Height="675">
-        <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw1" />
+        <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxWinLabel" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxLoseLabel" />

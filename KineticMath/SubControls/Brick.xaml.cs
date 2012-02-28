@@ -19,20 +19,18 @@ namespace KineticMath.SubControls
     /// Interaction logic for UserControl2.xaml
     /// </summary>
 
-    public partial class Ball : SeesawObject {
+    public partial class Brick : SeesawObject {
 
-        public static Color SELECTED_COLOR = Colors.Orange;
-        public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
+        public static double BRICK_HEIGHT = 35.5;
 
-        public static double BALL_HEIGHT = 50;
+        private String text;
 
-        private bool selected;
-
+        private bool _onLeftSeeSaw;
         public bool OnLeftSeeSaw
         {
-            get { return onLeftSeeSaw; }
+            get { return _onLeftSeeSaw; }
             set { 
-                onLeftSeeSaw = value;
+                _onLeftSeeSaw = value;
                 if (value)
                     ValueText.RenderTransform = new ScaleTransform(1, -1);
             }
@@ -47,16 +45,14 @@ namespace KineticMath.SubControls
             }
         }
 
-        public Ball()
+        public Brick()
         {
             InitializeComponent();
-            init("-",1);
+            init("-",5);
             
         }
 
-        
-
-        public Ball(String text,double weight)
+        public Brick(String text,double weight)
         {
             InitializeComponent();
             init(text, weight);
@@ -65,31 +61,20 @@ namespace KineticMath.SubControls
 
         private void init(String text, double weight)
         {
-            selected = false;
-            BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
+            //BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
             this.Text = text;
             this.Weight = weight;
-            this.Height = BALL_HEIGHT;
-        }
-
-
-        public bool IsSelected() {
-            return selected;
-        }
-
-        public void SetSelected(bool status) {
-            selected = status;
-            if (selected)
-                BallEllipse.Fill = new SolidColorBrush(SELECTED_COLOR);
-            else
-                BallEllipse.Fill = new SolidColorBrush(DESELECTED_COLOR);
-        }
-
-        public void SetSize(int width, int height) {
-            BallEllipse.Width = width;
-            BallEllipse.Height = height;
-            canvas.Width = width;
-            canvas.Height = height;
+            this.Height = BRICK_HEIGHT * weight;
+            for (int i = 1; i < weight; i++)
+            {
+                Image brick = new Image();
+                brick.Height = 76;
+                brick.Width = 72;
+                brick.Source = new BitmapImage(new Uri(@"/KineticMath;component/Images/brick.gif", UriKind.Relative));
+                canvas.Children.Add(brick);
+                Canvas.SetTop(brick, -17 - i * BRICK_HEIGHT);
+                Canvas.SetLeft(brick, -14);
+            }
         }
     }
 }

@@ -120,7 +120,7 @@ namespace KineticMath.SubControls
                 Ball b = ballArray[selectedIndex];
                 ballArray[selectedIndex] = null;
                 // Remove the ball from the canvas
-                Canvas.Children.Remove(b);
+                canvas.Children.Remove(b);
                 return new Ball(b.Text, b.Weight);
             }
             return null;
@@ -129,8 +129,9 @@ namespace KineticMath.SubControls
         public void addBall(List<int> weightsArray)
         {
             int cheating = 20;
-    
-            if (weightsArray.Count() > 3) {
+
+            if (weightsArray.Count() > 3)
+            {
                 newBall(0, top, left, weightsArray[0]);
                 locations[0].X = left;
                 locations[0].Y = top;
@@ -149,7 +150,7 @@ namespace KineticMath.SubControls
         public void newBall(int index, int top, int left, int weight){
             Ball b = new Ball(weight.ToString(), weight);
             ballArray[index] = b;
-            Canvas.Children.Add(b);
+            canvas.Children.Add(b);
             Canvas.SetTop(b, top);
             Canvas.SetLeft(b, left);
         }
@@ -183,7 +184,7 @@ namespace KineticMath.SubControls
             {
                 if (ballArray[i] != null)
                 {
-                    Canvas.Children.Remove(ballArray[i]);
+                    canvas.Children.Remove(ballArray[i]);
                 }
             }
         }
