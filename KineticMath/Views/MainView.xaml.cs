@@ -71,13 +71,20 @@ namespace KineticMath.Views
         private void RegisterGestures()
         {
             JointMoveGestures leftHandGesture = new JointMoveGestures(JointType.HandLeft);
-            JointMoveGestures rightHandGesture = new JointMoveGestures(JointType.HandLeft);
+            JointMoveGestures rightHandGesture = new JointMoveGestures(JointType.HandRight);
+            JointMoveGestures leftFootGesture = new JointMoveGestures(JointType.FootLeft);
+            JointMoveGestures rightFootGesture = new JointMoveGestures(JointType.FootRight);
 
             leftHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
             rightHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
+            leftFootGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
+            rightFootGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
 
             _sharedData.GestureController.AddGesture(this, leftHandGesture);
             _sharedData.GestureController.AddGesture(this, rightHandGesture);
+            _sharedData.GestureController.AddGesture(this, leftFootGesture);
+            _sharedData.GestureController.AddGesture(this, rightFootGesture);
+
         }
 
         void handGesture_JointMoved(object sender, JointMovedEventArgs e)
@@ -85,8 +92,25 @@ namespace KineticMath.Views
             // Show the movement on the screen
             SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
             // e.g. move circle to pt
+            fallingGroup.hit(pt);
+            selectItem();
         }
+       
 
+        void selectItem()
+        {
+            Ball b = fallingGroup.RemoveSelected();
+            if(b != null)
+                seesaw1.AddBall(b);
+
+            if (seesaw1.checkAnswer())
+            {
+                RoundComplete();
+            }
+            else {
+                PromptIfGetWrong();
+            }
+        }
         void Reset()
         {
             ClearBalls();
@@ -98,6 +122,12 @@ namespace KineticMath.Views
             ClearBalls();
             Setup();
         }
+        void ResetWrong(object sender, EventArgs args)
+        {
+            ClearBalls();
+            SetupBalls();
+        }
+
 
         void RoundComplete()
         {
@@ -105,7 +135,7 @@ namespace KineticMath.Views
             uxWinLabel.Opacity = 1;
 
             levelsCompleted++;
-            difficulty = levelsCompleted / 3 + 1;
+            //difficulty = levelsCompleted / 3 + 1;
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
@@ -115,6 +145,21 @@ namespace KineticMath.Views
             Storyboard labelSb = new Storyboard();
             labelSb.Children.Add(labelAnimation);
             labelAnimation.Completed += new EventHandler(NewRound);
+            labelSb.Begin();
+        }
+
+        void PromptIfGetWrong()
+        {
+            uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxLoseLabel.Opacity = 1;
+            // Hide it when we're done
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            Storyboard.SetTarget(labelAnimation, uxLoseLabel);
+            Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard labelSb = new Storyboard();
+            labelSb.Children.Add(labelAnimation);
+            labelAnimation.Completed += new EventHandler(ResetWrong);
             labelSb.Begin();
         }
 
