@@ -12,11 +12,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
+using Microsoft.Kinect;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 using KineticMath.SubControls;
 using System.Windows.Media.Animation;
+
+using KineticMath.Kinect.PointConverters;
+using KineticMath.Controllers;
+using System.ComponentModel;
 
 namespace KineticMath.Views
 {
@@ -32,6 +36,8 @@ namespace KineticMath.Views
 
         private int difficulty = 1;
         private int levelsCompleted = 0;
+
+        private BalanceGame game;
        
         public MainView()
         {
@@ -40,56 +46,44 @@ namespace KineticMath.Views
             Loaded += new RoutedEventHandler(MainView_Loaded);
         }
 
-        void MainView_Loaded(object sender, RoutedEventArgs e)
+        private void InitializeGame()
         {
-            Console.Out.WriteLine("MainView loaded");
-            MoveGesture mover = new MoveGesture();
-            mover.UserMoved += Mover_move;
-            mover.BodyMoved += new EventHandler<BodyMoveEventArgs>(mover_BodyMoved);
-            _sharedData.GestureController.AddGesture(this, mover);
-
-            //SwipeGesture swipe = new SwipeGesture();
-            //swipe.SwipeGestureMade += new EventHandler(swipe_SwipeGestureMade);
-            //_sharedData.GestureController.AddGesture(swipe);
-
-            HoldGesture holder = new HoldGesture();
-            holder.UserHolded += new EventHandler(Holder_hold);
-            _sharedData.GestureController.AddGesture(this, holder);
+            game = new BalanceGame();
+            DependencyPropertyDescriptor.FromProperty(BalanceGame.HeldBallsProperty, game.GetType()).AddValueChanged(game, new EventHandler(BallsChanged));
+            game.NewGame();
+            // TODO: Actually provide valid coordinates
+            bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
         }
 
-        void swipe_SwipeGestureMade(object sender, EventArgs e)
+        public void BallsChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("HI");
+            // Implement code when the ball collection in the game object has changed, e.g. show/hide balls in holder
         }
 
-        private bool ResetSelected = false;
-
-        void mover_BodyMoved(object sender, BodyMoveEventArgs e)
+        private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-            float pos = e.ScreenX;
-            // Check where the body is
-            if (Canvas.GetLeft(fallingGroup) < pos && pos < Canvas.GetLeft(fallingGroup) + rectangle3.ActualWidth)
-            {
-                fallingGroup.SelectBall(pos - Canvas.GetLeft(fallingGroup));
-            } else {
-                fallingGroup.SelectBall(-1);
-            }
-            if (Canvas.GetLeft(uxResetRectangle) < pos && pos < Canvas.GetLeft(uxResetRectangle) + uxResetRectangle.ActualWidth)
-            {
-                uxResetRectangle.Background = new SolidColorBrush(SELECTED_COLOR);
-                ResetSelected = true;
-            }
-            else
-            {
-                uxResetRectangle.Background = new SolidColorBrush(DESELECTED_COLOR);
-                ResetSelected = false;
-            }
+            InitializeGame();
         }
 
-        void Holder_hold(object sender, EventArgs e)
+        private BodyRelativePointConverter bodyConverter;
+
+        private void RegisterGestures()
         {
-            System.Console.WriteLine("Holder_hold");
-            selectItem();
+            JointMoveGestures leftHandGesture = new JointMoveGestures(JointType.HandLeft);
+            JointMoveGestures rightHandGesture = new JointMoveGestures(JointType.HandLeft);
+
+            leftHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
+            rightHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
+
+            _sharedData.GestureController.AddGesture(this, leftHandGesture);
+            _sharedData.GestureController.AddGesture(this, rightHandGesture);
+        }
+
+        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
+        {
+            // Show the movement on the screen
+            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
+            // e.g. move circle to pt
         }
 
         void Reset()
@@ -123,25 +117,6 @@ namespace KineticMath.Views
             labelSb.Begin();
         }
 
-        void selectItem()
-        {
-            if (ResetSelected)
-            {
-                Reset();
-            }
-            else
-            {
-                Ball b = fallingGroup.RemoveSelected();
-                if (b != null)
-                    seesaw1.AddBall(b);
-
-                if (seesaw1.checkAnswer())
-                {
-                    RoundComplete();
-                }
-            }
-        }
-
         void ClearBalls()
         {
             fallingGroup.RemoveAllBalls();
@@ -165,6 +140,7 @@ namespace KineticMath.Views
         public override void OnViewActivated()
         {
              base.OnViewActivated();
+             RegisterGestures();
              ParentWindow.AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
         }
 
@@ -185,7 +161,6 @@ namespace KineticMath.Views
                     
                     break;
                 case Key.S:
-                    selectItem();
                     break;
                 case Key.R:
                     Reset();
