@@ -82,6 +82,9 @@
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
+    <Compile Include="SubControls\Brick.xaml.cs">
+      <DependentUpon>Brick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubControls\KinectSkeleton.xaml.cs">
       <DependentUpon>KinectSkeleton.xaml</DependentUpon>
     </Compile>
@@ -118,6 +121,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SubControls\Brick.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SubControls\KinectSkeleton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -173,6 +180,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\brick.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\brick.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
