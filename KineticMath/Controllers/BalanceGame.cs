@@ -11,12 +11,12 @@ namespace KineticMath.Controllers
     /// <summary>
     /// Controls dynamic of the balance game
     /// </summary>
-    public class BalanceGame : DependencyObject
+    public class BalanceGame : Game
     {
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-        public void NewGame()
+        public override void StartGame()
         {
         }
 

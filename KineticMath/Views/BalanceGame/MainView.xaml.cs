@@ -48,16 +48,16 @@ namespace KineticMath.Views
 
         private void InitializeGame()
         {
+            bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
             try
             {
                 game = new BalanceGame();
                 DependencyPropertyDescriptor.FromProperty(BalanceGame.HeldBallsProperty, game.GetType()).AddValueChanged(game, new EventHandler(BallsChanged));
-                game.NewGame();
-                // TODO: Actually provide valid coordinates
-                bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
+                game.StartGame();
             }
-            catch(Exception ex){
-                Console.Out.Write(ex.StackTrace);
+            catch (Exception ex)
+            {
+                // TODO: Actually provide valid coordinates
             }
         }
 
