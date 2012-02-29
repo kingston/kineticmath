@@ -50,7 +50,6 @@ namespace KineticMath.Views
         {
             bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
             game = new BalanceGame();
-            DependencyPropertyDescriptor.FromProperty(BalanceGame.HeldBallsProperty, game.GetType()).AddValueChanged(game, new EventHandler(BallsChanged));
             game.NewGame();
             // TODO: Actually provide valid coordinates
             

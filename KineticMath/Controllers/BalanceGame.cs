@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 using KineticMath.SubControls;
 
@@ -13,11 +14,24 @@ namespace KineticMath.Controllers
     /// </summary>
     public class BalanceGame : DependencyObject
     {
+        public BalanceGame()
+        {
+            HeldBalls = new ObservableCollection<Ball>();
+            LeftBalanceBalls = new ObservableCollection<Ball>();
+            RightBalanceBalls = new ObservableCollection<Ball>();
+        }
+
+        public event EventHandler LevelCompleted;
+
+        private int currentLevel = 1;
+
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
         public void NewGame()
         {
+            // TODO: Load new game
+            SetupLevel();
         }
 
         /// <summary>
@@ -25,6 +39,28 @@ namespace KineticMath.Controllers
         /// </summary>
         public void VerifySolution()
         {
+            if (LeftBalanceBalls.Count > 0 && LeftBalanceBalls.Sum(s => s.Weight) == RightBalanceBalls.Sum(s => s.Weight))
+            {
+                if (LevelCompleted != null)
+                {
+                    LevelCompleted(this, EventArgs.Empty);
+                }
+                currentLevel++;
+                LoadLevel(currentLevel);
+            }
+        }
+
+        private void LoadLevel(int level)
+        {
+            // TODO: Load the given leve
+            SetupLevel();
+        }
+
+        private void SetupLevel()
+        {
+            // TODO: Set up all the balls, etc. from the start parameters
+            // (called during load level and reset)
+            
         }
 
         /// <summary>
@@ -41,6 +77,7 @@ namespace KineticMath.Controllers
         /// </summary>
         public void Reset()
         {
+            SetupLevel();
         }
 
         /// <summary>
@@ -60,43 +97,10 @@ namespace KineticMath.Controllers
             }
         }
 
-        /// <summary>
-        /// Balls that are pushable
-        /// </summary>
-        public List<Ball> HeldBalls
-        {
-            get { return (List<Ball>)GetValue(HeldBallsProperty); }
-            set { SetValue(HeldBallsProperty, value); }
-        }
+        public ObservableCollection<Ball> HeldBalls { get; private set; }
 
-        // Using a DependencyProperty as the backing store for HeldBalls.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty HeldBallsProperty =
-            DependencyProperty.Register("HeldBalls", typeof(List<Ball>), typeof(BalanceGame), new UIPropertyMetadata(0));
+        public ObservableCollection<Ball> LeftBalanceBalls { get; private set; }
 
-        /// <summary>
-        /// Balls on the left of the balance
-        /// </summary>
-        public List<Ball> LeftBalanceBalls
-        {
-            get { return (List<Ball>)GetValue(LeftBalanceBallsProperty); }
-            set { SetValue(LeftBalanceBallsProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for LeftBalanceBalls.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LeftBalanceBallsProperty =
-            DependencyProperty.Register("LeftBalanceBalls", typeof(List<Ball>), typeof(BalanceGame), new UIPropertyMetadata(0));
-
-        /// <summary>
-        /// Balls on the right of the balance
-        /// </summary>
-        public List<Ball> RightBalanceBalls
-        {
-            get { return (List<Ball>)GetValue(RightBalanceBallsProperty); }
-            set { SetValue(RightBalanceBallsProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for RightBalanceBalls.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty RightBalanceBallsProperty =
-            DependencyProperty.Register("RightBalanceBalls", typeof(List<Ball>), typeof(BalanceGame), new UIPropertyMetadata(0));        
+        public ObservableCollection<Ball> RightBalanceBalls { get; private set; }
     }
 }
