@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Shapes;
 
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
+using KineticMath.Controllers;
 
 
 namespace KineticMath.SubControls
@@ -34,6 +36,16 @@ namespace KineticMath.SubControls
         {
             InitializeComponent();
             //rightBallPanel.LastChildFill = false;
+        }
+
+        public void RegisterGame(BalanceGame game)
+        {
+            game.LeftBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(LeftBalanceBalls_CollectionChanged);
+        }
+
+        void LeftBalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // TODO: Implement left ball changed
         }
 
         public void AddObject(SeesawObject obj, bool isLeft = true)
