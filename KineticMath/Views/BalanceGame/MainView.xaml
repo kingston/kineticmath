@@ -8,12 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1200" xmlns:my="clr-namespace:KineticMath.SubControls">
     <Canvas Width="1200" Height="675">
-        <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw1" />
-        <my:FallingGroup Canvas.Left="100" Canvas.Top="376" x:Name="fallingGroup"/>
-        <Rectangle Canvas.Left="103" Canvas.Top="431" Height="121" Name="rectangle1" Stroke="{x:Null}" Width="15" Fill="#FF964A27" AllowDrop="True" />
-        <Rectangle AllowDrop="True" Canvas.Left="404" Canvas.Top="431" Fill="#FF964A27" Height="121" Name="rectangle2" Stroke="{x:Null}" Width="15" />
-        <Rectangle AllowDrop="True" Canvas.Left="90" Canvas.Top="426" Fill="#FF964A27" Height="18" Name="rectangle3" Stroke="{x:Null}" Width="352" />
+        <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
+        <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxWinLabel" />
+        <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxLoseLabel" />
         <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" Name="uxResetRectangle" Canvas.Top="386" Canvas.Left="456" Width="90" Height="50" Background="#FFFFCC99">
             <Label FontSize="30" Content="Reset" Canvas.Left="460" Canvas.Top="338"></Label>
         </Border>

@@ -9,7 +9,7 @@ namespace KineticMath.Controllers
     /// <summary>
     /// Base class for game
     /// </summary>
-    abstract class Game : DependencyObject
+    public abstract class Game : DependencyObject
     {
         
         public virtual void StartGame()

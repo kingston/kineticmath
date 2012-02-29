@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Coding4Fun.Kinect.Wpf;
 using Microsoft.Kinect;
+using KineticMath.SubControls;
 
 namespace KineticMath.Kinect.Gestures
 {
@@ -22,7 +23,7 @@ namespace KineticMath.Kinect.Gestures
             Joint joint = skeleton.Joints[this.JointType];
             if (joint.TrackingState != JointTrackingState.NotTracked)
             {
-                SkeletonPoint point = joint.Position;
+                SkeletonPoint point = joint.ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale).Position;
                 if (JointMoved != null)
                 {
                     JointMoved(this, new JointMovedEventArgs() { JointType = this.JointType, NewPosition = point });

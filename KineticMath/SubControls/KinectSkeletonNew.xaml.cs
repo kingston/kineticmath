@@ -28,7 +28,7 @@ namespace KineticMath.SubControls
         public static float k_xMaxJointScale = 1.5f;
         public static float k_yMaxJointScale = 1.5f;
 
-        public KinectSkeleton()
+        public KinectSkeletonNew()
         {
             InitializeComponent();
             //Force video to the background
