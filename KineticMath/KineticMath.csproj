@@ -93,7 +93,6 @@
     <Compile Include="Kinect\ConcreteKinectService.cs" />
     <Compile Include="Kinect\DummyKinectService.cs" />
     <Compile Include="Kinect\GestureController.cs" />
-    <Compile Include="Kinect\Gestures\MoveGesture.cs" />
     <Compile Include="Kinect\Gestures\HoldGesture.cs" />
     <Compile Include="Kinect\Gestures\IGesture.cs" />
     <Compile Include="Kinect\Gestures\JumpGesture.cs" />

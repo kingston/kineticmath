@@ -31,6 +31,7 @@ namespace KineticMath.Kinect.PointConverters
         public SkeletonPoint ConvertPoint(SkeletonPoint point)
         {
             // TODO: Actually implement conversion
+
             return point;
         }
     }

@@ -43,33 +43,11 @@ namespace KineticMath.Views
             HoldGesture holder = new HoldGesture();
             holder.UserHolded += new EventHandler(Holder_hold);
             _sharedData.GestureController.AddGesture(this, holder);
-
-            EnergizeGesture energizer = new EnergizeGesture();
-            energizer.UserEnergized += Energizer_energize;
-            _sharedData.GestureController.AddGesture(this, energizer);
-
-            MoveGesture mover = new MoveGesture();
-            mover.UserMoved += Mover_move;
-            _sharedData.GestureController.AddGesture(this, mover);
         }
 
         void Holder_hold(object sender, EventArgs e)
         {
             this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
-        }
-
-        void Energizer_energize(object sender, EnergyEventArgs e)
-        {
-            System.Console.WriteLine("Scale = " + e.GetEnergy());
-            this.SendMessage(new ChangeViewMessage(typeof(TutorialView)));
-        }
-
-        void Mover_move(object sender, MoveEventArgs m)
-        {
-            if(m.GetDirection() == 1)
-                System.Console.WriteLine("Move Right");
-            else
-                System.Console.WriteLine("Move Left");
         }
     }
 }
