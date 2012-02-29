@@ -46,13 +46,12 @@ namespace KineticMath.Views
             Loaded += new RoutedEventHandler(MainView_Loaded);
         }
 
-        private void InitializeGame()
+        private void InitializeGameController()
         {
             bodyConverter = new BodyRelativePointConverter(new Rect(100, 100, 1000, 1000));
             game = new BalanceGame();
             game.NewGame();
             // TODO: Actually provide valid coordinates
-            
         }
 
         public void BallsChanged(object sender, EventArgs e)
@@ -62,28 +61,16 @@ namespace KineticMath.Views
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-            InitializeGame();
+            InitializeGameController();
         }
 
         private BodyRelativePointConverter bodyConverter;
 
         private void RegisterGestures()
         {
-            JointMoveGestures leftHandGesture = new JointMoveGestures(JointType.HandLeft);
-            JointMoveGestures rightHandGesture = new JointMoveGestures(JointType.HandRight);
-            JointMoveGestures leftFootGesture = new JointMoveGestures(JointType.FootLeft);
-            JointMoveGestures rightFootGesture = new JointMoveGestures(JointType.FootRight);
-
-            leftHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            rightHandGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            leftFootGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            rightFootGesture.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-
-            _sharedData.GestureController.AddGesture(this, leftHandGesture);
-            _sharedData.GestureController.AddGesture(this, rightHandGesture);
-            _sharedData.GestureController.AddGesture(this, leftFootGesture);
-            _sharedData.GestureController.AddGesture(this, rightFootGesture);
-
+            JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.FootLeft, JointType.FootRight);
+            handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
+            _sharedData.GestureController.AddGesture(this, handGestures);
         }
 
         void handGesture_JointMoved(object sender, JointMovedEventArgs e)
