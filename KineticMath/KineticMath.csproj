@@ -117,12 +117,15 @@
       <DependentUpon>Ball.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubControls\SeesawObject.cs" />
+    <Compile Include="SubControls\Skeletons\DefaultSkeleton.xaml.cs">
+      <DependentUpon>DefaultSkeleton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\Skeletons\ISkeleton.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\BalanceGame\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-
     <Compile Include="SubControls\Brick.xaml.cs">
       <DependentUpon>Brick.xaml</DependentUpon>
     </Compile>
@@ -165,6 +168,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SubControls\Ball.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControls\Skeletons\DefaultSkeleton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
