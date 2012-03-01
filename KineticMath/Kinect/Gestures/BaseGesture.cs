@@ -27,11 +27,5 @@ namespace KineticMath.Kinect.Gestures
         {
             return skel.Joints[JointType.HandLeft].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
         }
-
-        private Joint GetJointScaledToScreen(Skeleton skel, JointType joint)
-        {
-            // TODO: Don't hard code values
-            return skel.Joints[JointType.HandLeft].ScaleTo(1200, 675, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-        }
     }
 }

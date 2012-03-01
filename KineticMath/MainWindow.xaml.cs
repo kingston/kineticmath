@@ -46,7 +46,7 @@ namespace KineticMath
             sharedViewData.GestureController = new GestureController(sharedViewData.KinectService);
 
             // Set up skeleton control
-            uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
+            // uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
 
             // Set up views
             viewCollection = new Dictionary<string, IView>();

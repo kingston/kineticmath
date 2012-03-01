@@ -55,7 +55,6 @@ namespace KineticMath.Kinect.PointConverters
 
                 curSkeletonId = skel.TrackingId;
             }
-            // TODO: Technically off a little (as it's not center, but close enough)
             bottomCenterPoint = skel.Joints[JointType.HipCenter].Position;
             bottomCenterPoint.Y = minFootY;
         }

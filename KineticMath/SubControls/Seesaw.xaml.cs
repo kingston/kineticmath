@@ -49,7 +49,7 @@ namespace KineticMath.SubControls
         void game_LevelReset(object sender, EventArgs e)
         {
             originalOffset = 0;
-            // TODO: Terminate all animatoins
+            // TODO2: Terminate all animatoins
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -72,7 +72,7 @@ namespace KineticMath.SubControls
             int offset = (int) game.GetBalanceOffset();
             if (offset != originalOffset)
             {
-                // TODO: Trigger balance animation
+                // TODO2: Trigger balance animation
                 originalOffset = offset;
                 RenderWeights();
                 // After animation is complete...

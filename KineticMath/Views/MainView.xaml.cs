@@ -61,12 +61,23 @@ namespace KineticMath.Views
 
         void game_LevelReset(object sender, EventArgs e)
         {
-            // TODO: Terminate all pending animations
+            // TODO2: Terminate all pending animations
         }
 
         void game_LevelCompleted(object sender, EventArgs e)
         {
-            // TODO: Say something cool!
+            uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxWinLabel.Opacity = 1;
+
+            // Hide it when we're done
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+            Storyboard.SetTarget(labelAnimation, uxWinLabel);
+            Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard labelSb = new Storyboard();
+            // TODO2: Start level once animation is over
+            labelSb.Children.Add(labelAnimation);
+            labelSb.Begin();
         }
 
         private void HeldBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
