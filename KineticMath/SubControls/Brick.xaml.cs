@@ -23,8 +23,6 @@ namespace KineticMath.SubControls
 
         public static double BRICK_HEIGHT = 35.5;
 
-        private String text;
-
         private bool _onLeftSeeSaw;
         public bool OnLeftSeeSaw
         {

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using KineticMath.Helpers;
 using KineticMath.Views;
 using KineticMath.Kinect;
 using KineticMath.Messaging;
@@ -46,11 +47,19 @@ namespace KineticMath
             sharedViewData.GestureController = new GestureController(sharedViewData.KinectService);
 
             // Set up skeleton control
-            uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
+            // uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
 
             // Set up views
             viewCollection = new Dictionary<string, IView>();
             LoadView(typeof(MainView));
+
+            // Listen for log messages if we're debugging
+            DebugHelper.GetInstance().DebugMessageReceived += new EventHandler<DebugMessageReceivedEventArgs>(MainWindow_DebugMessageReceived);
+        }
+
+        void MainWindow_DebugMessageReceived(object sender, DebugMessageReceivedEventArgs e)
+        {
+            uxDebugLabel.Content = e.Message;
         }
 
         private void LoadView(Type viewType)

@@ -83,6 +83,7 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\BalanceGame.cs" />
     <Compile Include="Controllers\Game.cs" />
+	<Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Kinect\ConcreteKinectService.cs" />
     <Compile Include="Kinect\DummyKinectService.cs" />
     <Compile Include="Kinect\GestureController.cs" />
-    <Compile Include="Kinect\Gestures\MoveGesture.cs" />
     <Compile Include="Kinect\Gestures\HoldGesture.cs" />
     <Compile Include="Kinect\Gestures\IGesture.cs" />
     <Compile Include="Kinect\Gestures\JumpGesture.cs" />
@@ -236,6 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ball.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

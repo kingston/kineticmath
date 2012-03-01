@@ -10,23 +10,25 @@ namespace KineticMath.Kinect.Gestures
 {
     public class JointMoveGestures : BaseGesture
     {
-        public JointType JointType { get; private set; }
+        public JointType[] JointTypes { get; private set; }
         public event EventHandler<JointMovedEventArgs> JointMoved;
 
-        public JointMoveGestures(JointType type)
+        public JointMoveGestures(params JointType[] types)
         {
-            this.JointType = type;
+            this.JointTypes = types;
         }
 
         public override void OnProcessSkeleton(Skeleton skeleton)
         {
-            Joint joint = skeleton.Joints[this.JointType];
-            if (joint.TrackingState != JointTrackingState.NotTracked)
+            foreach (var type in this.JointTypes)
             {
-                SkeletonPoint point = joint.ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale).Position;
-                if (JointMoved != null)
+                Joint joint = skeleton.Joints[type];
+                if (joint.TrackingState != JointTrackingState.NotTracked)
                 {
-                    JointMoved(this, new JointMovedEventArgs() { JointType = this.JointType, NewPosition = point });
+                    if (JointMoved != null)
+                    {
+                        JointMoved(this, new JointMovedEventArgs() { JointType = type, NewPosition = joint.Position });
+                    }
                 }
             }
         }

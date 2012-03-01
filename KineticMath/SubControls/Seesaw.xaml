@@ -18,8 +18,8 @@
                     <ScaleTransform ScaleY="-1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
+            <Canvas Name="rightBallPanel" Canvas.Left="257" Canvas.Top="10" Height="240" Width="61" />
         </Canvas>
-        <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
-        <Canvas Name="rightBallPanel" Canvas.Left="296" Canvas.Top="6" Height="244" Width="63" />
+        <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" /> 
     </Canvas>
 </UserControl>

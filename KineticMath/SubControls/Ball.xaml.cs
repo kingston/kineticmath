@@ -91,5 +91,15 @@ namespace KineticMath.SubControls
             canvas.Width = width;
             canvas.Height = height;
         }
+
+        private void SeesawObject_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void image1_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+
+        }
     }
 }
