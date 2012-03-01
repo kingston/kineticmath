@@ -6,9 +6,6 @@ using System.Windows.Controls;
 
 namespace KineticMath.SubControls
 {
-    /// <summary>
-    /// Interaction logic for SeesawObject.xaml
-    /// </summary>
     public class SeesawObject : UserControl
     {
         protected String text;
