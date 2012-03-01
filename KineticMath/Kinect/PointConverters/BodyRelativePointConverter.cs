@@ -24,7 +24,7 @@ namespace KineticMath.Kinect.PointConverters
         //  Shoulder to foot: 150
         //  Foot to Extended Arm: 230
         //  Foot to Half Way Point: 115 (just above hip)
-        private const int SHOULDER_TO_EXTENDED_ARM_RATIO = 230 / 150;
+        private const double SHOULDER_TO_EXTENDED_ARM_RATIO = 230.0 / 150;
 
         // TODO: Add a meaningful scale for the scale factor
         private float scaleFactor = 1.0f; //The scale factor to scale from points in Kinect space to canvas space
@@ -67,10 +67,10 @@ namespace KineticMath.Kinect.PointConverters
         public SkeletonPoint ConvertPoint(SkeletonPoint point)
         {
             SkeletonPoint pt = new SkeletonPoint();
-            pt.X = ScalePoint(pt.X, bottomCenterPoint.X) - (float) ActiveRectangle.Width / 2 + (float) ActiveRectangle.X;
-            pt.Y = (float) ActiveRectangle.Height - ScalePoint(pt.X, bottomCenterPoint.Y) + (float) ActiveRectangle.Y;
-            pt.Z = ScalePoint(pt.Z, bottomCenterPoint.Z);
-            return point;
+            pt.X = ScalePoint(point.X, bottomCenterPoint.X) + (float)ActiveRectangle.Width / 2 + (float)ActiveRectangle.X;
+            pt.Y = (float)ActiveRectangle.Height - ScalePoint(point.Y, bottomCenterPoint.Y) + (float)ActiveRectangle.Y;
+            pt.Z = ScalePoint(point.Z, bottomCenterPoint.Z);
+            return pt;
         }
 
         private float ScalePoint(float val, float center)

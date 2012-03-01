@@ -25,10 +25,9 @@ namespace KineticMath.Kinect.Gestures
                 Joint joint = skeleton.Joints[type];
                 if (joint.TrackingState != JointTrackingState.NotTracked)
                 {
-                    SkeletonPoint point = joint.ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale).Position;
                     if (JointMoved != null)
                     {
-                        JointMoved(this, new JointMovedEventArgs() { JointType = type, NewPosition = point });
+                        JointMoved(this, new JointMovedEventArgs() { JointType = type, NewPosition = joint.Position });
                     }
                 }
             }

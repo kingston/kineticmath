@@ -129,10 +129,10 @@ namespace KineticMath.Views
                 BallHolders = new Canvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(0.1, 0.2),
-                    new Point(0.3, 0.1),
-                    new Point(0.7, 0.1),
-                    new Point(0.9, 0.2)
+                    new Point(0.1, 0.3),
+                    new Point(0.3, 0.2),
+                    new Point(0.7, 0.2),
+                    new Point(0.9, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 for (int i = 0; i < numHolders; i++)
@@ -188,9 +188,7 @@ namespace KineticMath.Views
 
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(
-                new Rect(Canvas.GetLeft(uxPersonRectangle), Canvas.GetTop(uxPersonRectangle), uxPersonRectangle.ActualWidth, uxPersonRectangle.ActualHeight),
-                this._sharedData.GestureController);
+            bodyConverter = new BodyRelativePointConverter(GetBoundingRectangle(uxPersonRectangle), this._sharedData.GestureController);
 
             JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.HipCenter);
             handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
@@ -265,7 +263,7 @@ namespace KineticMath.Views
         /// <returns></returns>
         private Rect GetBoundingRectangle(FrameworkElement element)
         {
-            return new Rect(Canvas.GetLeft(element), Canvas.GetTop(element), element.ActualWidth, element.ActualHeight);
+            return new Rect(Canvas.GetLeft(element), Canvas.GetTop(element), element.Width, element.Height);
         }
 
         /*** EVERYTHING BELOW HERE IS OLD CODE ***/
