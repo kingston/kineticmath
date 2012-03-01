@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using KineticMath.Kinect.PointConverters;
 using KineticMath.Controllers;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace KineticMath.Views
 {
@@ -68,15 +69,54 @@ namespace KineticMath.Views
             // TODO: Say something cool!
         }
 
-        void HeldBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void HeldBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            // Update the held balls accordingly
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            ObservableCollection<Ball> col = (ObservableCollection<Ball>)sender;
+            SetupBallHolders(col.Count);
+            for (int i = 0; i < col.Count; i++)
             {
-                // Add balls to screen
-            } else if (e.Action == NotifyCollectionChangedAction.Replace) 
+                if (col[i] == null) {
+                    BallHolders[i].Children.Clear();
+                } else if (BallHolders[i].Children.Count == 0) {
+                    BallHolders[i].Children.Add(col[i]);
+                }
+            }
+        }
+
+        // TODO2: Use an actual ball holder UI control, not a canvas
+        private Canvas[] BallHolders;
+
+        private void SetupBallHolders(int numHolders)
+        {
+            if (BallHolders == null || BallHolders.Length != numHolders)
             {
-                // Remove ball from screen as it would be replaced with null
+                // Remove all the ball holders
+                if (BallHolders != null)
+                {
+                    foreach (var holder in BallHolders)
+                    {
+                        uxMainCanvas.Children.Remove(holder);
+                    }
+                }
+                BallHolders = new Canvas[numHolders];
+                // Points relative to the uxPersonCanvas space
+                Point[] holderPositions = new Point[] {
+                    new Point(100, 300),
+                    new Point(150, 200),
+                    new Point(250, 200),
+                    new Point(300, 300)
+                };
+                if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
+                for (int i = 0; i < numHolders; i++)
+                {
+                    Canvas canvas = new Canvas();
+                    canvas.Width = 100;
+                    canvas.Height = 100;
+                    uxMainCanvas.Children.Add(canvas);
+                    Canvas.SetLeft(canvas, holderPositions[i].X + Canvas.GetLeft(uxPersonRectangle));
+                    Canvas.SetTop(canvas, holderPositions[i].Y + Canvas.GetTop(uxPersonRectangle));
+                    BallHolders[i] = canvas;
+                }
             }
         }
 
@@ -136,11 +176,21 @@ namespace KineticMath.Views
         {
             SkeletonPoint pt = bodyConverter.ConvertPoint(e.Position);
             Ball pushedBall = null;
-            // TODO: Identify which ball was pushed
+            foreach (var holder in BallHolders)
+            {
+                Rect rect = GetBoundingRectangle(holder);
+                if (rect.Contains(ConvertSkeletonPointTo2DPoint(e.Position)))
+                {
+                    if (holder.Children.Count > 0)
+                    {
+                        pushedBall = (Ball)holder.Children[0];
+                    }
+                }
+            }
             if (pushedBall != null)
             {
                 game.PushBall(pushedBall);
-                // TODO: Trigger animation for ball and after animation is triggered
+                // TODO2: Trigger animation for ball and after animation is triggered
                 game.AddBallToBalance(pushedBall, true); // push ball to left side
             }
         }
@@ -149,7 +199,43 @@ namespace KineticMath.Views
         {
             // Show the movement on the screen
             SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
-            // TODO: Reflect move action on screen
+            // TODO2: Make pretty way to reflect hand movements
+            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
+            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
+        }
+
+        private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
+        {
+            Canvas.SetLeft(element, pt.X + element.ActualWidth / 2);
+            Canvas.SetTop(element, pt.Y + element.ActualHeight / 2);
+        }
+
+        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Rect rect = GetBoundingRectangle(uxPersonRectangle);
+            Point pt = e.GetPosition(uxMainCanvas);
+            if (rect.Contains(e.GetPosition(uxMainCanvas))) {
+                SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
+                handPushGesture_HandPushed(this, new HandPushedEventArgs() { Joint = JointType.HandLeft, Position = skelPt });
+            }
+        }
+
+        // TODO3: Extract out to extension methods
+        private Point ConvertSkeletonPointTo2DPoint(SkeletonPoint pt)
+        {
+            return new Point(pt.X, pt.Y);
+        }
+
+        /// <summary>
+        /// Gets the bounding rectangle of an element given the canvas
+        /// 
+        /// TODO3: Extract out somewhere else
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        private Rect GetBoundingRectangle(FrameworkElement element)
+        {
+            return new Rect(Canvas.GetLeft(element), Canvas.GetTop(element), element.ActualWidth, element.ActualHeight);
         }
 
         /*** EVERYTHING BELOW HERE IS OLD CODE ***/
