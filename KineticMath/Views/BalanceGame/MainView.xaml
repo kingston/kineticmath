@@ -30,12 +30,61 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="ThumbStyle1" TargetType="{x:Type Thumb}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Thumb}">
+						<Grid>
+							<GroupItem x:Name="uxLeftHand" Content="GroupItem" Style="{DynamicResource GroupItemStyle1}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ThumbStyle2" TargetType="{x:Type Thumb}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Thumb}">
+						<Grid>
+							<GroupItem x:Name="uxRightHand" Content="GroupItem" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource GroupItemStyle1}">
+								<GroupItem.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform ScaleY="1" ScaleX="-1"/>
+										<SkewTransform AngleY="0" AngleX="0"/>
+										<RotateTransform Angle="0"/>
+										<TranslateTransform/>
+									</TransformGroup>
+								</GroupItem.RenderTransform>
+							</GroupItem>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ControlStyle1" TargetType="{x:Type Control}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Control}">
+						<Grid>
+							<Rectangle RadiusY="10" RadiusX="10">
+								<Rectangle.Fill>
+									<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+										<GradientStop Color="#FF061427" Offset="0"/>
+										<GradientStop Color="#FF0A3978" Offset="1"/>
+									</LinearGradientBrush>
+								</Rectangle.Fill>
+							</Rectangle>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</views:BaseView.Resources>
     <Canvas Width="1200" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
         <KineticMath:Background Canvas.Top="4" d:LayoutOverrides="Width, Height"/>
         <my:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
-        <GroupItem x:Name="uxLeftHand" Content="GroupItem" Height="50" Canvas.Left="150" Style="{DynamicResource GroupItemStyle1}" Canvas.Top="300" Width="50"/>
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
         <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Pink" />
         <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" x:Name="uxResetRectangle" Canvas.Top="386" Canvas.Left="456" Width="90" Height="50" Background="#FFFFCC99">
             <Label FontSize="30" Content="Reset" Canvas.Left="460" Canvas.Top="338"/>
@@ -48,15 +97,7 @@
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="100" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxLoseLabel" />
-        <GroupItem x:Name="uxRightHand" Content="GroupItem" Height="50" Canvas.Left="400" Style="{DynamicResource GroupItemStyle1}" Canvas.Top="300" Width="50" RenderTransformOrigin="0.5,0.5">
-        	<GroupItem.RenderTransform>
-        		<TransformGroup>
-        			<ScaleTransform ScaleY="1" ScaleX="-1"/>
-        			<SkewTransform AngleY="0" AngleX="0"/>
-        			<RotateTransform Angle="0"/>
-        			<TranslateTransform/>
-        		</TransformGroup>
-        	</GroupItem.RenderTransform>
-        </GroupItem>
+        <Thumb Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
+        <Control Height="50" Canvas.Left="104" Style="{DynamicResource ControlStyle1}" Canvas.Top="229" Width="50"/>
     </Canvas>
 </views:BaseView>
