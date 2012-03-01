@@ -6,6 +6,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 
 using KineticMath.SubControls;
+using System.Windows.Threading;
 
 namespace KineticMath.Controllers
 {
@@ -14,12 +15,31 @@ namespace KineticMath.Controllers
     /// </summary>
     public class BalanceGame : DependencyObject
     {
+        public static int SECOND = 1;
+        public static int MINUTE = 60;
+
+        DispatcherTimer timer;
+        public Mode mode;
+
+        public enum Mode
+        {
+            Challenge,
+            Practice
+        }
+
+        public int Counter { get; set; }
+        public int Score { get; set; }
+
         public BalanceGame()
         {
+            timer = new DispatcherTimer();
+            mode = Mode.Challenge;
             HeldBalls = new ObservableCollection<Ball>();
             LeftBalanceBalls = new ObservableCollection<Ball>();
             RightBalanceBalls = new ObservableCollection<Ball>();
         }
+
+        public event EventHandler UpdateView;
 
         public event EventHandler LevelCompleted;
 
@@ -38,10 +58,63 @@ namespace KineticMath.Controllers
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-        public void NewGame()
+        public void ChallengeMode()
+        {
+            NewGame();
+        }
+
+        private void timerHandler(Object sender, EventArgs args)
+        {
+            Counter++;
+            if (Counter <= MINUTE)
+            {
+                System.Console.Write(Counter);
+                UpdateView(this, EventArgs.Empty);
+                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                timer.Start();
+            }
+        }
+
+        public void setMode(Mode mode)
+        {
+            this.mode = mode;
+        }
+
+        /// <summary>
+        /// Starts a new game and resets everything
+        /// </summary>
+        public void PracticeMode()
         {
             currentLevel = 1;
             LoadCurrentLevel();
+        }
+
+        /// <summary>
+        /// Starts a new game and resets everything
+        /// </summary>
+        public void NewGame()
+        {
+            if (mode == Mode.Challenge)
+            {
+                if (Counter == 0)
+                    timer.Tick += new EventHandler(timerHandler);
+                else
+                    Counter = 0;
+                
+                Score = 0;
+                currentLevel = 1;
+                LoadCurrentLevel();
+                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                
+                timer.Start();
+            }
+            else
+            {
+                if (timer.IsEnabled)
+                    timer.Stop();
+                currentLevel = 1;
+                LoadCurrentLevel();
+            };
         }
 
         /// <summary>
@@ -55,6 +128,7 @@ namespace KineticMath.Controllers
                 {
                     if (LevelCompleted != null)
                     {
+                        Score++;
                         LevelCompleted(this, EventArgs.Empty);
                     }
                     currentLevel++;

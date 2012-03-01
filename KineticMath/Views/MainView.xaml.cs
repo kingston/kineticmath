@@ -55,9 +55,47 @@ namespace KineticMath.Views
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
+            game.UpdateView += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
             game.NewGame();
         }
+
+        void timerCallback(object sender, EventArgs e)
+        {
+            BalanceGame bg = (BalanceGame) sender;
+            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + (60 - bg.Counter);
+            if (60 - bg.Counter == 0)
+            {
+                modeLabel.Content = "Time's up!";
+                statusLabel.Content = "You scored " + bg.Score + " points!";
+
+                finalScore.Content = "Score: " + bg.Score;
+                playAgain.BeginAnimation(UIElement.OpacityProperty, null);
+                finalScore.BeginAnimation(UIElement.OpacityProperty, null);
+                playAgain.Opacity = 1;
+                finalScore.Opacity = 1;
+                // Hide it when we're done
+                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                Storyboard.SetTarget(labelAnimation, playAgain);
+                Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+                Storyboard.SetTarget(imageAnimation, finalScore);
+                Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+                Storyboard labelSb = new Storyboard();
+                labelSb.Children.Add(labelAnimation);
+                labelSb.Children.Add(imageAnimation);
+                
+
+                labelSb.Completed += delegate {
+                    modeLabel.Content = "Challenge Mode";
+                    game.NewGame();
+                };
+                labelSb.Begin();
+            }
+        }
+
 
         void game_LevelLost(object sender, EventArgs e)
         {
@@ -151,6 +189,20 @@ namespace KineticMath.Views
 
         private void HandleKeyDownEvent(object sender, KeyEventArgs e)
         {
+            switch (e.Key)
+            {
+                case Key.D1:
+                    modeLabel.Content = "Challenge Mode";
+                    game.setMode(BalanceGame.Mode.Challenge);
+                    game.NewGame();
+                    break;
+                case Key.D2:
+                    modeLabel.Content = "Practice Mode";
+                    statusLabel.Content = "";
+                    game.setMode(BalanceGame.Mode.Practice);
+                    game.NewGame();
+                    break;
+            }
             //Console.Out.WriteLine("Keydown");
             //switch (e.Key)
             //{

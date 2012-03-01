@@ -24,7 +24,7 @@ namespace KineticMath.SubControls
         public static Color SELECTED_COLOR = Colors.Orange;
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
-        public static double BALL_HEIGHT = 50;
+        public static double BALL_HEIGHT = 80;
 
         private bool selected;
 

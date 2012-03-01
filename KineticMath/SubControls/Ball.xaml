@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:src="clr-namespace:KineticMath.SubControls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="50">
-    <Canvas Name="canvas" Width="50" Height="50">
-        <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="50" Height="50"/>
-        <Image Canvas.Left="0" Canvas.Top="0" Height="50" Name="ball" Stretch="Fill" Width="50" Source="/KineticMath;component/Images/ball.png" ImageFailed="image1_ImageFailed" />
-        <TextBlock Canvas.Left="0" FontSize="25" Canvas.Top="7" Height="40" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5" Foreground="#FFEE236A">
+             d:DesignHeight="80" d:DesignWidth="80">
+    <Canvas Name="canvas" Width="80" Height="80">
+        <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="80" Height="80"/>
+        <Image Canvas.Left="0" Canvas.Top="0" Height="80" Name="ball" Stretch="Fill" Width="80" Source="/KineticMath;component/Images/ball.png" ImageFailed="image1_ImageFailed" />
+        <TextBlock Canvas.Left="15" FontSize="30" Canvas.Top="18" Height="40" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5" Foreground="#FFEE236A">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>

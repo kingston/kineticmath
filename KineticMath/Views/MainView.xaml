@@ -7,7 +7,7 @@
                 xmlns:subcontrols="clr-namespace:KineticMath.SubControls"
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1200" xmlns:my="clr-namespace:KineticMath.SubControls">
-    <Canvas Width="1200" Height="675" Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
+    <Canvas Width="1200" Height="675" Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" DataContext="{Binding RelativeSource={RelativeSource Self}}">
         <subcontrols:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Ellipse Canvas.Left="150" Canvas.Top="300" Width="50" Height="50" Name="uxLeftHand" Fill="Orange" />
@@ -24,5 +24,9 @@
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" Name="uxPersonRectangle" Stroke="Black" Opacity="100" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxWinLabel" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0.0" Name="uxLoseLabel" />
+        <Label Canvas.Left="40" Canvas.Top="50" Content="Challenge Mode" Height="58" Name="modeLabel" Width="283" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="34" />
+        <Label Canvas.Left="312" Canvas.Top="50" Height="58" Name="statusLabel" Width="218" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" />
+        <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" />
+        <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
     </Canvas>
 </views:BaseView>
