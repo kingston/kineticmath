@@ -20,6 +20,6 @@
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
-        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="500" Name="uxPersonRectangle" Stroke="White" />
+        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="500" Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
     </Canvas>
 </views:BaseView>

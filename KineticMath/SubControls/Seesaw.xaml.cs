@@ -27,39 +27,59 @@ namespace KineticMath.SubControls
 
     public partial class Seesaw : UserControl
     {
-        HashSet<SeesawObject> _leftObjects = new HashSet<SeesawObject>();
-        HashSet<SeesawObject> _rightObjects = new HashSet<SeesawObject>();
+        private BalanceGame game;
+        private double originalOffset = 0;
 
         private double currentBottom = 0;
 
         public Seesaw()
         {
             InitializeComponent();
-            //rightBallPanel.LastChildFill = false;
         }
 
         public void RegisterGame(BalanceGame game)
         {
-            game.LeftBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(LeftBalanceBalls_CollectionChanged);
+            game.LeftBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(BalanceBalls_CollectionChanged);
+            game.RightBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(BalanceBalls_CollectionChanged);
+            this.game = game;
         }
 
-        void LeftBalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            // TODO: Implement left ball changed
+            bool isLeft = (sender == game.LeftBalanceBalls);
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Ball obj in e.NewItems)
+                {
+                    AddObject(obj, isLeft);
+                }
+            }
+            else
+            {
+                foreach (Ball obj in e.NewItems)
+                {
+                    RemoveObject(obj, isLeft);
+                }
+            }
+            int offset = (int) game.GetBalanceOffset();
+            if (offset != originalOffset)
+            {
+                // TODO: Trigger balance animation
+                originalOffset = offset;
+                // After animation is complete...
+                game.VerifySolution();
+            }
         }
 
-        public void AddObject(SeesawObject obj, bool isLeft = true)
+        public void AddObject(Ball obj, bool isLeft = true)
         {
-
             if (isLeft)
             {
                 obj.OnLeftSeesaw = true;
-                _leftObjects.Add(obj);
                 leftBallPanel.Children.Add(obj);
             }
             else
             {
-                _rightObjects.Add(obj);
                 rightBallPanel.Children.Add(obj);
                 Canvas.SetBottom(obj, currentBottom);
                 currentBottom += obj.Height;
@@ -69,55 +89,31 @@ namespace KineticMath.SubControls
         }
 
 
-        public void RemoveObject(SeesawObject obj, bool isLeft = true)
+        public void RemoveObject(Ball obj, bool isLeft = true)
         {
             if (isLeft)
             {
                 obj.OnLeftSeesaw = false;
-                _leftObjects.Remove(obj);
                 leftBallPanel.Children.Remove(obj);
             }
             else
             {
-                _rightObjects.Remove(obj);
                 rightBallPanel.Children.Remove(obj);
             }
             RenderWeights();
         }
 
-        public void RemoveAllObjects()
-        {
-            foreach (var obj in _leftObjects)
-            {
-                leftBallPanel.Children.Remove(obj);
-            }
-            foreach (var obj in _rightObjects)
-            {
-                rightBallPanel.Children.Remove(obj);
-            }
-            _leftObjects.Clear();
-            _rightObjects.Clear();
-        }
-
         private void RenderWeights()
         {
             // Work out rotation
-            double leftSideWeight = _leftObjects.Select(x => x.Weight).Sum();
-            double rightSideWeight = _rightObjects.Select(x => x.Weight).Sum();
+            double leftSideWeight = game.LeftBalanceBalls.Select(x => x.Weight).Sum();
+            double rightSideWeight = game.RightBalanceBalls.Select(x => x.Weight).Sum();
             double ratio = 0.25;
             double max = Math.Max(leftSideWeight, rightSideWeight);
             if (25 / max < 0.25) ratio = 25 / max;
             double angle = (rightSideWeight - leftSideWeight)*0.25;
             Console.Out.WriteLine("angle:"+angle);
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
-        }
-
-        public bool checkAnswer()
-        {
-            currentBottom = 0;
-            double leftSideWeight = _leftObjects.Select(x => x.Weight).Sum();
-            double rightSideWeight = _rightObjects.Select(x => x.Weight).Sum();
-            return leftSideWeight == rightSideWeight;
         }
     }
 }

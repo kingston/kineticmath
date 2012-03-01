@@ -23,15 +23,15 @@ namespace KineticMath.Controllers
 
         public event EventHandler LevelCompleted;
 
-        private int currentLevel = 1;
+        private int currentLevel;
 
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
         public void NewGame()
         {
-            // TODO: Load new game
-            SetupLevel();
+            currentLevel = 1;
+            LoadCurrentLevel();
         }
 
         /// <summary>
@@ -46,13 +46,13 @@ namespace KineticMath.Controllers
                     LevelCompleted(this, EventArgs.Empty);
                 }
                 currentLevel++;
-                LoadLevel(currentLevel);
+                LoadCurrentLevel();
             }
         }
 
-        private void LoadLevel(int level)
+        private void LoadCurrentLevel()
         {
-            // TODO: Load the given leve
+            // TODO: Load the given level
             SetupLevel();
         }
 
@@ -60,7 +60,6 @@ namespace KineticMath.Controllers
         {
             // TODO: Set up all the balls, etc. from the start parameters
             // (called during load level and reset)
-            
         }
 
         /// <summary>
@@ -98,6 +97,12 @@ namespace KineticMath.Controllers
             {
                 RightBalanceBalls.Add(ball);
             }
+        }
+
+        // Gets the amount of weight the right side is heavier than the left
+        public double GetBalanceOffset()
+        {
+            return RightBalanceBalls.Sum(s => s.Weight) - LeftBalanceBalls.Sum(s => s.Weight);
         }
 
         public ObservableCollection<Ball> HeldBalls { get; private set; }
