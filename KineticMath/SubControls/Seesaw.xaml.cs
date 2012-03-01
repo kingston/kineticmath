@@ -49,7 +49,8 @@ namespace KineticMath.SubControls
         void game_LevelReset(object sender, EventArgs e)
         {
             originalOffset = 0;
-            // TODO2: Terminate all animatoins
+            currentBottom = 0;
+            // TODO2: Terminate all animations
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -62,12 +63,17 @@ namespace KineticMath.SubControls
                     AddObject(obj, isLeft);
                 }
             }
-            else
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (Ball obj in e.NewItems)
+                foreach (Ball obj in e.OldItems)
                 {
                     RemoveObject(obj, isLeft);
                 }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Panel panel = isLeft ? (Panel) leftBallPanel : (Panel) rightBallPanel;
+                panel.Children.Clear();
             }
             int offset = (int) game.GetBalanceOffset();
             if (offset != originalOffset)
@@ -92,7 +98,6 @@ namespace KineticMath.SubControls
                 rightBallPanel.Children.Add(obj);
                 Canvas.SetBottom(obj, currentBottom);
                 currentBottom += obj.Height;
-
             }
         }
 

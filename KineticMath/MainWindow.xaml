@@ -4,7 +4,7 @@
         Title="MainWindow" Height="834" Width="1225" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
     <Canvas>
         <Canvas Name="uxMainCanvas" Width="1200" Height="675" Canvas.Top="0" Canvas.Left="0">
-            <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0.5" Canvas.Top="85">
+            <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0" Canvas.Top="85">
             </my:KinectSkeleton>
             <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
         </Canvas>

@@ -22,7 +22,15 @@ namespace KineticMath.Controllers
         }
 
         public event EventHandler LevelCompleted;
-        // Called when the level is reset and should end all animations that would add balls
+
+        /// <summary>
+        /// Called when they got the wrong answer
+        /// </summary>
+        public event EventHandler LevelLost;
+
+        /// <summary>
+        /// Called when the level is reset and should end all animations that would add balls
+        /// </summary>
         public event EventHandler LevelReset;
 
         private int currentLevel;
@@ -41,14 +49,26 @@ namespace KineticMath.Controllers
         /// </summary>
         public void VerifySolution()
         {
-            if (LeftBalanceBalls.Count > 0 && LeftBalanceBalls.Sum(s => s.Weight) == RightBalanceBalls.Sum(s => s.Weight))
+            if (LeftBalanceBalls.Count > 0)
             {
-                if (LevelCompleted != null)
+                if (LeftBalanceBalls.Sum(s => s.Weight) == RightBalanceBalls.Sum(s => s.Weight))
                 {
-                    LevelCompleted(this, EventArgs.Empty);
+                    if (LevelCompleted != null)
+                    {
+                        LevelCompleted(this, EventArgs.Empty);
+                    }
+                    currentLevel++;
+                    LoadCurrentLevel();
                 }
-                currentLevel++;
-                LoadCurrentLevel();
+                else
+                {
+                    // Triger loss
+                    Reset();
+                    if (LevelLost != null)
+                    {
+                        LevelLost(this, EventArgs.Empty);
+                    }
+                }
             }
         }
 
@@ -64,7 +84,7 @@ namespace KineticMath.Controllers
                     targetRightSide = new int[] { 2, 3 };
                     break;
                 case 2:
-                    curBalls = new int[] { 5, 7, 3, 4 };
+                    curBalls = new int[] { 5, 7, 3, 6 };
                     targetRightSide = new int[] { 5, 1 };
                     break;
                 case 3:
@@ -87,7 +107,7 @@ namespace KineticMath.Controllers
                     }
                     i = 0;
                     curBalls = new int[4];
-                    int answer = curBalls.Sum();
+                    int answer = targetRightSide.Sum();
                     while (i < curBalls.Length)
                     {
                         int candidate = rand.Next(Convert.ToInt32(Math.Min(answer * 0.5, 1)), answer * 2);

@@ -17,9 +17,12 @@ namespace KineticMath.Kinect.Gestures
         public override void ProcessSkeleton(Skeleton skeleton)
         {
             // Clean up old entries
-            while (DateTime.Now.Subtract(skeletalHistory.Last().Time).Milliseconds > maxTimeToLive)
+            if (skeletalHistory.Count > 0)
             {
-                skeletalHistory.RemoveAt(skeletalHistory.Count - 1);
+                while (DateTime.Now.Subtract(skeletalHistory.Last().Time).Milliseconds > maxTimeToLive)
+                {
+                    skeletalHistory.RemoveAt(skeletalHistory.Count - 1);
+                }
             }
             skeletalHistory.Add(new SkeletonTimeEntry() { Time = DateTime.Now, Skeleton = skeleton });
             base.ProcessSkeleton(skeleton);

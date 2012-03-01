@@ -54,7 +54,23 @@ namespace KineticMath.Views
             game.HeldBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(HeldBalls_CollectionChanged);
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
+            game.LevelLost += new EventHandler(game_LevelLost);
+            seesaw.RegisterGame(game);
             game.NewGame();
+        }
+
+        void game_LevelLost(object sender, EventArgs e)
+        {
+            uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxLoseLabel.Opacity = 1;
+            // Hide it when we're done
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            Storyboard.SetTarget(labelAnimation, uxLoseLabel);
+            Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard labelSb = new Storyboard();
+            labelSb.Children.Add(labelAnimation);
+            labelSb.Begin();
         }
 
         void game_LevelReset(object sender, EventArgs e)
@@ -88,6 +104,8 @@ namespace KineticMath.Views
                     BallHolders[i].Children.Clear();
                 } else if (BallHolders[i].Children.Count == 0) {
                     BallHolders[i].Children.Add(col[i]);
+                    Canvas.SetLeft(col[i], 0);
+                    Canvas.SetTop(col[i], 0);
                 }
             }
         }
@@ -104,26 +122,28 @@ namespace KineticMath.Views
                 {
                     foreach (var holder in BallHolders)
                     {
+                        holder.Children.Clear();
                         uxMainCanvas.Children.Remove(holder);
                     }
                 }
                 BallHolders = new Canvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(100, 300),
-                    new Point(150, 200),
-                    new Point(250, 200),
-                    new Point(300, 300)
+                    new Point(0.1, 0.2),
+                    new Point(0.3, 0.1),
+                    new Point(0.7, 0.1),
+                    new Point(0.9, 0.2)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 for (int i = 0; i < numHolders; i++)
                 {
                     Canvas canvas = new Canvas();
-                    canvas.Width = 100;
-                    canvas.Height = 100;
+                    canvas.Width = 50;
+                    canvas.Height = 50;
                     uxMainCanvas.Children.Add(canvas);
-                    Canvas.SetLeft(canvas, holderPositions[i].X + Canvas.GetLeft(uxPersonRectangle));
-                    Canvas.SetTop(canvas, holderPositions[i].Y + Canvas.GetTop(uxPersonRectangle));
+                    // -25 to center it
+                    Canvas.SetLeft(canvas, holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - 25);
+                    Canvas.SetTop(canvas, holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - 25);
                     BallHolders[i] = canvas;
                 }
             }
@@ -172,13 +192,23 @@ namespace KineticMath.Views
                 new Rect(Canvas.GetLeft(uxPersonRectangle), Canvas.GetTop(uxPersonRectangle), uxPersonRectangle.ActualWidth, uxPersonRectangle.ActualHeight),
                 this._sharedData.GestureController);
 
-            JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight);
+            JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.HipCenter);
             handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
             _sharedData.GestureController.AddGesture(this, handGestures);
 
             HandPushGesture handPushGesture = new HandPushGesture();
             handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
             _sharedData.GestureController.AddGesture(this, handPushGesture);
+        }
+
+        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
+        {
+            // Show the movement on the screen
+            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
+            // TODO2: Make pretty way to reflect hand movements
+            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
+            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
+            else if (e.JointType == JointType.HipCenter) SetCanvasLocationCentered(uxTester, pt);
         }
 
         void handPushGesture_HandPushed(object sender, HandPushedEventArgs e)
@@ -204,19 +234,10 @@ namespace KineticMath.Views
             }
         }
 
-        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
-        {
-            // Show the movement on the screen
-            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
-            // TODO2: Make pretty way to reflect hand movements
-            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
-            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
-        }
-
         private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
         {
-            Canvas.SetLeft(element, pt.X + element.ActualWidth / 2);
-            Canvas.SetTop(element, pt.Y + element.ActualHeight / 2);
+            Canvas.SetLeft(element, pt.X - element.ActualWidth / 2);
+            Canvas.SetTop(element, pt.Y - element.ActualHeight / 2);
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

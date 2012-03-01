@@ -60,7 +60,7 @@ namespace KineticMath.Kinect.PointConverters
         }
 
         /// <summary>
-        /// The rectangle to scale the skeleton to (it should be approximately 4:3 scaled)
+        /// The rectangle to scale the skeleton to (it should be approximately 5:4 scaled)
         /// </summary>
         public Rect ActiveRectangle { get; set; }
 
