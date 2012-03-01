@@ -56,7 +56,7 @@ namespace KineticMath.Views
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
             seesaw.RegisterGame(game);
-            game.NewGame();
+            game.StartGame();
         }
 
         void game_LevelLost(object sender, EventArgs e)

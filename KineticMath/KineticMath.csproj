@@ -30,6 +30,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -83,7 +85,7 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\BalanceGame.cs" />
     <Compile Include="Controllers\Game.cs" />
-	<Compile Include="Helpers\DebugHelper.cs" />
+    <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
@@ -104,6 +106,9 @@
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
+    <Compile Include="Resources\Background.xaml.cs">
+      <DependentUpon>Background.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubControls\KinectSkeletonNew.xaml.cs">
       <DependentUpon>KinectSkeletonNew.xaml</DependentUpon>
     </Compile>
@@ -122,7 +127,6 @@
     <Compile Include="Views\BalanceGame\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-
     <Compile Include="SubControls\Brick.xaml.cs">
       <DependentUpon>Brick.xaml</DependentUpon>
     </Compile>
@@ -148,6 +152,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\ResourceDictionary1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Background.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SubControls\Brick.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -233,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.jpg" />
+    <Resource Include="Images\image0.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.gif" />
