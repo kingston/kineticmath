@@ -22,8 +22,6 @@ namespace KineticMath.Views
     /// </summary>
     public partial class SplashView : BaseView
     {
-        
-
         public SplashView()
         {
             InitializeComponent();
