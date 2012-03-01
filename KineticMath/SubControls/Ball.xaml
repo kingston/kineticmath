@@ -15,4 +15,5 @@
             </TextBlock.RenderTransform>
         </TextBlock>
     </Canvas>
+    
 </src:SeesawObject>

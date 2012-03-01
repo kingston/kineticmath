@@ -57,14 +57,12 @@ namespace KineticMath.Controllers
                     if (LevelCompleted != null)
                     {
                         LevelCompleted(this, EventArgs.Empty);
+                        currentLevel++;
                     }
-                    currentLevel++;
-                    LoadCurrentLevel();
                 }
                 else
                 {
-                    // Triger loss
-                    Reset();
+                   
                     if (LevelLost != null)
                     {
                         LevelLost(this, EventArgs.Empty);
@@ -76,7 +74,7 @@ namespace KineticMath.Controllers
         private int[] curBalls;
         private int[] targetRightSide;
 
-        private void LoadCurrentLevel()
+        public void LoadCurrentLevel()
         {
             switch (currentLevel)
             {

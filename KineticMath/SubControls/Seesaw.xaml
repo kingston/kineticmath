@@ -36,4 +36,15 @@
         	</Canvas>
         </Viewbox> 
     </Canvas>
+
+    <UserControl.Resources>
+
+        <DoubleAnimationUsingKeyFrames x:Key="doubleAnimation" x:Name="doubleAnimation">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="40"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="-60"/>
+            </DoubleAnimationUsingKeyFrames>
+
+
+    </UserControl.Resources>
 </UserControl>

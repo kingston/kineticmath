@@ -80,7 +80,6 @@ namespace KineticMath.SubControls
             if (offset != originalOffset)
             {
                 // TODO2: Trigger balance animation
-
                 originalOffset = offset;
                 RenderWeights();
                 // After animation is complete...
@@ -123,6 +122,15 @@ namespace KineticMath.SubControls
             // Work out rotation
             double angle = game.GetBalanceOffset() / game.GetMaximumValue() * MAX_ROTATION_ANGLE;
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
+
+            DoubleAnimationUsingKeyFrames rotateAnimation = FindResource("doubleAnimation") as DoubleAnimationUsingKeyFrames;
+
+            Storyboard.SetTarget(rotateAnimation, uxBalanceCanvas);
+            Storyboard.SetTargetProperty(rotateAnimation,  new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)"));
+            Storyboard ballMove = new Storyboard();
+            ballMove.Children.Add(rotateAnimation);
+
+
         }
     }
 }
