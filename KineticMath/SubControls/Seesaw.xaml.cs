@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 using KineticMath.Controllers;
+using System.Windows.Media.Animation;
 
 
 namespace KineticMath.SubControls
@@ -79,6 +80,7 @@ namespace KineticMath.SubControls
             if (offset != originalOffset)
             {
                 // TODO2: Trigger balance animation
+
                 originalOffset = offset;
                 RenderWeights();
                 // After animation is complete...

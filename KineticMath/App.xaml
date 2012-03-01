@@ -3,6 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <!-- The path along which the Rectangle will travel (just a wild path) -->
+            <PathFigureCollection x:Key="RectanglePathFigureCollection">
+                M 20 50 
+         C0,100 80,50 100,120
+         c50,200 40,-30 200,-10
+         c60,10 125,-25 0,-25
+         c-20,0 -100,-10 -150,-40
+         c-50,-30 -110,-55 -130,5
+            </PathFigureCollection>
+        </ResourceDictionary>
+
+
     </Application.Resources>
 </Application>

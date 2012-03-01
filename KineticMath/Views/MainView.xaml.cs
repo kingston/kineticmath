@@ -36,6 +36,7 @@ namespace KineticMath.Views
 
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
+        public static int deplayedTime = 5000;
        
         public MainView()
         {
@@ -64,13 +65,15 @@ namespace KineticMath.Views
             uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
-            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(deplayedTime)));
             labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
             Storyboard.SetTarget(labelAnimation, uxLoseLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             labelSb.Children.Add(labelAnimation);
             labelSb.Begin();
+
+
         }
 
         void game_LevelReset(object sender, EventArgs e)
@@ -230,9 +233,47 @@ namespace KineticMath.Views
             }
             if (pushedBall != null)
             {
-                game.PushBall(pushedBall);
+                //game.PushBall(pushedBall);
+
+                DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
+                DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
+
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+                pFigure.StartPoint = new Point(10, 100);
+                PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+                
+                /*PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+                pBezierSegment.Points.Add(new Point(35, 0));
+                pBezierSegment.Points.Add(new Point(135, 0));
+                pBezierSegment.Points.Add(new Point(160, 100));
+                pBezierSegment.Points.Add(new Point(180, 190));
+                pBezierSegment.Points.Add(new Point(285, 200));
+                pBezierSegment.Points.Add(new Point(310, 100));
+                pFigure.Segments.Add(pBezierSegment);
+                animationPath.Figures.Add(pFigure);
+
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+                */
+                animationPath.Figures = pfc;
+                ballAnimationX.PathGeometry = animationPath;
+                ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
+                ballAnimationX.AutoReverse = false;
+                ballAnimationY.PathGeometry = animationPath;
+                ballAnimationY.AutoReverse = false;
+                ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
+                Storyboard.SetTarget(ballAnimationX, pushedBall);
+                Storyboard.SetTarget(ballAnimationY, pushedBall);
+                Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
+                Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
+                Storyboard labelSb = new Storyboard();
+                labelSb.Children.Add(ballAnimationX);
+                labelSb.Children.Add(ballAnimationY);
+                labelSb.Begin();
+
                 // TODO2: Trigger animation for ball and after animation is triggered
-                game.AddBallToBalance(pushedBall, true); // push ball to left side
+                //game.AddBallToBalance(pushedBall, true); // push ball to left side
             }
         }
 
