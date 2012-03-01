@@ -211,12 +211,16 @@ namespace KineticMath.Views
 
         void handPushGesture_HandPushed(object sender, HandPushedEventArgs e)
         {
-            SkeletonPoint pt = bodyConverter.ConvertPoint(e.Position);
+            HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
+        }
+
+        private void HandlePushEvent(SkeletonPoint pt)
+        {
             Ball pushedBall = null;
             foreach (var holder in BallHolders)
             {
                 Rect rect = GetBoundingRectangle(holder);
-                if (rect.Contains(ConvertSkeletonPointTo2DPoint(e.Position)))
+                if (rect.Contains(ConvertSkeletonPointTo2DPoint(pt)))
                 {
                     if (holder.Children.Count > 0)
                     {
@@ -244,7 +248,7 @@ namespace KineticMath.Views
             Point pt = e.GetPosition(uxMainCanvas);
             if (rect.Contains(e.GetPosition(uxMainCanvas))) {
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
-                handPushGesture_HandPushed(this, new HandPushedEventArgs() { Joint = JointType.HandLeft, Position = skelPt });
+                HandlePushEvent(skelPt);
             }
         }
 

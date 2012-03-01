@@ -19,11 +19,12 @@ namespace KineticMath.Kinect.Gestures
             // Clean up old entries
             if (skeletalHistory.Count > 0)
             {
-                while (DateTime.Now.Subtract(skeletalHistory.Last().Time).Milliseconds > maxTimeToLive)
+                while (DateTime.Now.Subtract(skeletalHistory.First().Time).Milliseconds > maxTimeToLive)
                 {
-                    skeletalHistory.RemoveAt(skeletalHistory.Count - 1);
+                    skeletalHistory.RemoveAt(0);
                 }
             }
+            // TODO3: Reset skeletal history when a new skeleton is used
             skeletalHistory.Add(new SkeletonTimeEntry() { Time = DateTime.Now, Skeleton = skeleton });
             base.ProcessSkeleton(skeleton);
         }

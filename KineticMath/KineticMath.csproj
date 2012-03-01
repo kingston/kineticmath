@@ -82,6 +82,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controllers\BalanceGame.cs" />
+    <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
