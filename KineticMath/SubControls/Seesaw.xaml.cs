@@ -27,6 +27,7 @@ namespace KineticMath.SubControls
 
     public partial class Seesaw : UserControl
     {
+        private const int MAX_ROTATION_ANGLE = 30;
         private BalanceGame game;
         private double originalOffset = 0;
 
@@ -73,6 +74,7 @@ namespace KineticMath.SubControls
             {
                 // TODO: Trigger balance animation
                 originalOffset = offset;
+                RenderWeights();
                 // After animation is complete...
                 game.VerifySolution();
             }
@@ -92,7 +94,6 @@ namespace KineticMath.SubControls
                 currentBottom += obj.Height;
 
             }
-            RenderWeights();
         }
 
 
@@ -113,13 +114,7 @@ namespace KineticMath.SubControls
         private void RenderWeights()
         {
             // Work out rotation
-            double leftSideWeight = game.LeftBalanceBalls.Select(x => x.Weight).Sum();
-            double rightSideWeight = game.RightBalanceBalls.Select(x => x.Weight).Sum();
-            double ratio = 0.25;
-            double max = Math.Max(leftSideWeight, rightSideWeight);
-            if (25 / max < 0.25) ratio = 25 / max;
-            double angle = (rightSideWeight - leftSideWeight)*0.5;
-            Console.Out.WriteLine("angle:"+angle);
+            double angle = game.GetBalanceOffset() / game.GetMaximumValue() * MAX_ROTATION_ANGLE;
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
         }
     }

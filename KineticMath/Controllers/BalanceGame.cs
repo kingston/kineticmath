@@ -120,6 +120,15 @@ namespace KineticMath.Controllers
         }
 
         /// <summary>
+        /// Gets the maximum value one side can have (used by Seesaw for angle adjusting)
+        /// </summary>
+        /// <returns></returns>
+        public int GetMaximumValue()
+        {
+            return Math.Max(curBalls.Sum(), targetRightSide.Sum());
+        }
+
+        /// <summary>
         /// Pushes a ball from the HeldBalls section in the assumption that it'll trigger an animation
         /// </summary>
         /// <param name="ball">The ball to remove</param>
