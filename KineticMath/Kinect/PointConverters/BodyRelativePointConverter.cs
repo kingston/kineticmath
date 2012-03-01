@@ -13,9 +13,14 @@ namespace KineticMath.Kinect.PointConverters
     /// </summary>
     public class BodyRelativePointConverter : IPointConverter
     {
-        public BodyRelativePointConverter(Rect activeRect)
+        public BodyRelativePointConverter(Rect activeRect, GestureController controller)
         {
             this.ActiveRectangle = activeRect;
+            controller.SkeletonPreProcessed += new EventHandler<SkeletonPreProcessedEventArgs>(controller_SkeletonPreProcessed);
+        }
+
+        void controller_SkeletonPreProcessed(object sender, SkeletonPreProcessedEventArgs e)
+        {
         }
 
         /// <summary>

@@ -66,10 +66,13 @@ namespace KineticMath.Controllers
         /// <summary>
         /// Pushes a ball from the HeldBalls section in the assumption that it'll trigger an animation
         /// </summary>
-        /// <param name="ball"></param>
-        public void PushBall(Ball ball)
+        /// <param name="ball">The ball to remove</param>
+        public bool PushBall(Ball ball)
         {
-            this.HeldBalls.Remove(ball);
+            int ballIdx = this.HeldBalls.IndexOf(ball);
+            if (ballIdx == -1) return false;
+            this.HeldBalls[this.HeldBalls.IndexOf(ball)] = null;
+            return true;
         }
 
         /// <summary>

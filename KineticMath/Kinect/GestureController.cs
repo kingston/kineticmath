@@ -15,6 +15,9 @@ namespace KineticMath.Kinect
         private Dictionary<IView, List<IGesture>> gestureMap = new Dictionary<IView, List<IGesture>>();
         private IKinectService kinect;
 
+        // An event to allow PointControllers to pre-process the skeleton prior to gesture processing
+        public event EventHandler<SkeletonPreProcessedEventArgs> SkeletonPreProcessed;
+
         public GestureController(IKinectService kinect)
         {
             this.kinect = kinect;
@@ -29,6 +32,10 @@ namespace KineticMath.Kinect
 
             if (skel != null)
             {
+                if (SkeletonPreProcessed != null)
+                {
+                    SkeletonPreProcessed(this, new SkeletonPreProcessedEventArgs() { Skeleton = skel });
+                }
                 foreach (var gesture in gestures)
                 {
                     gesture.ProcessSkeleton(skel);
@@ -68,5 +75,10 @@ namespace KineticMath.Kinect
             }
         }
 
+    }
+
+    public class SkeletonPreProcessedEventArgs : EventArgs
+    {
+        public Skeleton Skeleton { get; set; }
     }
 }
