@@ -1,0 +1,62 @@
+﻿<views:BaseView
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:KineticMath.Views"
+                xmlns:subcontrols="clr-namespace:KineticMath.SubControls"
+             xmlns:my="clr-namespace:KineticMath.SubControls" xmlns:KineticMath="clr-namespace:KineticMath" x:Class="KineticMath.Views.MainView"
+             mc:Ignorable="d" 
+             d:DesignHeight="675" d:DesignWidth="1200">
+	<views:BaseView.Resources>
+		<Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type GroupItem}">
+						<Grid>
+							<Ellipse x:Name="uxLeftHand" Fill="#7F4D4D4D"/>
+							<Image Margin="-16.5,-18,-14.5,-19" Source="/KineticMath;component/Images/image0.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Opacity="0.8">
+								<Image.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform ScaleY="0.5" ScaleX="-0.5"/>
+										<SkewTransform AngleY="0" AngleX="0"/>
+										<RotateTransform Angle="0"/>
+										<TranslateTransform/>
+									</TransformGroup>
+								</Image.RenderTransform>
+							</Image>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</views:BaseView.Resources>
+    <Canvas Width="1200" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
+        <KineticMath:Background Canvas.Top="4" d:LayoutOverrides="Width, Height"/>
+        <my:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
+        <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
+        <GroupItem x:Name="uxLeftHand" Content="GroupItem" Height="50" Canvas.Left="150" Style="{DynamicResource GroupItemStyle1}" Canvas.Top="300" Width="50"/>
+        <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Pink" />
+        <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" x:Name="uxResetRectangle" Canvas.Top="386" Canvas.Left="456" Width="90" Height="50" Background="#FFFFCC99">
+            <Label FontSize="30" Content="Reset" Canvas.Left="460" Canvas.Top="338"/>
+        </Border>
+        <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" x:Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
+            <TextBlock.RenderTransform>
+                <ScaleTransform ScaleY="1"/>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="100" />
+        <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
+        <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxLoseLabel" />
+        <GroupItem x:Name="uxRightHand" Content="GroupItem" Height="50" Canvas.Left="400" Style="{DynamicResource GroupItemStyle1}" Canvas.Top="300" Width="50" RenderTransformOrigin="0.5,0.5">
+        	<GroupItem.RenderTransform>
+        		<TransformGroup>
+        			<ScaleTransform ScaleY="1" ScaleX="-1"/>
+        			<SkewTransform AngleY="0" AngleX="0"/>
+        			<RotateTransform Angle="0"/>
+        			<TranslateTransform/>
+        		</TransformGroup>
+        	</GroupItem.RenderTransform>
+        </GroupItem>
+    </Canvas>
+</views:BaseView>

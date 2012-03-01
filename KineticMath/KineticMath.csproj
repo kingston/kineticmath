@@ -30,6 +30,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -82,6 +84,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controllers\BalanceGame.cs" />
+    <Compile Include="Controllers\Game.cs" />
     <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
@@ -103,8 +106,11 @@
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="SubControls\Brick.xaml.cs">
-      <DependentUpon>Brick.xaml</DependentUpon>
+    <Compile Include="Resources\Background.xaml.cs">
+      <DependentUpon>Background.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\KinectSkeletonNew.xaml.cs">
+      <DependentUpon>KinectSkeletonNew.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubControls\KinectSkeleton.xaml.cs">
       <DependentUpon>KinectSkeleton.xaml</DependentUpon>
@@ -118,17 +124,20 @@
     <Compile Include="SubControls\SeesawObject.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />
-    <Compile Include="Views\MainView.xaml.cs">
+    <Compile Include="Views\BalanceGame\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\Brick.xaml.cs">
+      <DependentUpon>Brick.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubControls\Seesaw.xaml.cs">
       <DependentUpon>Seesaw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SharedViewData.cs" />
-    <Compile Include="Views\SplashView.xaml.cs">
+    <Compile Include="Views\BalanceGame\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TutorialView.xaml.cs">
+    <Compile Include="Views\BalanceGame\TutorialView.xaml.cs">
       <DependentUpon>TutorialView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -143,7 +152,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\ResourceDictionary1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Background.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SubControls\Brick.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SubControls\KinectSkeletonNew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -159,7 +180,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainView.xaml">
+    <Page Include="Views\BalanceGame\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,11 +188,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SplashView.xaml">
+    <Page Include="Views\BalanceGame\SplashView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TutorialView.xaml">
+    <Page Include="Views\BalanceGame\TutorialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.jpg" />
+    <Resource Include="Images\image0.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.gif" />

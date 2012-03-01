@@ -40,9 +40,9 @@ namespace KineticMath.SubControls
 
         private void FallingCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this) && ballArray.Length>1)
             {
-                ballArray[2].SetSelected(true);
+                if(ballArray[2]!=null)ballArray[2].SetSelected(true);
                 selectedIndex = 2;
                 //_timer = new Timer(500);
                 //_timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);

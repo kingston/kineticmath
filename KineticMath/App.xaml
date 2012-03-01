@@ -14,7 +14,10 @@
          c-50,-30 -110,-55 -130,5
             </PathFigureCollection>
         </ResourceDictionary>
-
-
+    	<ResourceDictionary>
+    		<ResourceDictionary.MergedDictionaries>
+    			<ResourceDictionary Source="Resources/ResourceDictionary1.xaml"/>
+    		</ResourceDictionary.MergedDictionaries>
+    	</ResourceDictionary>
     </Application.Resources>
 </Application>

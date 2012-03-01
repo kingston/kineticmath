@@ -12,7 +12,7 @@ namespace KineticMath.Controllers
     /// <summary>
     /// Controls dynamic of the balance game
     /// </summary>
-    public class BalanceGame : DependencyObject
+    public class BalanceGame : Game
     {
         public BalanceGame()
         {
@@ -38,11 +38,12 @@ namespace KineticMath.Controllers
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-        public void NewGame()
+        public override void StartGame()
         {
             currentLevel = 1;
             LoadCurrentLevel();
         }
+
 
         /// <summary>
         /// Called when the balance has stopped moving and is good to go

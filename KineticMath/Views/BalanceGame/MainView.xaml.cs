@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -36,7 +36,6 @@ namespace KineticMath.Views
 
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
-        public static int deplayedTime = 5000;
        
         public MainView()
         {
@@ -57,7 +56,7 @@ namespace KineticMath.Views
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
             seesaw.RegisterGame(game);
-            game.NewGame();
+            game.StartGame();
         }
 
         void game_LevelLost(object sender, EventArgs e)
@@ -65,15 +64,13 @@ namespace KineticMath.Views
             uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
-            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(deplayedTime)));
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
             labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
             Storyboard.SetTarget(labelAnimation, uxLoseLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             labelSb.Children.Add(labelAnimation);
             labelSb.Begin();
-
-
         }
 
         void game_LevelReset(object sender, EventArgs e)
@@ -234,6 +231,8 @@ namespace KineticMath.Views
             if (pushedBall != null)
             {
                 //game.PushBall(pushedBall);
+                // TODO2: Trigger animation for ball and after animation is triggered
+                //game.PushBall(pushedBall);
 
                 DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
                 DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
@@ -242,7 +241,7 @@ namespace KineticMath.Views
                 PathFigure pFigure = new PathFigure();
                 pFigure.StartPoint = new Point(10, 100);
                 PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
-                
+
                 /*PolyBezierSegment pBezierSegment = new PolyBezierSegment();
                 pBezierSegment.Points.Add(new Point(35, 0));
                 pBezierSegment.Points.Add(new Point(135, 0));
