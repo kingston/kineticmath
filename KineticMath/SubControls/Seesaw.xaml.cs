@@ -39,9 +39,16 @@ namespace KineticMath.SubControls
 
         public void RegisterGame(BalanceGame game)
         {
+            game.LevelReset += new EventHandler(game_LevelReset);
             game.LeftBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(BalanceBalls_CollectionChanged);
             game.RightBalanceBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(BalanceBalls_CollectionChanged);
             this.game = game;
+        }
+
+        void game_LevelReset(object sender, EventArgs e)
+        {
+            originalOffset = 0;
+            // TODO: Terminate all animatoins
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

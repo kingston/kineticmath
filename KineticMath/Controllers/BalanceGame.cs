@@ -22,6 +22,8 @@ namespace KineticMath.Controllers
         }
 
         public event EventHandler LevelCompleted;
+        // Called when the level is reset and should end all animations that would add balls
+        public event EventHandler LevelReset;
 
         private int currentLevel;
 
@@ -50,16 +52,71 @@ namespace KineticMath.Controllers
             }
         }
 
+        private int[] curBalls;
+        private int[] targetRightSide;
+
         private void LoadCurrentLevel()
         {
-            // TODO: Load the given level
+            switch (currentLevel)
+            {
+                case 1:
+                    curBalls = new int[] { 2, 4, 5, 6 };
+                    targetRightSide = new int[] { 2, 3 };
+                    break;
+                case 2:
+                    curBalls = new int[] { 5, 7, 3, 4 };
+                    targetRightSide = new int[] { 5, 1 };
+                    break;
+                case 3:
+                    curBalls = new int[] { 2, 4, 6, 3 };
+                    targetRightSide = new int[] { 4, 2 };
+                    break;
+                default:
+                    Random rand = new Random();
+                    // Generate the answer options
+                    targetRightSide = new int[2];
+                    int i = 0;
+                    while (i < targetRightSide.Length)
+                    {
+                        int candidate = rand.Next(1, currentLevel * 3 + 5);
+                        if (!targetRightSide.Contains(candidate))
+                        {
+                            targetRightSide[i] = candidate;
+                            i++;
+                        }
+                    }
+                    i = 0;
+                    curBalls = new int[4];
+                    int answer = curBalls.Sum();
+                    while (i < curBalls.Length)
+                    {
+                        int candidate = rand.Next(Convert.ToInt32(Math.Min(answer * 0.5, 1)), answer * 2);
+                        if (!curBalls.Contains(candidate) && candidate != answer)
+                        {
+                            curBalls[i] = candidate;
+                            i++;
+                        }
+                    }
+                    curBalls[rand.Next(0, curBalls.Length)] = answer;
+                    break;
+            }
             SetupLevel();
         }
 
         private void SetupLevel()
         {
-            // TODO: Set up all the balls, etc. from the start parameters
-            // (called during load level and reset)
+            if (LevelReset != null) LevelReset(null, EventArgs.Empty);
+            HeldBalls.Clear();
+            LeftBalanceBalls.Clear();
+            RightBalanceBalls.Clear();
+            foreach (var weight in curBalls)
+            {
+                HeldBalls.Add(new Ball(weight.ToString(), weight));
+            }
+            foreach (var weight in targetRightSide)
+            {
+                RightBalanceBalls.Add(new Ball(weight.ToString(), weight));
+            }
         }
 
         /// <summary>

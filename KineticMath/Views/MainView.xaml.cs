@@ -53,8 +53,14 @@ namespace KineticMath.Views
         {
             game = new BalanceGame();
             game.HeldBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(HeldBalls_CollectionChanged);
+            game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.NewGame();
+        }
+
+        void game_LevelReset(object sender, EventArgs e)
+        {
+            // TODO: Terminate all pending animations
         }
 
         void game_LevelCompleted(object sender, EventArgs e)
