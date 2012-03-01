@@ -29,4 +29,5 @@
         <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" />
         <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
     </Canvas>
+    
 </views:BaseView>

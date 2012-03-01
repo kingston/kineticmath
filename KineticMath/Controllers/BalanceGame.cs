@@ -13,7 +13,7 @@ namespace KineticMath.Controllers
     /// <summary>
     /// Controls dynamic of the balance game
     /// </summary>
-    public class BalanceGame : DependencyObject
+    public class BalanceGame : Game
     {
         public static int SECOND = 1;
         public static int MINUTE = 60;
@@ -58,10 +58,6 @@ namespace KineticMath.Controllers
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-        public void ChallengeMode()
-        {
-            NewGame();
-        }
 
         private void timerHandler(Object sender, EventArgs args)
         {
@@ -83,15 +79,6 @@ namespace KineticMath.Controllers
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-        public void PracticeMode()
-        {
-            currentLevel = 1;
-            LoadCurrentLevel();
-        }
-
-        /// <summary>
-        /// Starts a new game and resets everything
-        /// </summary>
         public void NewGame()
         {
             if (mode == Mode.Challenge)
@@ -105,7 +92,6 @@ namespace KineticMath.Controllers
                 currentLevel = 1;
                 LoadCurrentLevel();
                 timer.Interval = TimeSpan.FromSeconds(SECOND);
-                
                 timer.Start();
             }
             else
@@ -130,14 +116,12 @@ namespace KineticMath.Controllers
                     {
                         Score++;
                         LevelCompleted(this, EventArgs.Empty);
+                        currentLevel++;
                     }
-                    currentLevel++;
-                    LoadCurrentLevel();
                 }
                 else
                 {
-                    // Triger loss
-                    Reset();
+                   
                     if (LevelLost != null)
                     {
                         LevelLost(this, EventArgs.Empty);
@@ -149,7 +133,7 @@ namespace KineticMath.Controllers
         private int[] curBalls;
         private int[] targetRightSide;
 
-        private void LoadCurrentLevel()
+        public void LoadCurrentLevel()
         {
             switch (currentLevel)
             {

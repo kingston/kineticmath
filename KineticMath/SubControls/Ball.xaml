@@ -6,13 +6,34 @@
              xmlns:src="clr-namespace:KineticMath.SubControls"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="80">
+    <src:SeesawObject.Resources>
+        <Style x:Key="ControlStyle1" TargetType="{x:Type Control}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Control}">
+                        <Grid>
+                            <Rectangle RadiusY="10" RadiusX="10">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF061427" Offset="0"/>
+                                        <GradientStop Color="#FF0A3978" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </src:SeesawObject.Resources>
     <Canvas Name="canvas" Width="80" Height="80">
-        <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="80" Height="80"/>
-        <Image Canvas.Left="0" Canvas.Top="0" Height="80" Name="ball" Stretch="Fill" Width="80" Source="/KineticMath;component/Images/ball.png" ImageFailed="image1_ImageFailed" />
-        <TextBlock Canvas.Left="15" FontSize="30" Canvas.Top="18" Height="40" Name="ValueText" Text="1" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5" Foreground="#FFEE236A">
+        <Control Height="80" Style="{DynamicResource ControlStyle1}"  Width="80"/>
+        <Ellipse Name="BallEllipse" Fill="#FFE25151" Width="80" Height="80" Opacity="0"/>
+        <!--="" Image Canvas.Left="0" Canvas.Top="0" Height="80" Name="ball" Stretch="Fill" Width="80" Source="/KineticMath;component/Images/ball.png" ImageFailed="image1_ImageFailed" />-->
+        <TextBlock Canvas.Left="0" FontSize="50" Canvas.Top="2" Height="77" Name="ValueText" Text="1" TextAlignment="Center" Width="79" RenderTransformOrigin=".5,.5" Foreground="White">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
-            </TextBlock.RenderTransform>
-        </TextBlock>
+            </TextBlock.RenderTransform></TextBlock>
     </Canvas>
+    
 </src:SeesawObject>

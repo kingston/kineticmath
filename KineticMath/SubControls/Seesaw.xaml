@@ -12,14 +12,39 @@
             <Canvas.RenderTransform>
                 <RotateTransform Angle="0" />
             </Canvas.RenderTransform>
-            <Rectangle Width="320" Height="20" Fill="Orange" Canvas.Left="0" Name="uxBalanceRectangle" Canvas.Top="250" />
-            <WrapPanel Canvas.Left="0" Canvas.Top="10" Height="240" Name="leftBallPanel" Width="50" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
+            <Path Stretch="Fill" Fill="#FF965D21" Data="F1 M 1128,451.24L 610.615,451.24L 610.615,422.628L 1128,422.628L 1128,451.24 Z " Height="17.497" Canvas.Left="1.612" Canvas.Top="250" Width="316.388"/>
+            <WrapPanel Canvas.Left="0" Canvas.Top="10" Height="240" x:Name="leftBallPanel" Width="50" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
                 <WrapPanel.RenderTransform>
                     <ScaleTransform ScaleY="-1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
-            <Canvas Name="rightBallPanel" Canvas.Left="257" Canvas.Top="10" Height="240" Width="61" />
+            <Canvas x:Name="rightBallPanel" Canvas.Left="257" Canvas.Top="10" Height="240" Width="61" />
         </Canvas>
-        <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" /> 
+        <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
+        <Path Stretch="Fill" Fill="#FFAD6B29" Data="F1 M 914.747,433.242L 962.744,536.621L 938.745,536.621L 806.083,536.621L 777.219,536.621L 825.215,433.242L 914.747,433.242 Z " Height="63.217" Canvas.Left="144.012" Canvas.Top="258.039" Width="113.451"/>
+        <Rectangle Stretch="Fill" Fill="#FFAD6B29" Height="14.393" Canvas.Left="170.259" Canvas.Top="254.371" Width="60.957"/>
+        <Path Stretch="Fill" Fill="#FF653713" Data="F1 M 877.346,439.314C 877.346,435.245 874.051,431.95 869.982,431.95C 865.913,431.95 862.618,435.245 862.618,439.314C 862.618,443.383 865.913,446.679 869.982,446.679C 874.051,446.679 877.346,443.383 877.346,439.314 Z " Height="9.008" Canvas.Left="196.234" Canvas.Top="257.248" Width="9.007"/>
+        <Ellipse Stretch="Fill" Fill="#FF703F0E" Height="41.562" Canvas.Left="180.034" Canvas.Top="272.855" Width="41.561"/>
+        <Viewbox Height="34.819" Canvas.Left="183.347" Canvas.Top="276.285" Width="34.819">
+        	<Canvas x:Name="EqualSign" Width="56.9391" Height="56.9391">
+        		<Ellipse Width="56.9391" Height="56.9391" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="#FFB6FF07"/>
+        		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left"><TextBlock.RenderTransform>
+        				<TransformGroup>
+        					<MatrixTransform Matrix="1.33333,0,0,1.33333,9.03701,-19.4216"/>
+        				</TransformGroup>
+        			</TextBlock.RenderTransform><Run FontFamily="Segoe UI" FontSize="45" Text="=" Foreground="#FF41560E"/></TextBlock>
+        	</Canvas>
+        </Viewbox> 
     </Canvas>
+
+    <UserControl.Resources>
+
+        <DoubleAnimationUsingKeyFrames x:Key="doubleAnimation" x:Name="doubleAnimation">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="40"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="-60"/>
+            </DoubleAnimationUsingKeyFrames>
+
+
+    </UserControl.Resources>
 </UserControl>

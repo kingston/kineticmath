@@ -1,0 +1,16 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="KineticMath.Background"
+	x:Name="UserControl"
+	d:DesignWidth="640" d:DesignHeight="480" Width="1200" Height="675">
+
+	<Grid x:Name="LayoutRoot">
+		<Rectangle Stretch="Fill" Fill="#FF76E6F1"/>
+		<Path Stretch="Fill" Fill="#FF6AF759" Data="F1 M 0.000203451,444.943C 0.000203451,444.943 156.737,402.193 245.237,425.818C 333.737,449.443 612.737,462.943 708.737,458.443C 804.737,453.943 1200,396.733 1200,452.818C 1200,455.068 1200,676.41 1200,676.41L -0.030757,676.41L 0.000203451,444.943 Z " Height="257.71" Margin="-0.031,0,0.001,-1.41" VerticalAlignment="Bottom"/>
+		<Path Stretch="Fill" Fill="#FF40E72C" Data="F1 M -0.030599,497.551C -0.030599,497.551 169.587,523.235 262.974,515.606C 358.749,507.782 722.029,565.111 818.029,560.611C 914.029,556.111 1199.97,452.34 1199.97,508.426C 1199.97,510.676 1199.97,729.018 1199.97,729.018L -0.0615594,729.018L -0.030599,497.551 Z " Height="237.178" Margin="-0.062,0,0.032,-54.018" VerticalAlignment="Bottom"/>
+	</Grid>
+</UserControl>

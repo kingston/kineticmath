@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -36,6 +36,7 @@ namespace KineticMath.Views
 
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
+        public static int labelDisplayTime = 2000;
        
         public MainView()
         {
@@ -57,6 +58,7 @@ namespace KineticMath.Views
             game.LevelLost += new EventHandler(game_LevelLost);
             game.UpdateView += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
+            modeLabel.Content = "Challenge Mode";
             game.NewGame();
         }
 
@@ -102,12 +104,17 @@ namespace KineticMath.Views
             uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
-            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
             Storyboard.SetTarget(labelAnimation, uxLoseLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             labelSb.Children.Add(labelAnimation);
+            labelSb.Completed += delegate 
+            {
+                game.Reset();
+                game.LoadCurrentLevel(); 
+            };
             labelSb.Begin();
         }
 
@@ -122,13 +129,17 @@ namespace KineticMath.Views
             uxWinLabel.Opacity = 1;
 
             // Hide it when we're done
-            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
             labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
             Storyboard.SetTarget(labelAnimation, uxWinLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             // TODO2: Start level once animation is over
             labelSb.Children.Add(labelAnimation);
+            labelSb.Completed += delegate
+            {
+                game.LoadCurrentLevel();
+            };
             labelSb.Begin();
         }
 
@@ -282,10 +293,100 @@ namespace KineticMath.Views
             }
             if (pushedBall != null)
             {
-                game.PushBall(pushedBall);
+                //game.PushBall(pushedBall);
                 // TODO2: Trigger animation for ball and after animation is triggered
-                game.AddBallToBalance(pushedBall, true); // push ball to left side
+                
+
+                DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
+                DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
+
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+                pFigure.StartPoint = new Point(10, 100);
+                //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+
+                int index = game.HeldBalls.IndexOf(pushedBall);
+                pFigure.Segments.Add(getCurve(index));
+                animationPath.Figures.Add(pFigure);
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+                
+                /*
+                animationPath.Figures = pfc;*/
+                ballAnimationX.PathGeometry = animationPath;
+                ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
+                ballAnimationX.AutoReverse = false;
+                ballAnimationY.PathGeometry = animationPath;
+                ballAnimationY.AutoReverse = false;
+                ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
+                Storyboard.SetTarget(ballAnimationX, pushedBall);
+                Storyboard.SetTarget(ballAnimationY, pushedBall);
+                Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
+                Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
+                Storyboard ballMove = new Storyboard();
+                ballMove.Children.Add(ballAnimationX);
+                ballMove.Children.Add(ballAnimationY);
+
+
+                ballMove.Completed += delegate
+                {
+                    game.PushBall(pushedBall);
+                    game.AddBallToBalance(pushedBall, true); // push ball to left side
+                };
+
+                ballMove.Begin();
+                // TODO2: Trigger animation for ball and after animation is triggered
+               
             }
+        }
+
+        private PolyBezierSegment getCurve(int index) {
+            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+            switch (index)
+            {
+                case 0:
+                    pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(105, 0));
+                    pBezierSegment.Points.Add(new Point(130, 100));
+                    pBezierSegment.Points.Add(new Point(150, 190));
+                    pBezierSegment.Points.Add(new Point(225, 200));
+                    pBezierSegment.Points.Add(new Point(260, 100));
+                    break;
+                case 1:
+                    pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(105, 0));
+                    pBezierSegment.Points.Add(new Point(130, 100));
+                    pBezierSegment.Points.Add(new Point(150, 190));
+                    pBezierSegment.Points.Add(new Point(225, 200));
+                    pBezierSegment.Points.Add(new Point(260, 100));
+                    break;
+                case 2:
+                    pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(105, 0));
+                    pBezierSegment.Points.Add(new Point(130, 100));
+                    pBezierSegment.Points.Add(new Point(150, 190));
+                    pBezierSegment.Points.Add(new Point(180, 180));
+                    pBezierSegment.Points.Add(new Point(200, 180));
+                    break;
+                case 3:
+                    pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(105, 0));
+                    pBezierSegment.Points.Add(new Point(130, 100));
+                    pBezierSegment.Points.Add(new Point(150, 190));
+                    pBezierSegment.Points.Add(new Point(160, 160));
+                    pBezierSegment.Points.Add(new Point(200, 180));
+                    break;
+                default:
+                    System.Console.Write("4");
+                     pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(105, 0));
+                    pBezierSegment.Points.Add(new Point(130, 100));
+                    pBezierSegment.Points.Add(new Point(130, 130));
+                   pBezierSegment.Points.Add(new Point(130, 130));
+                    break;
+            }
+
+            return pBezierSegment;
         }
 
         private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
