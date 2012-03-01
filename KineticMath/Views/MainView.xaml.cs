@@ -31,8 +31,6 @@ namespace KineticMath.Views
     /// </summary>
     public partial class MainView : BaseView, IView
     {
-        private static int NUM_WEIGHTS = 5;
-        private static int MAX_NUMBERS_TO_ADD = 4;
         public static Color SELECTED_COLOR = Colors.Orange;
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 

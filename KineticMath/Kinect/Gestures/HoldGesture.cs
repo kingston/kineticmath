@@ -11,7 +11,7 @@ namespace KineticMath.Kinect.Gestures
     class HoldGesture : IGesture
     {
         private DateTime lastAction = DateTime.Now;
-        private float timelength = 1;
+        //private float timelength = 1;
         float heightThreshould = 20;
         float frontThreshould = 50;
 

@@ -13,6 +13,6 @@ namespace KineticMath.SubControls
 
         public virtual bool OnLeftSeesaw { get; set; }
         public virtual double Weight { get; set; }
-        public virtual double Height { get; set; }
+        //public virtual double Height { get; set; }
     }
 }

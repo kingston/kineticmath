@@ -7,6 +7,9 @@ using Microsoft.Kinect;
 
 namespace KineticMath.Kinect.Gestures
 {
+    /// <summary>
+    /// TODO2: Explain how this works
+    /// </summary>
     public class HandPushGesture : HistoryGestureBase
     {
         public event EventHandler<HandPushedEventArgs> HandPushed;
@@ -16,8 +19,11 @@ namespace KineticMath.Kinect.Gestures
             JointType[] activeJointTypes = new JointType[] { JointType.HandLeft, JointType.HandRight };
             foreach (var jointType in activeJointTypes) {
                 // Do processing based off history
+                var curPos = skeleton.Joints[jointType].Position;
                 foreach (var frame in this.skeletalHistory)
                 {
+                    var pos = frame.Skeleton.Joints[jointType].Position;
+                    
                     // Do stuff
                 }
                 if (true)
