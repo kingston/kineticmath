@@ -121,6 +121,7 @@
     <Compile Include="SubControls\Ball.xaml.cs">
       <DependentUpon>Ball.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubControls\PointCanvas.cs" />
     <Compile Include="SubControls\SeesawObject.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />

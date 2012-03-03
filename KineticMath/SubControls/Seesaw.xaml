@@ -13,9 +13,9 @@
                 <RotateTransform Angle="0" />
             </Canvas.RenderTransform>
             <Path Stretch="Fill" Fill="#FF965D21" Data="F1 M 1128,451.24L 610.615,451.24L 610.615,422.628L 1128,422.628L 1128,451.24 Z " Height="17.497" Canvas.Left="1.612" Canvas.Top="250" Width="316.388"/>
-            <WrapPanel Canvas.Left="0" Canvas.Top="10" Height="240" x:Name="leftBallPanel" Width="50" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
+            <WrapPanel Canvas.Left="0" Canvas.Top="170" Height="80" x:Name="leftBallPanel" Width="80" VerticalAlignment="Bottom" UseLayoutRounding="False" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" FlowDirection="RightToLeft">
                 <WrapPanel.RenderTransform>
-                    <ScaleTransform ScaleY="-1"/>
+                    <ScaleTransform ScaleY="1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
             <Canvas x:Name="rightBallPanel" Canvas.Left="257" Canvas.Top="10" Height="240" Width="61" />

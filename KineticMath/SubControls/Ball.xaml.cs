@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
 
+using KineticMath.SubControls;
+
 namespace KineticMath.SubControls
 {
     /// <summary>
@@ -100,6 +102,27 @@ namespace KineticMath.SubControls
         private void image1_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
 
+        }
+
+        public static readonly DependencyProperty TopLeftProperty = DependencyProperty.Register(
+          "TopLeft",
+          typeof(Uri),
+          typeof(Ball),
+          new FrameworkPropertyMetadata(null,
+              FrameworkPropertyMetadataOptions.AffectsRender,
+              new PropertyChangedCallback(onTopLeftChanged)
+          )
+        );
+        public Point TopLeft
+        {
+            get { return (Point)GetValue(TopLeftProperty); }
+            set { SetValue(TopLeftProperty, value); }
+        }
+        private static void onTopLeftChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            Ball s = (Ball)sender;
+            Canvas.SetLeft(s.canvas, ((Point)args.NewValue).X);
+            Canvas.SetTop(s.canvas, ((Point)args.NewValue).Y);
         }
     }
 }
