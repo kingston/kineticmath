@@ -67,16 +67,13 @@
         <my:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
-        <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Pink" />
-        <Border BorderBrush="#00000000" CornerRadius="5,5,5,5" x:Name="uxResetRectangle" Canvas.Top="386" Canvas.Left="456" Width="90" Height="50" Background="#FFFFCC99">
-            <Label FontSize="30" Content="Reset" Canvas.Left="460" Canvas.Top="338"/>
-        </Border>
+        <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Orange" />
         <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" x:Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
-        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="100" />
+        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
         <Label Canvas.Left="0" Canvas.Top="91" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxLoseLabel" />
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>

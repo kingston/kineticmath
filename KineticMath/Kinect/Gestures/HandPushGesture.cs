@@ -15,8 +15,8 @@ namespace KineticMath.Kinect.Gestures
     public class HandPushGesture : HistoryGestureBase
     {
         public event EventHandler<HandPushedEventArgs> HandPushed;
-        private const double MAX_XY_DISTANCE = 0.05; // The maximum distance a gesture can happen outside the XY plane
-        private const double Z_THRESHOLD = 0.10; // The depth threshold that will trigger the gesture
+        private const double MAX_XY_DISTANCE = 0.3; // The maximum distance a gesture can happen outside the XY plane
+        private const double Z_THRESHOLD = 0.05; // The depth threshold that will trigger the gesture
 
         public override void OnProcessSkeleton(Skeleton skeleton)
         {

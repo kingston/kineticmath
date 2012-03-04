@@ -54,7 +54,8 @@ namespace KineticMath
             LoadView(typeof(MainView));
 
             // Listen for log messages if we're debugging
-            DebugHelper.GetInstance().DebugMessageReceived += new EventHandler<DebugMessageReceivedEventArgs>(MainWindow_DebugMessageReceived);
+            
+            //DebugHelper.GetInstance().DebugMessageReceived += new EventHandler<DebugMessageReceivedEventArgs>(MainWindow_DebugMessageReceived);
         }
 
         void MainWindow_DebugMessageReceived(object sender, DebugMessageReceivedEventArgs e)
@@ -104,7 +105,7 @@ namespace KineticMath
         {
             var size = e.NewSize;
             //uxMainCanvas.RenderTransform = new ScaleTransform(1, 1);
-            double xScale = (size.Width - 50) / uxMainCanvas.ActualWidth;
+            double xScale = (size.Width - 20) / uxMainCanvas.ActualWidth;
             double yScale = (size.Height - 100) / uxMainCanvas.ActualHeight;
             double scale = Math.Min(xScale, yScale);
             uxMainCanvas.RenderTransform = new ScaleTransform(scale, scale);
