@@ -9,5 +9,18 @@
             <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
             <Label Name="uxDebugLabel" FontSize="20" Canvas.Top="20" Canvas.Left="800" Content="Debug Message here" />
         </Canvas>
+        <MediaElement Name="backgroundMusic" Volume="0.2">
+            <MediaElement.Triggers>
+                <EventTrigger RoutedEvent="MediaElement.Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <MediaTimeline Source="../../Media/WinterBells.mp3" Storyboard.TargetName="backgroundMusic" RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </MediaElement.Triggers>
+        </MediaElement>
     </Canvas>
 </Window>

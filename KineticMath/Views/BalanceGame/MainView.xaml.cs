@@ -137,6 +137,7 @@ namespace KineticMath.Views
 
         void game_LevelCompleted(object sender, EventArgs e)
         {
+            soundEffect.Play();
             uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxWinLabel.Opacity = 1;
 
@@ -150,6 +151,7 @@ namespace KineticMath.Views
             labelSb.Children.Add(labelAnimation);
             labelSb.Completed += delegate
             {
+                soundEffect.Stop();
                 game.LoadCurrentLevel();
             };
             labelSb.Begin();

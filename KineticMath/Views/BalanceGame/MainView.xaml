@@ -86,6 +86,6 @@
 
             <Label Name="modeLabel" Canvas.Left="32" Canvas.Top="12" Height="72" Width="340" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="ChallengeMode" />
         </Canvas>
-        
+        <MediaElement Name="soundEffect" Source="../../Media/tada.wav" LoadedBehavior="Manual" />
     </Canvas>
 </views:BaseView>
