@@ -305,6 +305,7 @@ namespace KineticMath.Views
             {
                 var ballHolder = this.BallHolders[index];
                 ballHolder.Children.Add(pushedBall);
+
                 // TODO2: Trigger animation for ball and after animation is triggered
 
                 PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
@@ -313,8 +314,16 @@ namespace KineticMath.Views
                 PathFigure pFigure = new PathFigure();
                 pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
                 //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+                Point endPoint = new Point(
+                    Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
+                    Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel)
+                );
+                PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+                pBezierSegment.Points.Add(new Point(pFigure.StartPoint.X + (endPoint.X - pFigure.StartPoint.X) * 2 / 3, pFigure.StartPoint.Y));
+                pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - pFigure.StartPoint.Y) * 2 / 3));
+                pBezierSegment.Points.Add(endPoint);
+                pFigure.Segments.Add(pBezierSegment);
 
-                pFigure.Segments.Add(getCurve(index));
                 animationPath.Figures.Add(pFigure);
                 // Freeze the PathGeometry for performance benefits.
                 animationPath.Freeze();
@@ -340,6 +349,14 @@ namespace KineticMath.Views
                 selectingBall = true;
                 ballMove.Begin();
                 // TODO2: Trigger animation for ball and after animation is triggered
+
+                /*Debug*
+                Path myPath = new Path();
+                myPath.Stroke = Brushes.Black;
+                myPath.StrokeThickness = 1;
+                myPath.Data = animationPath;
+                uxMainCanvas.Children.Add(myPath);
+                /**/
             }
         }
 
@@ -365,52 +382,6 @@ namespace KineticMath.Views
                 int index = game.HeldBalls.IndexOf(pushedBall);
                 HitBall(index, new Vector(0, 0));
             }
-        }
-
-        private PolyBezierSegment getCurve(int index) {
-            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-            switch (index)
-            {
-                case 0:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(225, 200));
-                    break;
-                case 1:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(225, 200));
-                    break;
-                case 2:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(180, 180));
-                    break;
-                case 3:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(160, 160));
-                    break;
-                default:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(130, 130));
-                    break;
-            }
-            pBezierSegment.Points.Add(new Point(
-                Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
-                Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel))
-            ); 
-            return pBezierSegment;
         }
 
         private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
