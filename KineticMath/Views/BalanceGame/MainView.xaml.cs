@@ -18,6 +18,7 @@ using Microsoft.Kinect;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 using KineticMath.SubControls;
+using KineticMath.Helpers;
 using System.Windows.Media.Animation;
 
 using KineticMath.Kinect.PointConverters;
@@ -175,6 +176,7 @@ namespace KineticMath.Views
 
         // TODO2: Use an actual ball holder UI control, not a canvas
         private PointCanvas[] BallHolders;
+        private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
 
         private void SetupBallHolders(int numHolders)
         {
@@ -198,18 +200,26 @@ namespace KineticMath.Views
                     new Point(0.9, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
+                _hitZones.Clear();
                 for (int i = 0; i < numHolders; i++)
                 {
                     PointCanvas canvas = new PointCanvas();
-                    canvas.Width = 50;
-                    canvas.Height = 50;
+                    canvas.Width = 80;
+                    canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
-                    // -25 to center it
                     PointCanvas.SetTopLeft(canvas, new Point(
-                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - 25,
-                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - 25)
+                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle),
+                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle))
                     );
                     BallHolders[i] = canvas;
+                    Rect boundaryRect = canvas.GetBoundaryRect();
+                    //boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
+                    _hitZones.Add(boundaryRect);
+                }
+                if (hitGesture != null)
+                {
+                    hitGesture.HitRectangles.Clear();
+                    hitGesture.HitRectangles.AddRange(_hitZones);
                 }
             }
         }
@@ -230,26 +240,6 @@ namespace KineticMath.Views
                     game.NewGame();
                     break;
             }
-            //Console.Out.WriteLine("Keydown");
-            //switch (e.Key)
-            //{
-            //    case Key.T:
-            //        seesaw.AddObject(new SubControls.Ball());
-            //        //Console.Out.WriteLine("ball add");
-
-            //        break;
-            //    case Key.S:
-            //        break;
-            //    case Key.R:
-            //        Reset();
-            //        break;
-            //    case Key.Left:
-            //        fallingGroup.ChoosePrevious();
-            //        break;
-            //    case Key.Right:
-            //        fallingGroup.ChooseNext();
-            //        break;
-            //}
         }
 
         public override void OnViewActivated()
@@ -265,17 +255,32 @@ namespace KineticMath.Views
             ParentWindow.RemoveHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
         }
 
+        private List<Rect> _hitZones = new List<Rect>(); // Zones for the hit gesture
+        private HitGesture hitGesture;
+
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(GetBoundingRectangle(uxPersonRectangle), this._sharedData.GestureController);
+            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
 
             JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.Head);
             handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
             _sharedData.GestureController.AddGesture(this, handGestures);
 
-            HandPushGesture handPushGesture = new HandPushGesture();
-            handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
-            _sharedData.GestureController.AddGesture(this, handPushGesture);
+            // TODO: Remove dead code (hand push gesture no longer active)
+            //HandPushGesture handPushGesture = new HandPushGesture();
+            //handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
+            //_sharedData.GestureController.AddGesture(this, handPushGesture);
+            if (hitGesture == null)
+            {
+                hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
+                hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
+            }
+            _sharedData.GestureController.AddGesture(this, hitGesture);
+        }
+
+        void hitGesture_RectHit(object sender, RectHitEventArgs e)
+        {
+            HitBall(e.RectIdx, e.HitVelocity);
         }
 
         void handGesture_JointMoved(object sender, JointMovedEventArgs e)
@@ -293,6 +298,51 @@ namespace KineticMath.Views
             HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
         }
 
+        private void HitBall(int index, Vector velocity)
+        {
+            var pushedBall = game.HeldBalls[index];
+            if (game.PushBall(pushedBall))
+            {
+                var ballHolder = this.BallHolders[index];
+                ballHolder.Children.Add(pushedBall);
+                // TODO2: Trigger animation for ball and after animation is triggered
+
+                PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
+
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+                pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
+                //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+
+                pFigure.Segments.Add(getCurve(index));
+                animationPath.Figures.Add(pFigure);
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+
+                /*
+                animationPath.Figures = pfc;*/
+                ballAnimation.PathGeometry = animationPath;
+                ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                ballAnimation.AutoReverse = false;
+
+                Storyboard.SetTarget(ballAnimation, ballHolder);
+                Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
+                Storyboard ballMove = new Storyboard();
+                ballMove.Children.Add(ballAnimation);
+
+                ballMove.Completed += delegate
+                {
+                    selectingBall = false;
+                    this.BallHolders[index].Children.Remove(pushedBall);
+                    runningAnimations.Remove(ballMove);
+                    game.AddBallToBalance(pushedBall, true); // push ball to left side
+                };
+                selectingBall = true;
+                ballMove.Begin();
+                // TODO2: Trigger animation for ball and after animation is triggered
+            }
+        }
+
         private void HandlePushEvent(SkeletonPoint pt)
         {
             if (selectingBall) return;
@@ -300,8 +350,8 @@ namespace KineticMath.Views
             PointCanvas ballHolder = null;
             foreach (var holder in BallHolders)
             {
-                Rect rect = GetBoundingRectangle(holder);
-                if (rect.Contains(ConvertSkeletonPointTo2DPoint(pt)))
+                Rect rect = holder.GetBoundaryRect();
+                if (rect.Contains(pt.To2DPoint()))
                 {
                     if (holder.Children.Count > 0)
                     {
@@ -313,45 +363,7 @@ namespace KineticMath.Views
             if (pushedBall != null)
             {
                 int index = game.HeldBalls.IndexOf(pushedBall);
-                if (game.PushBall(pushedBall))
-                {
-                    this.BallHolders[index].Children.Add(pushedBall);
-                    // TODO2: Trigger animation for ball and after animation is triggered
-
-                    PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
-
-                    PathGeometry animationPath = new PathGeometry();
-                    PathFigure pFigure = new PathFigure();
-                    pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
-                    //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
-
-                    pFigure.Segments.Add(getCurve(index));
-                    animationPath.Figures.Add(pFigure);
-                    // Freeze the PathGeometry for performance benefits.
-                    animationPath.Freeze();
-
-                    /*
-                    animationPath.Figures = pfc;*/
-                    ballAnimation.PathGeometry = animationPath;
-                    ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                    ballAnimation.AutoReverse = false;
-
-                    Storyboard.SetTarget(ballAnimation, ballHolder);
-                    Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
-                    Storyboard ballMove = new Storyboard();
-                    ballMove.Children.Add(ballAnimation);
-
-                    ballMove.Completed += delegate
-                    {
-                        selectingBall = false;
-                        this.BallHolders[index].Children.Remove(pushedBall);
-                        runningAnimations.Remove(ballMove);
-                        game.AddBallToBalance(pushedBall, true); // push ball to left side
-                    };
-                    selectingBall = true;
-                    ballMove.Begin();
-                    // TODO2: Trigger animation for ball and after animation is triggered
-                }
+                HitBall(index, new Vector(0, 0));
             }
         }
 
@@ -409,30 +421,12 @@ namespace KineticMath.Views
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Rect rect = GetBoundingRectangle(uxPersonRectangle);
+            Rect rect = uxPersonRectangle.GetBoundaryRect();
             Point pt = e.GetPosition(uxMainCanvas);
             if (rect.Contains(e.GetPosition(uxMainCanvas))) {
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
                 HandlePushEvent(skelPt);
             }
-        }
-
-        // TODO3: Extract out to extension methods
-        private Point ConvertSkeletonPointTo2DPoint(SkeletonPoint pt)
-        {
-            return new Point(pt.X, pt.Y);
-        }
-
-        /// <summary>
-        /// Gets the bounding rectangle of an element given the canvas
-        /// 
-        /// TODO3: Extract out somewhere else
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        private Rect GetBoundingRectangle(FrameworkElement element)
-        {
-            return new Rect(Canvas.GetLeft(element), Canvas.GetTop(element), element.Width, element.Height);
         }
     }
 }

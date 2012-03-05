@@ -7,7 +7,7 @@
             <my:KinectSkeleton x:Name="uxKinectSkeleton" Opacity="0" Canvas.Top="85">
             </my:KinectSkeleton>
             <Label x:Name="uxNoKinectDetected" FontSize="15" Canvas.Top="20" Canvas.Left="10" Content="No Kinect Detected - using dummy service..." Foreground="Gray" Visibility="Collapsed" />
-            <Label Name="uxDebugLabel" FontSize="20" Canvas.Top="20" Canvas.Left="800" Content="Debug Message here" />
+            <Label Name="uxDebugLabel" FontSize="25" Canvas.Top="133" Canvas.Left="581" Canvas.ZIndex="1" Opacity="0"  Content="Debug Message here" />
         </Canvas>
         <MediaElement Name="backgroundMusic" Volume="0.2">
             <MediaElement.Triggers>

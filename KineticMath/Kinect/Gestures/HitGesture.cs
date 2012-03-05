@@ -5,51 +5,88 @@ using System.Text;
 using Coding4Fun.Kinect.Wpf;
 using Microsoft.Kinect;
 using KineticMath.SubControls;
+using System.Windows;
+using KineticMath.Kinect.PointConverters;
+using KineticMath.Helpers;
 
 namespace KineticMath.Kinect.Gestures
 {
-    class HitGesture : IGesture
+    public class HitGesture : HistoryGestureBase
     {
-        private DateTime lastAction = DateTime.Now;
-        private float timelength = 1;
-        float heightThreshould = 20;
-        float frontThreshould = 50;
+        // TODO: Find a way to remove HitRectangles from detection once they've been chosen
+        private JointType[] joints;
+        private IPointConverter pointConverter;
 
-        public event EventHandler handler;
+        public List<Rect> HitRectangles { get; private set; }
 
-        public void ProcessSkeleton(Skeleton skeleton)
+        public event EventHandler<RectHitEventArgs> RectHit;
+
+        public HitGesture(List<Rect> hitRectangles, IPointConverter pointConverter, params JointType[] joints) {
+            if (hitRectangles == null) throw new ArgumentNullException("hitRectangles");
+            if (pointConverter == null) throw new ArgumentNullException("pointConverter");
+            this.maxTimeToLive = 200;
+            this.joints = joints;
+            this.HitRectangles = hitRectangles.ToList();
+            this.pointConverter = pointConverter;
+        }
+
+        public override void OnProcessSkeleton(Skeleton skeleton)
         {
-            Joint handLeft = skeleton.Joints[JointType.HandLeft].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-            Joint handRight = skeleton.Joints[JointType.HandRight].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-
-            Joint elbowLeft = skeleton.Joints[JointType.ElbowLeft].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-            Joint elbowRight = skeleton.Joints[JointType.ElbowRight].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-
-            Joint shoulderLeft = skeleton.Joints[JointType.ShoulderLeft].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-            Joint shoulderRight = skeleton.Joints[JointType.ShoulderRight].ScaleTo(640, 480, KinectSkeleton.k_xMaxJointScale, KinectSkeleton.k_yMaxJointScale);
-
-            float heightLeft = (handLeft.Position.Y - elbowLeft.Position.Y);
-            float heightRight = (handRight.Position.Y - elbowRight.Position.Y);
-            float frontLeft = handLeft.Position.X - shoulderLeft.Position.X;
-            float frontRight = handRight.Position.X - shoulderRight.Position.X;
-
-            
-            if (DateTime.Now.Subtract(lastAction) >= TimeSpan.FromMilliseconds(1000))
+            // Check if joints hit anything
+            foreach (JointType type in joints)
             {
-                System.Console.WriteLine("handleft.X : " + handLeft.Position.X);
-                System.Console.WriteLine("handleft.Y : " + handLeft.Position.Y);
-
-                if (Math.Abs(heightLeft) < heightThreshould && Math.Abs(heightRight) < heightThreshould
-                    && Math.Abs(frontLeft) < frontThreshould && Math.Abs(frontRight) < frontThreshould)
+                SkeletonPoint pt = pointConverter.ConvertPoint(skeleton.Joints[type].Position);
+                if (type == JointType.HandLeft)
                 {
-                    if (handler != null)
+                    DebugHelper.GetInstance().LogMessage(this.HitRectangles[1].ToString() + " - " + pt.ToReadableString());
+                }
+                int rectIdx = HitTestRects(pt);
+                if (rectIdx > -1)
+                {
+                    Vector velocity = ComputeJointVelocity(type);
+                    if (RectHit != null)
                     {
-                        System.Console.WriteLine("Pick up!");
-                        handler(this, EventArgs.Empty);
+                        RectHit(this, new RectHitEventArgs() { Joint = type, HitVelocity = velocity, RectIdx = rectIdx });
                     }
                 }
-                lastAction = DateTime.Now;
             }
         }
+
+        /// <summary>
+        /// Computes the velocity of a joint given the joint history
+        /// </summary>
+        /// <param name="type">The type of joint to compute the velocity of</param>
+        /// <returns>A vector containing the velocity of the joint</returns>
+        private Vector ComputeJointVelocity(JointType type)
+        {
+            SkeletonPoint oldPt = pointConverter.ConvertPoint(this.skeletalHistory.First().Skeleton.Joints[type].Position);
+            SkeletonPoint newPt = pointConverter.ConvertPoint(this.skeletalHistory.Last().Skeleton.Joints[type].Position);
+            return Point.Subtract(newPt.To2DPoint(), oldPt.To2DPoint());
+        }
+
+        /// <summary>
+        /// Checks whether the joint hit a rectangle and if so, return the index of the rect it hit
+        /// </summary>
+        /// <param name="skelPt">The skeleton point to check</param>
+        /// <returns>The index of the rectangle hit if found; otherwise -1</returns>
+        private int HitTestRects(SkeletonPoint skelPt)
+        {
+            Point pt = skelPt.To2DPoint();
+            for (int i = 0; i < HitRectangles.Count; i++)
+            {
+                if (HitRectangles[i].Contains(pt))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
+    public class RectHitEventArgs : EventArgs
+    {
+        public JointType Joint { get; set; }
+        public int RectIdx { get; set; }
+        public Vector HitVelocity { get; set; }
     }
 }

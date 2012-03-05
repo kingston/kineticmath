@@ -225,9 +225,10 @@ namespace KineticMath.Controllers
         /// <param name="ball">The ball to remove</param>
         public bool PushBall(Ball ball)
         {
+            if (ball == null) return false;
             int ballIdx = this.HeldBalls.IndexOf(ball);
             if (ballIdx == -1) return false;
-            this.HeldBalls[this.HeldBalls.IndexOf(ball)] = null;
+            this.HeldBalls[ballIdx] = null;
             return true;
         }
 

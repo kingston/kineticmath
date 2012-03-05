@@ -86,10 +86,13 @@
     <Compile Include="Controllers\BalanceGame.cs" />
     <Compile Include="Controllers\Game.cs" />
     <Compile Include="Helpers\DebugHelper.cs" />
+    <Compile Include="Helpers\FrameworkElementExtensions.cs" />
+    <Compile Include="Helpers\SkeletonPointExtensions.cs" />
     <Compile Include="Kinect\Gestures\BaseGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergizeGesture.cs" />
     <Compile Include="Kinect\Gestures\EnergyEventArgs.cs" />
     <Compile Include="Kinect\Gestures\HistoryGestureBase.cs" />
+    <Compile Include="Kinect\Gestures\HitGesture.cs" />
     <Compile Include="Kinect\Gestures\JointMoveGestures.cs" />
     <Compile Include="Kinect\Gestures\HandPushGesture.cs" />
     <Compile Include="Kinect\Gestures\SwipeGesture.cs" />

@@ -60,6 +60,7 @@ namespace KineticMath
 
         void MainWindow_DebugMessageReceived(object sender, DebugMessageReceivedEventArgs e)
         {
+            uxDebugLabel.Opacity = 1;
             uxDebugLabel.Content = e.Message;
         }
 
