@@ -37,6 +37,7 @@ namespace KineticMath.Views
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
         public static int labelDisplayTime = 2000;
+        private List<Storyboard> runningAnimations = new List<Storyboard>();
        
         public MainView()
         {
@@ -120,7 +121,11 @@ namespace KineticMath.Views
 
         void game_LevelReset(object sender, EventArgs e)
         {
-            // TODO2: Terminate all pending animations
+            foreach (var animation in runningAnimations)
+            {
+                animation.Stop();
+            }
+            runningAnimations.Clear();
         }
 
         void game_LevelCompleted(object sender, EventArgs e)
@@ -293,50 +298,51 @@ namespace KineticMath.Views
             }
             if (pushedBall != null)
             {
-                //game.PushBall(pushedBall);
-                // TODO2: Trigger animation for ball and after animation is triggered
-                
-
-                DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
-                DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
-
-                PathGeometry animationPath = new PathGeometry();
-                PathFigure pFigure = new PathFigure();
-                pFigure.StartPoint = new Point(10, 100);
-                //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
-
                 int index = game.HeldBalls.IndexOf(pushedBall);
-                pFigure.Segments.Add(getCurve(index));
-                animationPath.Figures.Add(pFigure);
-                // Freeze the PathGeometry for performance benefits.
-                animationPath.Freeze();
-                
-                /*
-                animationPath.Figures = pfc;*/
-                ballAnimationX.PathGeometry = animationPath;
-                ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
-                ballAnimationX.AutoReverse = false;
-                ballAnimationY.PathGeometry = animationPath;
-                ballAnimationY.AutoReverse = false;
-                ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
-                Storyboard.SetTarget(ballAnimationX, pushedBall);
-                Storyboard.SetTarget(ballAnimationY, pushedBall);
-                Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
-                Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
-                Storyboard ballMove = new Storyboard();
-                ballMove.Children.Add(ballAnimationX);
-                ballMove.Children.Add(ballAnimationY);
-
-
-                ballMove.Completed += delegate
+                if (game.PushBall(pushedBall))
                 {
-                    game.PushBall(pushedBall);
-                    game.AddBallToBalance(pushedBall, true); // push ball to left side
-                };
+                    this.BallHolders[index].Children.Add(pushedBall);
+                    // TODO2: Trigger animation for ball and after animation is triggered
 
-                ballMove.Begin();
-                // TODO2: Trigger animation for ball and after animation is triggered
-               
+                    DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
+                    DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
+
+                    PathGeometry animationPath = new PathGeometry();
+                    PathFigure pFigure = new PathFigure();
+                    pFigure.StartPoint = new Point(10, 100);
+                    //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+
+                    pFigure.Segments.Add(getCurve(index));
+                    animationPath.Figures.Add(pFigure);
+                    // Freeze the PathGeometry for performance benefits.
+                    animationPath.Freeze();
+
+                    /*
+                    animationPath.Figures = pfc;*/
+                    ballAnimationX.PathGeometry = animationPath;
+                    ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
+                    ballAnimationX.AutoReverse = false;
+                    ballAnimationY.PathGeometry = animationPath;
+                    ballAnimationY.AutoReverse = false;
+                    ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
+                    Storyboard.SetTarget(ballAnimationX, pushedBall);
+                    Storyboard.SetTarget(ballAnimationY, pushedBall);
+                    Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
+                    Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
+                    Storyboard ballMove = new Storyboard();
+                    ballMove.Children.Add(ballAnimationX);
+                    ballMove.Children.Add(ballAnimationY);
+
+                    ballMove.Completed += delegate
+                    {
+                        this.BallHolders[index].Children.Remove(pushedBall);
+                        runningAnimations.Remove(ballMove);
+                        game.AddBallToBalance(pushedBall, true); // push ball to left side
+                    };
+
+                    ballMove.Begin();
+                    // TODO2: Trigger animation for ball and after animation is triggered
+                }
             }
         }
 
