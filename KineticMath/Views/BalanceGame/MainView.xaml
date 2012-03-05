@@ -74,16 +74,18 @@
             </TextBlock.RenderTransform>
         </TextBlock>
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
-        <Label Canvas.Left="0" Canvas.Top="100" Width="800" FontSize="40" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
-        <Label Canvas.Left="0" Canvas.Top="91" Width="800" FontSize="40" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxLoseLabel" />
+       
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
-        <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0">
-
-            <Label Name="modeLabel" Canvas.Left="33" Canvas.Top="50" Height="58" Width="295" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" />
-            <Label Name="statusLabel" Canvas.Left="306" Canvas.Top="50" Height="58" Width="213" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" />
-            <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" />
+        <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
+            <Label Name="statusLabel" Canvas.Left="900" Canvas.Top="10" Height="74" Width="272" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="35" Content="status"  />
+            <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" Content=""  />
             <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
+            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
+            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
+
+            <Label Name="modeLabel" Canvas.Left="32" Canvas.Top="12" Height="72" Width="340" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="ChallengeMode" />
         </Canvas>
+        
     </Canvas>
 </views:BaseView>

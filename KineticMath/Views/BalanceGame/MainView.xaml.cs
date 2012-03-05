@@ -38,7 +38,7 @@ namespace KineticMath.Views
         private BodyRelativePointConverter bodyConverter;
         public static int labelDisplayTime = 2000;
         private List<Storyboard> runningAnimations = new List<Storyboard>();
-       
+        private bool selectingBall = false;
         public MainView()
         {
             InitializeComponent();
@@ -135,7 +135,7 @@ namespace KineticMath.Views
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(1.75);
             Storyboard.SetTarget(labelAnimation, uxWinLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
@@ -284,6 +284,7 @@ namespace KineticMath.Views
 
         private void HandlePushEvent(SkeletonPoint pt)
         {
+            if (selectingBall) return;
             Ball pushedBall = null;
             foreach (var holder in BallHolders)
             {
@@ -335,11 +336,12 @@ namespace KineticMath.Views
 
                     ballMove.Completed += delegate
                     {
+                        selectingBall = false;
                         this.BallHolders[index].Children.Remove(pushedBall);
                         runningAnimations.Remove(ballMove);
                         game.AddBallToBalance(pushedBall, true); // push ball to left side
                     };
-
+                    selectingBall = true;
                     ballMove.Begin();
                     // TODO2: Trigger animation for ball and after animation is triggered
                 }
