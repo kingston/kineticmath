@@ -15,7 +15,6 @@ namespace KineticMath.Controllers
     /// </summary>
     public class BalanceGame : Game
     {
-        public static int SECOND = 1;
         public static int MINUTE = 60;
 
         DispatcherTimer timer;
@@ -27,19 +26,19 @@ namespace KineticMath.Controllers
             Practice
         }
 
-        public int Counter { get; set; }
         public int Score { get; set; }
 
         public BalanceGame()
         {
             timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(timerHandler);
             mode = Mode.Challenge;
             HeldBalls = new ObservableCollection<Ball>();
             LeftBalanceBalls = new ObservableCollection<Ball>();
             RightBalanceBalls = new ObservableCollection<Ball>();
         }
 
-        public event EventHandler UpdateView;
+        public event EventHandler TimerTicked;
 
         public event EventHandler LevelCompleted;
 
@@ -61,13 +60,16 @@ namespace KineticMath.Controllers
 
         private void timerHandler(Object sender, EventArgs args)
         {
-            Counter++;
-            if (Counter <= MINUTE)
+            if (this.TimeLeft >= 0)
             {
-                System.Console.Write(Counter);
-                UpdateView(this, EventArgs.Empty);
-                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                TimerTicked(this, EventArgs.Empty);
+                timer.Interval = TimeSpan.FromSeconds(1);
                 timer.Start();
+                this.TimeLeft--;
+            }
+            else
+            {
+                timer.Stop();
             }
         }
 
@@ -77,21 +79,26 @@ namespace KineticMath.Controllers
         }
 
         /// <summary>
+        /// The time left in the challenge mode in seconds
+        /// </summary>
+        public int TimeLeft { get; set; }
+
+        /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
         public void NewGame()
         {
             if (mode == Mode.Challenge)
             {
-                if (Counter == 0)
-                    timer.Tick += new EventHandler(timerHandler);
-                else
-                    Counter = 0;
-                
+                if (timer.IsEnabled)
+                {
+                    timer.Stop(); // Reset timer
+                }
+                this.TimeLeft = MINUTE;
                 Score = 0;
                 currentLevel = 1;
                 LoadCurrentLevel();
-                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                timer.Interval = TimeSpan.FromSeconds(1);
                 timer.Start();
             }
             else

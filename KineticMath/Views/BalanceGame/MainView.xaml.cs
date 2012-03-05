@@ -59,7 +59,7 @@ namespace KineticMath.Views
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
-            game.UpdateView += new EventHandler(timerCallback);
+            game.TimerTicked += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
             modeLabel.Content = "Challenge Mode";
             game.NewGame();
@@ -68,8 +68,8 @@ namespace KineticMath.Views
         void timerCallback(object sender, EventArgs e)
         {
             BalanceGame bg = (BalanceGame) sender;
-            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + (60 - bg.Counter);
-            if (60 - bg.Counter == 0)
+            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
+            if (bg.TimeLeft == 0)
             {
                 modeLabel.Content = "Time's up!";
                 statusLabel.Content = "You scored " + bg.Score + " points!";
@@ -388,7 +388,6 @@ namespace KineticMath.Views
                     pBezierSegment.Points.Add(new Point(160, 160));
                     break;
                 default:
-                    System.Console.Write("4");
                     pBezierSegment.Points.Add(new Point(15, 0));
                     pBezierSegment.Points.Add(new Point(105, 0));
                     pBezierSegment.Points.Add(new Point(130, 100));
