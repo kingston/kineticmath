@@ -114,7 +114,6 @@ namespace KineticMath.Views
             labelSb.Completed += delegate 
             {
                 game.Reset();
-                game.LoadCurrentLevel(); 
             };
             labelSb.Begin();
         }
