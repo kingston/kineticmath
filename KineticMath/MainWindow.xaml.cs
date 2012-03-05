@@ -56,6 +56,18 @@ namespace KineticMath
             // Listen for log messages if we're debugging
             
             //DebugHelper.GetInstance().DebugMessageReceived += new EventHandler<DebugMessageReceivedEventArgs>(MainWindow_DebugMessageReceived);
+
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
+        }
+
+        private void HandleKeyDownEvent(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.B:
+                    backgroundMusic.IsMuted = !backgroundMusic.IsMuted;
+                    break;
+            }
         }
 
         void MainWindow_DebugMessageReceived(object sender, DebugMessageReceivedEventArgs e)
