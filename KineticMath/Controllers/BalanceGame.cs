@@ -154,9 +154,15 @@ namespace KineticMath.Controllers
                     // Generate the answer options
                     targetRightSide = new int[2];
                     int i = 0;
+                    int max = 0;
+                    if (currentLevel < 10)
+                        max = 10;
+                    else
+                        max = currentLevel / 10 * 10;
+
                     while (i < targetRightSide.Length)
                     {
-                        int candidate = rand.Next(1, currentLevel * 3 + 5);
+                        int candidate = rand.Next(1, currentLevel * 3 - 3);
                         if (!targetRightSide.Contains(candidate))
                         {
                             targetRightSide[i] = candidate;

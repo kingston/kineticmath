@@ -129,8 +129,6 @@ namespace KineticMath.SubControls
             Storyboard.SetTargetProperty(rotateAnimation,  new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)"));
             Storyboard ballMove = new Storyboard();
             ballMove.Children.Add(rotateAnimation);
-
-
         }
     }
 }
