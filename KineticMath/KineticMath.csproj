@@ -123,6 +123,9 @@
     </Compile>
     <Compile Include="SubControls\PointCanvas.cs" />
     <Compile Include="SubControls\SeesawObject.cs" />
+    <Compile Include="Resources\PlayAgainControl.xaml.cs">
+      <DependentUpon>PlayAgainControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\BalanceGame\MainView.xaml.cs">
@@ -189,6 +192,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\PlayAgainControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\BalanceGame\SplashView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -245,6 +252,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <BlendEmbeddedFont Include="Fonts\ITCKRIST.TTF">
+      <IsSystemFont>True</IsSystemFont>
+      <All>True</All>
+      <AutoFill>False</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>True</Uppercase>
+      <Lowercase>True</Lowercase>
+      <Numbers>True</Numbers>
+      <Punctuation>True</Punctuation>
+    </BlendEmbeddedFont>
     <Resource Include="Images\brick.jpg" />
     <Resource Include="Images\image0.png" />
   </ItemGroup>
@@ -258,6 +276,7 @@
     <Resource Include="Images\play_again.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

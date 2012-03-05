@@ -66,7 +66,9 @@ namespace KineticMath.Views
         void timerCallback(object sender, EventArgs e)
         {
             BalanceGame bg = (BalanceGame) sender;
-            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + (60 - bg.Counter);
+            scoreText.Content = bg.Score;
+            timeText.Content = 60- bg.Counter;
+            
             if (60 - bg.Counter == 0)
             {
                 modeLabel.Content = "Time's up!";
@@ -209,11 +211,13 @@ namespace KineticMath.Views
             {
                 case Key.D1:
                     modeLabel.Content = "Challenge Mode";
+                    ChallengeModeGUI.Visibility = System.Windows.Visibility.Visible;
                     game.setMode(BalanceGame.Mode.Challenge);
                     game.NewGame();
                     break;
                 case Key.D2:
                     modeLabel.Content = "Practice Mode";
+                    ChallengeModeGUI.Visibility = System.Windows.Visibility.Hidden;
                     statusLabel.Content = "";
                     game.setMode(BalanceGame.Mode.Practice);
                     game.NewGame();

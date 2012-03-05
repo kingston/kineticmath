@@ -7,7 +7,7 @@
                 xmlns:subcontrols="clr-namespace:KineticMath.SubControls"
              xmlns:my="clr-namespace:KineticMath.SubControls" xmlns:KineticMath="clr-namespace:KineticMath" x:Class="KineticMath.Views.MainView"
              mc:Ignorable="d" 
-             d:DesignHeight="675" d:DesignWidth="1200">
+             d:DesignHeight="675" d:DesignWidth="1280" Width="1280">
 	<views:BaseView.Resources>
 		<Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
 			<Setter Property="Template">
@@ -62,9 +62,9 @@
 			</Setter>
 		</Style>
 	</views:BaseView.Resources>
-    <Canvas Width="1200" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
-        <KineticMath:Background Canvas.Top="4" d:LayoutOverrides="Width, Height"/>
-        <my:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
+    <Canvas Width="1280" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
+        <KineticMath:Background Height="Auto" Width="Auto" Canvas.Left="-33" Canvas.Top="-2"/>
+        <my:Seesaw Canvas.Left="400" Canvas.Top="324" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
         <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Orange" />
@@ -74,18 +74,22 @@
             </TextBlock.RenderTransform>
         </TextBlock>
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
-       
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
-            <Label Name="statusLabel" Canvas.Left="808" Canvas.Top="10" Height="74" Width="364" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="35" Content="status"  />
-            <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" Content=""  />
-            <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
+            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" Content=""  />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
 
-            <Label Name="modeLabel" Canvas.Left="32" Canvas.Top="12" Height="72" Width="340" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="ChallengeMode" />
+            <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
+            <KineticMath:PlayAgainControl Canvas.Left="144" Canvas.Top="160" x:Name="playAgain" Opacity="0" />
+            <Label x:Name="statusLabel" Canvas.Left="1058" Canvas.Top="150" Height="51" Width="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
         </Canvas>
-        
+        <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
+        	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
+        	<Label x:Name="timeLabel" Canvas.Left="120" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Time" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
+        	<Label x:Name="scoreText" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
+        	<Label x:Name="timeText" Canvas.Left="120" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
+        </Canvas>
     </Canvas>
 </views:BaseView>
