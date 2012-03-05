@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 using Microsoft.Kinect;
 using KineticMath.Messaging;
@@ -37,6 +38,7 @@ namespace KineticMath.Views
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
         public static int labelDisplayTime = 2000;
+        private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
         public MainView()
@@ -111,11 +113,17 @@ namespace KineticMath.Views
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             labelSb.Children.Add(labelAnimation);
-            labelSb.Completed += delegate 
+            labelSb.Begin();
+
+            // Reset
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = RESET_DELAY;
+            timer.Tick += delegate
             {
                 game.Reset();
+                timer.Stop();
             };
-            labelSb.Begin();
+            timer.Start();
         }
 
         void game_LevelReset(object sender, EventArgs e)
