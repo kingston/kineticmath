@@ -165,7 +165,7 @@ namespace KineticMath.Views
         }
 
         // TODO2: Use an actual ball holder UI control, not a canvas
-        private Canvas[] BallHolders;
+        private PointCanvas[] BallHolders;
 
         private void SetupBallHolders(int numHolders)
         {
@@ -180,7 +180,7 @@ namespace KineticMath.Views
                         uxMainCanvas.Children.Remove(holder);
                     }
                 }
-                BallHolders = new Canvas[numHolders];
+                BallHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
                     new Point(0.1, 0.3),
@@ -191,13 +191,15 @@ namespace KineticMath.Views
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 for (int i = 0; i < numHolders; i++)
                 {
-                    Canvas canvas = new Canvas();
+                    PointCanvas canvas = new PointCanvas();
                     canvas.Width = 50;
                     canvas.Height = 50;
                     uxMainCanvas.Children.Add(canvas);
                     // -25 to center it
-                    Canvas.SetLeft(canvas, holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - 25);
-                    Canvas.SetTop(canvas, holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - 25);
+                    PointCanvas.SetTopLeft(canvas, new Point(
+                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - 25,
+                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - 25)
+                    );
                     BallHolders[i] = canvas;
                 }
             }
@@ -286,6 +288,7 @@ namespace KineticMath.Views
         {
             if (selectingBall) return;
             Ball pushedBall = null;
+            PointCanvas ballHolder = null;
             foreach (var holder in BallHolders)
             {
                 Rect rect = GetBoundingRectangle(holder);
@@ -294,6 +297,7 @@ namespace KineticMath.Views
                     if (holder.Children.Count > 0)
                     {
                         pushedBall = (Ball)holder.Children[0];
+                        ballHolder = holder;
                     }
                 }
             }
@@ -305,12 +309,11 @@ namespace KineticMath.Views
                     this.BallHolders[index].Children.Add(pushedBall);
                     // TODO2: Trigger animation for ball and after animation is triggered
 
-                    DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
-                    DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
+                    PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
 
                     PathGeometry animationPath = new PathGeometry();
                     PathFigure pFigure = new PathFigure();
-                    pFigure.StartPoint = new Point(10, 100);
+                    pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
                     //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
 
                     pFigure.Segments.Add(getCurve(index));
@@ -320,19 +323,14 @@ namespace KineticMath.Views
 
                     /*
                     animationPath.Figures = pfc;*/
-                    ballAnimationX.PathGeometry = animationPath;
-                    ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
-                    ballAnimationX.AutoReverse = false;
-                    ballAnimationY.PathGeometry = animationPath;
-                    ballAnimationY.AutoReverse = false;
-                    ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
-                    Storyboard.SetTarget(ballAnimationX, pushedBall);
-                    Storyboard.SetTarget(ballAnimationY, pushedBall);
-                    Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
-                    Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
+                    ballAnimation.PathGeometry = animationPath;
+                    ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                    ballAnimation.AutoReverse = false;
+
+                    Storyboard.SetTarget(ballAnimation, ballHolder);
+                    Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
                     Storyboard ballMove = new Storyboard();
-                    ballMove.Children.Add(ballAnimationX);
-                    ballMove.Children.Add(ballAnimationY);
+                    ballMove.Children.Add(ballAnimation);
 
                     ballMove.Completed += delegate
                     {
@@ -358,7 +356,6 @@ namespace KineticMath.Views
                     pBezierSegment.Points.Add(new Point(130, 100));
                     pBezierSegment.Points.Add(new Point(150, 190));
                     pBezierSegment.Points.Add(new Point(225, 200));
-                    pBezierSegment.Points.Add(new Point(260, 100));
                     break;
                 case 1:
                     pBezierSegment.Points.Add(new Point(15, 0));
@@ -366,7 +363,6 @@ namespace KineticMath.Views
                     pBezierSegment.Points.Add(new Point(130, 100));
                     pBezierSegment.Points.Add(new Point(150, 190));
                     pBezierSegment.Points.Add(new Point(225, 200));
-                    pBezierSegment.Points.Add(new Point(260, 100));
                     break;
                 case 2:
                     pBezierSegment.Points.Add(new Point(15, 0));
@@ -374,7 +370,6 @@ namespace KineticMath.Views
                     pBezierSegment.Points.Add(new Point(130, 100));
                     pBezierSegment.Points.Add(new Point(150, 190));
                     pBezierSegment.Points.Add(new Point(180, 180));
-                    pBezierSegment.Points.Add(new Point(200, 180));
                     break;
                 case 3:
                     pBezierSegment.Points.Add(new Point(15, 0));
@@ -382,18 +377,19 @@ namespace KineticMath.Views
                     pBezierSegment.Points.Add(new Point(130, 100));
                     pBezierSegment.Points.Add(new Point(150, 190));
                     pBezierSegment.Points.Add(new Point(160, 160));
-                    pBezierSegment.Points.Add(new Point(200, 180));
                     break;
                 default:
                     System.Console.Write("4");
-                     pBezierSegment.Points.Add(new Point(15, 0));
+                    pBezierSegment.Points.Add(new Point(15, 0));
                     pBezierSegment.Points.Add(new Point(105, 0));
                     pBezierSegment.Points.Add(new Point(130, 100));
                     pBezierSegment.Points.Add(new Point(130, 130));
-                   pBezierSegment.Points.Add(new Point(130, 130));
                     break;
             }
-
+            pBezierSegment.Points.Add(new Point(
+                Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
+                Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel))
+            ); 
             return pBezierSegment;
         }
 
