@@ -60,6 +60,7 @@ namespace KineticMath.Views
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
+            game.GameOver += new EventHandler(game_GameOver);
             game.TimerTicked += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
             modeLabel.Content = "Classic Mode";
@@ -75,40 +76,7 @@ namespace KineticMath.Views
             
             if (game.mode == BalanceGame.Mode.Challenge)
             {
-                if (bg.TimeLeft == 0)
-                {
-                    notime.Stop();
-                    notime.Play();
-                    modeLabel.Content = "Time's up!";
-                    statusLabel.Content = "You scored " + bg.Score + " points!";
-
-                    finalScore.Content = "Score: " + bg.Score;
-                    playAgain.BeginAnimation(UIElement.OpacityProperty, null);
-                    finalScore.BeginAnimation(UIElement.OpacityProperty, null);
-                    playAgain.Opacity = 1;
-                    finalScore.Opacity = 1;
-                    // Hide it when we're done
-                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                    DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                    imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                    Storyboard.SetTarget(labelAnimation, playAgain);
-                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard.SetTarget(imageAnimation, finalScore);
-                    Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard labelSb = new Storyboard();
-                    labelSb.Children.Add(labelAnimation);
-                    labelSb.Children.Add(imageAnimation);
-
-
-                    labelSb.Completed += delegate
-                    {
-                        modeLabel.Content = "Challenge Mode";
-                        game.NewGame();
-                    };
-                    labelSb.Begin();
-                }
-                else if (bg.TimeLeft < 10)
+                if (bg.TimeLeft < 10)
                 {
                     ding.Stop();
                     ding.Play();
@@ -116,83 +84,70 @@ namespace KineticMath.Views
             }
             else if (game.mode == BalanceGame.Mode.Classic)
             {
-                if (bg.TimeLeft == 0)
-                {
-                    lifeCanvas.Children.RemoveAt(0);
-                    uxNoTimeLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-                    uxNoTimeLabel.Opacity = 1;
-                    // Hide it when we're done
-                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
-                    Storyboard.SetTarget(labelAnimation, uxNoTimeLabel);
-                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard labelSb = new Storyboard();
-                    runningAnimations.Add(labelSb);
-                    labelSb.Children.Add(labelAnimation);
-
-                    labelSb.Completed += delegate
-                    {
-                        runningAnimations.Remove(labelSb);
-                        game.Reset();
-                    };
-                    labelSb.Begin();
-                }
-                else if (bg.TimeLeft <= 3)
+                if (bg.TimeLeft <= 3)
                 {
                     ding.Stop();
                     ding.Play();
                 }
-
-                if (lifeCanvas.Children.Count == 0)
-                {
-                    modeLabel.Content = "Game over!";
-                    statusLabel.Content = "You scored " + bg.Score + " points!";
-
-                    playAgain.Opacity = 1;
-                    finalScore.Opacity = 1;
-
-                    /*
-                    finalScore.Content = "Score: " + bg.Score;
-                    playAgain.BeginAnimation(UIElement.OpacityProperty, null);
-                    finalScore.BeginAnimation(UIElement.OpacityProperty, null);
-                    
-                    // Hide it when we're done
-                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                    DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                    imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                    Storyboard.SetTarget(labelAnimation, playAgain);
-                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard.SetTarget(imageAnimation, finalScore);
-                    Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
-                    Storyboard labelSb = new Storyboard();
-                    labelSb.Children.Add(labelAnimation);
-                    labelSb.Children.Add(imageAnimation);
-
-
-                    labelSb.Completed += delegate
-                    {
-                        modeLabel.Content = "Classic Mode";
-                        game.NewGame();
-                    };
-                    labelSb.Begin();
-                    */
-                }
             }
         }
 
+        void game_GameOver(object sender, EventArgs e)
+        {
+            BalanceGame bg = (BalanceGame)sender;
+
+            notime.Stop();
+            notime.Play();
+            modeLabel.Content = "Time's up!";
+            statusLabel.Content = "You scored " + bg.Score + " points!";
+
+            finalScore.Content = "Score: " + bg.Score;
+            playAgain.BeginAnimation(UIElement.OpacityProperty, null);
+            finalScore.BeginAnimation(UIElement.OpacityProperty, null);
+            playAgain.Opacity = 1;
+            finalScore.Opacity = 1;
+            // Hide it when we're done
+            DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+            imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            Storyboard.SetTarget(labelAnimation, playAgain);
+            Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(imageAnimation, finalScore);
+            Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard labelSb = new Storyboard();
+            labelSb.Children.Add(labelAnimation);
+            labelSb.Children.Add(imageAnimation);
+            labelSb.Begin();
+        }
 
         void game_LevelLost(object sender, EventArgs e)
         {
+            LevelLostEventArgs args = (LevelLostEventArgs)e;
             if (game.mode == BalanceGame.Mode.Classic)
                 lifeCanvas.Children.RemoveAt(0);
 
-            uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-            uxLoseLabel.Opacity = 1;
+            if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
+            {
+                uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+                uxLoseLabel.Opacity = 1;
+            }
+            else
+            {
+                uxNoTimeLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+                uxNoTimeLabel.Opacity = 1;
+            }
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
             labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
-            Storyboard.SetTarget(labelAnimation, uxLoseLabel);
+            if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
+            {
+                Storyboard.SetTarget(labelAnimation, uxLoseLabel);
+            }
+            else
+            {
+                Storyboard.SetTarget(labelAnimation, uxNoTimeLabel);
+            }
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
             runningAnimations.Add(labelSb);

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 
 using KineticMath.SubControls;
 using System.Windows.Threading;
+using KineticMath.Views;
 
 namespace KineticMath.Controllers
 {
@@ -29,6 +30,13 @@ namespace KineticMath.Controllers
         }
 
         public int Score { get; set; }
+
+        /// <summary>
+        /// The time left in the challenge mode in seconds
+        /// </summary>
+        public int TimeLeft { get; set; }
+
+        public int LivesLeft { get; protected set; }
 
         public BalanceGame()
         {
@@ -54,12 +62,13 @@ namespace KineticMath.Controllers
         /// </summary>
         public event EventHandler LevelReset;
 
+        public event EventHandler GameOver;
+
         private int currentLevel;
 
         /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
-
         private void timerHandler(Object sender, EventArgs args)
         {
             if (this.TimeLeft >= 0)
@@ -72,9 +81,25 @@ namespace KineticMath.Controllers
             else
             {
                 if (mode == Mode.Classic)
-                    TimeLeft = TEN_SECOND;
+                {
+                    LivesLeft--;
+                    LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
+                    if (LivesLeft > 0)
+                    {
+                        TimeLeft = TEN_SECOND;
+                    }
+                    else
+                    {
+                        timer.Stop();
+                        GameOver(this, EventArgs.Empty);
+                    }
+                }
                 else if (mode == Mode.Challenge)
+                {
+                    LivesLeft--;
                     timer.Stop();
+                    GameOver(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -82,11 +107,6 @@ namespace KineticMath.Controllers
         {
             this.mode = mode;
         }
-
-        /// <summary>
-        /// The time left in the challenge mode in seconds
-        /// </summary>
-        public int TimeLeft { get; set; }
 
         /// <summary>
         /// Starts a new game and resets everything
@@ -99,6 +119,7 @@ namespace KineticMath.Controllers
                 {
                     timer.Stop(); // Reset timer
                 }
+                this.LivesLeft = 1;
                 this.TimeLeft = MINUTE;
                 Score = 0;
                 currentLevel = 1;
@@ -112,6 +133,7 @@ namespace KineticMath.Controllers
                 {
                     timer.Stop(); // Reset timer
                 }
+                this.LivesLeft = 3;
                 this.TimeLeft = TEN_SECOND;
                 Score = 0;
                 currentLevel = 1;
@@ -122,7 +144,10 @@ namespace KineticMath.Controllers
             else
             {
                 if (timer.IsEnabled)
+                {
                     timer.Stop();
+                }
+                this.LivesLeft = 1;
                 currentLevel = 1;
                 LoadCurrentLevel();
             };
@@ -151,10 +176,21 @@ namespace KineticMath.Controllers
                 }
                 else
                 {
-                   
-                    if (LevelLost != null)
+                    if (mode != Mode.Practice)
                     {
-                        LevelLost(this, EventArgs.Empty);
+                        this.LivesLeft--;
+                    }
+                    if (LivesLeft <= 0)
+                    {
+                        timer.Stop();
+                        if (GameOver != null)
+                        {
+                            GameOver(this, EventArgs.Empty);
+                        }
+                    }
+                    else if (LevelLost != null)
+                    {
+                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
                     }
                 }
             }
@@ -300,5 +336,19 @@ namespace KineticMath.Controllers
         public ObservableCollection<SeesawObject> LeftBalanceBalls { get; private set; }
 
         public ObservableCollection<SeesawObject> RightBalanceBalls { get; private set; }
+
+    }
+
+    public class LevelLostEventArgs : EventArgs
+    {
+        public enum Reason
+        {
+            TimeUp, WrongAnswer
+        }
+        public Reason reason { get; set; }
+        public LevelLostEventArgs(Reason r)
+        {
+            reason = r;
+        }
     }
 }
