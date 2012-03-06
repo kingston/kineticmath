@@ -64,7 +64,7 @@
 	</views:BaseView.Resources>
     <Canvas Width="1200" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
         <KineticMath:Background Canvas.Top="4" d:LayoutOverrides="Width, Height"/>
-        <my:Seesaw Canvas.Left="400" Canvas.Top="229" x:Name="seesaw" />
+        <my:Seesaw Canvas.Left="662" Canvas.Top="236" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
         <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Orange" />
@@ -82,8 +82,15 @@
             <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
-
+            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Time's up! Try next round!" Foreground="Blue" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxNoTimeLabel" />
+            
             <Label Name="modeLabel" Canvas.Left="32" Canvas.Top="12" Height="72" Width="340" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="ChallengeMode" />
+            <Canvas Canvas.Left="834" Canvas.Top="90" Height="75" Name="lifeCanvas" Width="266">
+                <my:Bird Canvas.Left="0" Canvas.Top="0" Height="90" x:Name="life1" />
+                <my:Bird Canvas.Left="90" Canvas.Top="0" Height="90" x:Name="life2" />
+                <my:Bird Canvas.Left="180" Canvas.Top="0" Height="90" x:Name="life3" />
+            </Canvas>
+            
         </Canvas>
 
         <MediaElement Name="ding" Source="../../Media/ding.wav" LoadedBehavior="Manual" Volume="4" />

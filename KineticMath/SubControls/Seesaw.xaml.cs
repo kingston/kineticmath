@@ -59,7 +59,7 @@ namespace KineticMath.SubControls
             bool isLeft = (sender == game.LeftBalanceBalls);
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (Ball obj in e.NewItems)
+                foreach (SeesawObject obj in e.NewItems)
                 {
                     AddObject(obj, isLeft);
                 }
@@ -87,7 +87,7 @@ namespace KineticMath.SubControls
             }
         }
 
-        public void AddObject(Ball obj, bool isLeft = true)
+        public void AddObject(SeesawObject obj, bool isLeft = true)
         {
             if (isLeft)
             {
@@ -103,7 +103,7 @@ namespace KineticMath.SubControls
         }
 
 
-        public void RemoveObject(Ball obj, bool isLeft = true)
+        public void RemoveObject(SeesawObject obj, bool isLeft = true)
         {
             if (isLeft)
             {

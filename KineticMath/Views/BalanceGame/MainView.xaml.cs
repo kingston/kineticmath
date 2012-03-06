@@ -62,7 +62,7 @@ namespace KineticMath.Views
             game.LevelLost += new EventHandler(game_LevelLost);
             game.TimerTicked += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
-            modeLabel.Content = "Challenge Mode";
+            modeLabel.Content = "Classic Mode";
             game.NewGame();
         }
 
@@ -70,49 +70,120 @@ namespace KineticMath.Views
         {
             BalanceGame bg = (BalanceGame) sender;
             statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
-            if (bg.TimeLeft == 0)
+            if (game.mode == BalanceGame.Mode.Challenge)
             {
-                notime.Stop();
-                notime.Play();
-                modeLabel.Content = "Time's up!";
-                statusLabel.Content = "You scored " + bg.Score + " points!";
-
-                finalScore.Content = "Score: " + bg.Score;
-                playAgain.BeginAnimation(UIElement.OpacityProperty, null);
-                finalScore.BeginAnimation(UIElement.OpacityProperty, null);
-                playAgain.Opacity = 1;
-                finalScore.Opacity = 1;
-                // Hide it when we're done
-                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
-                imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                Storyboard.SetTarget(labelAnimation, playAgain);
-                Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-                Storyboard.SetTarget(imageAnimation, finalScore);
-                Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
-                Storyboard labelSb = new Storyboard();
-                labelSb.Children.Add(labelAnimation);
-                labelSb.Children.Add(imageAnimation);
-
-
-                labelSb.Completed += delegate
+                if (bg.TimeLeft == 0)
                 {
-                    modeLabel.Content = "Challenge Mode";
-                    game.NewGame();
-                };
-                labelSb.Begin();
+                    notime.Stop();
+                    notime.Play();
+                    modeLabel.Content = "Time's up!";
+                    statusLabel.Content = "You scored " + bg.Score + " points!";
+
+                    finalScore.Content = "Score: " + bg.Score;
+                    playAgain.BeginAnimation(UIElement.OpacityProperty, null);
+                    finalScore.BeginAnimation(UIElement.OpacityProperty, null);
+                    playAgain.Opacity = 1;
+                    finalScore.Opacity = 1;
+                    // Hide it when we're done
+                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                    DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+                    imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                    Storyboard.SetTarget(labelAnimation, playAgain);
+                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard.SetTarget(imageAnimation, finalScore);
+                    Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard labelSb = new Storyboard();
+                    labelSb.Children.Add(labelAnimation);
+                    labelSb.Children.Add(imageAnimation);
+
+
+                    labelSb.Completed += delegate
+                    {
+                        modeLabel.Content = "Challenge Mode";
+                        game.NewGame();
+                    };
+                    labelSb.Begin();
+                }
+                else if (bg.TimeLeft < 10)
+                {
+                    ding.Stop();
+                    ding.Play();
+                }
             }
-            else if (bg.TimeLeft < 10)
+            else if (game.mode == BalanceGame.Mode.Classic)
             {
-                ding.Stop();
-                ding.Play();
+                if (bg.TimeLeft == 0)
+                {
+                    lifeCanvas.Children.RemoveAt(0);
+                    uxNoTimeLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+                    uxNoTimeLabel.Opacity = 1;
+                    // Hide it when we're done
+                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
+                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
+                    Storyboard.SetTarget(labelAnimation, uxNoTimeLabel);
+                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard labelSb = new Storyboard();
+                    runningAnimations.Add(labelSb);
+                    labelSb.Children.Add(labelAnimation);
+
+                    labelSb.Completed += delegate
+                    {
+                        runningAnimations.Remove(labelSb);
+                        game.Reset();
+                    };
+                    labelSb.Begin();
+                }
+                else if (bg.TimeLeft <= 3)
+                {
+                    ding.Stop();
+                    ding.Play();
+                }
+
+                if (lifeCanvas.Children.Count == 0)
+                {
+                    modeLabel.Content = "Game over!";
+                    statusLabel.Content = "You scored " + bg.Score + " points!";
+
+                    playAgain.Opacity = 1;
+                    finalScore.Opacity = 1;
+
+                    /*
+                    finalScore.Content = "Score: " + bg.Score;
+                    playAgain.BeginAnimation(UIElement.OpacityProperty, null);
+                    finalScore.BeginAnimation(UIElement.OpacityProperty, null);
+                    
+                    // Hide it when we're done
+                    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+                    labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                    DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
+                    imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                    Storyboard.SetTarget(labelAnimation, playAgain);
+                    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard.SetTarget(imageAnimation, finalScore);
+                    Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+                    Storyboard labelSb = new Storyboard();
+                    labelSb.Children.Add(labelAnimation);
+                    labelSb.Children.Add(imageAnimation);
+
+
+                    labelSb.Completed += delegate
+                    {
+                        modeLabel.Content = "Classic Mode";
+                        game.NewGame();
+                    };
+                    labelSb.Begin();
+                    */
+                }
             }
         }
 
 
         void game_LevelLost(object sender, EventArgs e)
         {
+            if (game.mode == BalanceGame.Mode.Classic)
+                lifeCanvas.Children.RemoveAt(0);
+
             uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
@@ -166,7 +237,7 @@ namespace KineticMath.Views
 
         private void HeldBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            ObservableCollection<Ball> col = (ObservableCollection<Ball>)sender;
+            ObservableCollection<SeesawObject> col = (ObservableCollection<SeesawObject>)sender;
             SetupBallHolders(col.Count);
             for (int i = 0; i < col.Count; i++)
             {
@@ -210,8 +281,8 @@ namespace KineticMath.Views
                 for (int i = 0; i < numHolders; i++)
                 {
                     PointCanvas canvas = new PointCanvas();
-                    canvas.Width = 80;
-                    canvas.Height = 80;
+                    canvas.Width = 200;
+                    canvas.Height = 200;
                     uxMainCanvas.Children.Add(canvas);
                     PointCanvas.SetTopLeft(canvas, new Point(
                         holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle),
@@ -235,11 +306,19 @@ namespace KineticMath.Views
             switch (e.Key)
             {
                 case Key.D1:
+                    lifeCanvas.Opacity = 1;
+                    modeLabel.Content = "Classic Mode";
+                    game.setMode(BalanceGame.Mode.Classic);
+                    game.NewGame();
+                    break;
+                case Key.D2:
+                    lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Challenge Mode";
                     game.setMode(BalanceGame.Mode.Challenge);
                     game.NewGame();
                     break;
-                case Key.D2:
+                case Key.D3:
+                    lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Practice Mode";
                     statusLabel.Content = "";
                     game.setMode(BalanceGame.Mode.Practice);
@@ -398,7 +477,7 @@ namespace KineticMath.Views
         private void HandlePushEvent(SkeletonPoint pt)
         {
             if (selectingBall) return;
-            Ball pushedBall = null;
+            SeesawObject pushedBall = null;
             PointCanvas ballHolder = null;
             foreach (var holder in BallHolders)
             {
@@ -407,7 +486,7 @@ namespace KineticMath.Views
                 {
                     if (holder.Children.Count > 0)
                     {
-                        pushedBall = (Ball)holder.Children[0];
+                        pushedBall = (SeesawObject) holder.Children[0];
                         ballHolder = holder;
                     }
                 }

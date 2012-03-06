@@ -16,6 +16,7 @@ namespace KineticMath.Controllers
     public class BalanceGame : Game
     {
         public static int MINUTE = 60;
+        public static int TEN_SECOND = 10;
 
         DispatcherTimer timer;
         public Mode mode;
@@ -23,7 +24,8 @@ namespace KineticMath.Controllers
         public enum Mode
         {
             Challenge,
-            Practice
+            Practice,
+            Classic
         }
 
         public int Score { get; set; }
@@ -32,10 +34,10 @@ namespace KineticMath.Controllers
         {
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timerHandler);
-            mode = Mode.Challenge;
-            HeldBalls = new ObservableCollection<Ball>();
-            LeftBalanceBalls = new ObservableCollection<Ball>();
-            RightBalanceBalls = new ObservableCollection<Ball>();
+            mode = Mode.Classic;
+            HeldBalls = new ObservableCollection<SeesawObject>();
+            LeftBalanceBalls = new ObservableCollection<SeesawObject>();
+            RightBalanceBalls = new ObservableCollection<SeesawObject>();
         }
 
         public event EventHandler TimerTicked;
@@ -69,7 +71,10 @@ namespace KineticMath.Controllers
             }
             else
             {
-                timer.Stop();
+                if (mode == Mode.Classic)
+                    TimeLeft = TEN_SECOND;
+                else if (mode == Mode.Challenge)
+                    timer.Stop();
             }
         }
 
@@ -95,6 +100,19 @@ namespace KineticMath.Controllers
                     timer.Stop(); // Reset timer
                 }
                 this.TimeLeft = MINUTE;
+                Score = 0;
+                currentLevel = 1;
+                LoadCurrentLevel();
+                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Start();
+            }
+            else if (mode == Mode.Classic)
+            {
+                if (timer.IsEnabled)
+                {
+                    timer.Stop(); // Reset timer
+                }
+                this.TimeLeft = TEN_SECOND;
                 Score = 0;
                 currentLevel = 1;
                 LoadCurrentLevel();
@@ -140,6 +158,8 @@ namespace KineticMath.Controllers
                     }
                 }
             }
+            if (mode == Mode.Classic)
+                TimeLeft = TEN_SECOND;
         }
 
         private int[] curBalls;
@@ -214,11 +234,11 @@ namespace KineticMath.Controllers
             RightBalanceBalls.Clear();
             foreach (var weight in curBalls)
             {
-                HeldBalls.Add(new Ball(weight.ToString(), weight));
+                HeldBalls.Add(new Bird(weight.ToString(), weight));
             }
             foreach (var weight in targetRightSide)
             {
-                RightBalanceBalls.Add(new Ball(weight.ToString(), weight));
+                RightBalanceBalls.Add(new Pig(weight.ToString(), weight));
             }
         }
 
@@ -235,7 +255,7 @@ namespace KineticMath.Controllers
         /// Pushes a ball from the HeldBalls section in the assumption that it'll trigger an animation
         /// </summary>
         /// <param name="ball">The ball to remove</param>
-        public bool PushBall(Ball ball)
+        public bool PushBall(SeesawObject ball)
         {
             if (ball == null) return false;
             int ballIdx = this.HeldBalls.IndexOf(ball);
@@ -257,7 +277,7 @@ namespace KineticMath.Controllers
         /// </summary>
         /// <param name="ball"></param>
         /// <param name="leftSide"></param>
-        public void AddBallToBalance(Ball ball, bool leftSide)
+        public void AddBallToBalance(SeesawObject ball, bool leftSide)
         {
             if (leftSide)
             {
@@ -275,10 +295,10 @@ namespace KineticMath.Controllers
             return RightBalanceBalls.Sum(s => s.Weight) - LeftBalanceBalls.Sum(s => s.Weight);
         }
 
-        public ObservableCollection<Ball> HeldBalls { get; private set; }
+        public ObservableCollection<SeesawObject> HeldBalls { get; private set; }
 
-        public ObservableCollection<Ball> LeftBalanceBalls { get; private set; }
+        public ObservableCollection<SeesawObject> LeftBalanceBalls { get; private set; }
 
-        public ObservableCollection<Ball> RightBalanceBalls { get; private set; }
+        public ObservableCollection<SeesawObject> RightBalanceBalls { get; private set; }
     }
 }

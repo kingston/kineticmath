@@ -1,0 +1,14 @@
+﻿<src:SeesawObject x:Class="KineticMath.SubControls.Bird"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:src="clr-namespace:KineticMath.SubControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="117">
+    <Canvas Name="canvas" Width="125" Height="80">
+        <Image Canvas.Left="4" Canvas.Top="0" Height="68" Width="64" Source="/KineticMath;component/Images/bird.png" />
+        <TextBlock Canvas.Left="67" FontSize="50" Canvas.Top="0" Height="68" Name="ValueText" Text="1" TextAlignment="Center" Width="58" Foreground="Red" FontWeight="Bold">
+        </TextBlock>
+    </Canvas>
+</src:SeesawObject>

@@ -112,6 +112,9 @@
     <Compile Include="Resources\Background.xaml.cs">
       <DependentUpon>Background.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubControls\Bird.xaml.cs">
+      <DependentUpon>Bird.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubControls\KinectSkeletonNew.xaml.cs">
       <DependentUpon>KinectSkeletonNew.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,9 @@
     </Compile>
     <Compile Include="SubControls\Ball.xaml.cs">
       <DependentUpon>Ball.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControls\Pig.xaml.cs">
+      <DependentUpon>Pig.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubControls\PointCanvas.cs" />
     <Compile Include="SubControls\SeesawObject.cs" />
@@ -168,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SubControls\Bird.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SubControls\KinectSkeletonNew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -181,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SubControls\Ball.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControls\Pig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -261,6 +275,8 @@
     <Resource Include="Images\play_again.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\bird.png" />
+    <Resource Include="Images\pig.png" />
     <Content Include="Media\ding.wav" />
     <Content Include="Media\notime.wma" />
     <Content Include="Media\tada.wav">
