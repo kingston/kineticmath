@@ -70,6 +70,9 @@ namespace KineticMath.Views
         {
             BalanceGame bg = (BalanceGame) sender;
             statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
+            scoreText.TextContent = bg.Score;
+            timeText.Content = bg.TimeLeft;
+            
             if (game.mode == BalanceGame.Mode.Challenge)
             {
                 if (bg.TimeLeft == 0)
@@ -314,12 +317,14 @@ namespace KineticMath.Views
                 case Key.D2:
                     lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Challenge Mode";
+                    ChallengeModeGUI.Visibility = System.Windows.Visibility.Visible;
                     game.setMode(BalanceGame.Mode.Challenge);
                     game.NewGame();
                     break;
                 case Key.D3:
                     lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Practice Mode";
+                    ChallengeModeGUI.Visibility = System.Windows.Visibility.Hidden;
                     statusLabel.Content = "";
                     game.setMode(BalanceGame.Mode.Practice);
                     game.NewGame();
