@@ -61,7 +61,7 @@ namespace KineticMath.Kinect.Gestures
         {
             SkeletonPoint oldPt = pointConverter.ConvertPoint(this.skeletalHistory.First().Skeleton.Joints[type].Position);
             SkeletonPoint newPt = pointConverter.ConvertPoint(this.skeletalHistory.Last().Skeleton.Joints[type].Position);
-            return Point.Subtract(newPt.To2DPoint(), oldPt.To2DPoint());
+            return Point.Subtract(newPt.To2DPoint(), oldPt.To2DPoint()) / this.maxTimeToLive * 100; // Want the velocity for the past 50ms
         }
 
         /// <summary>

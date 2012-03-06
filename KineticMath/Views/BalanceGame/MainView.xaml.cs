@@ -298,6 +298,36 @@ namespace KineticMath.Views
             HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
         }
 
+        private PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
+        {
+            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+            //pBezierSegment.Points.Add(new Point(startPoint.X + (endPoint.X - startPoint.X) * 2 / 3, startPoint.Y));
+            //pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - startPoint.Y) * 2 / 3));
+            //pBezierSegment.Points.Add(endPoint);
+            // Compute path
+            int divisions = 10; // The granularity of the path
+            double[] xPoints = ComputeAcceleratePoints(velocity.X, endPoint.X - startPoint.X, divisions);
+            double[] yPoints = ComputeAcceleratePoints(velocity.Y, endPoint.Y - startPoint.Y, divisions);
+
+            for (int i = 0; i < divisions; i++)
+            {
+                pBezierSegment.Points.Add(new Point(startPoint.X + xPoints[i], startPoint.Y + yPoints[i]));
+            }
+            return pBezierSegment;
+        }
+
+        private double[] ComputeAcceleratePoints(double initialSpeed, double distance, int totalTime)
+        {
+            // Using SUVAT equation s = ut + 1/2 at^2
+            double acceleration = 2 * (distance - initialSpeed * totalTime) / (totalTime * totalTime);
+            double[] points = new double[totalTime];
+            for (int i = 1; i <= totalTime; i++)
+            {
+                points[i - 1] = initialSpeed * i + 0.5 * acceleration * (i * i);
+            }
+            return points;
+        }
+
         private void HitBall(int index, Vector velocity)
         {
             var pushedBall = game.HeldBalls[index];
@@ -318,11 +348,7 @@ namespace KineticMath.Views
                     Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
                     Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel)
                 );
-                PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-                pBezierSegment.Points.Add(new Point(pFigure.StartPoint.X + (endPoint.X - pFigure.StartPoint.X) * 2 / 3, pFigure.StartPoint.Y));
-                pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - pFigure.StartPoint.Y) * 2 / 3));
-                pBezierSegment.Points.Add(endPoint);
-                pFigure.Segments.Add(pBezierSegment);
+                pFigure.Segments.Add(ComputeCurve(pFigure.StartPoint, endPoint, velocity));
 
                 animationPath.Figures.Add(pFigure);
                 // Freeze the PathGeometry for performance benefits.
