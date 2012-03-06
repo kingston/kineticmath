@@ -89,7 +89,6 @@
             </Canvas>
 
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
-            <KineticMath:PlayAgainControl Canvas.Left="144" Canvas.Top="160" x:Name="playAgain" Opacity="0" />
             <Label x:Name="statusLabel" Canvas.Left="1058" Canvas.Top="150" Height="51" Width="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
         </Canvas>
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
@@ -101,5 +100,6 @@
 		<MediaElement Name="ding" Source="../../Media/ding.wav" LoadedBehavior="Manual" Volume="4" />
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
         <MediaElement Name="soundEffect" Source="../../Media/tada.mp3" LoadedBehavior="Manual" Volume="1" />
+        <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="385" x:Name="playAgain" Opacity="0" />
     </Canvas>
 </views:BaseView>
