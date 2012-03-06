@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:KineticMath.Views"
-                xmlns:subcontrols="clr-namespace:KineticMath.SubControls"
+               xmlns:subcontrols="clr-namespace:KineticMath.SubControls"
              xmlns:my="clr-namespace:KineticMath.SubControls" xmlns:KineticMath="clr-namespace:KineticMath" x:Class="KineticMath.Views.MainView"
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1280" Width="1280">
@@ -77,7 +77,7 @@
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
-            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" Content=""  />
+            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
 
@@ -88,7 +88,7 @@
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
         	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
         	<Label x:Name="timeLabel" Canvas.Left="120" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Time" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
-        	<Label x:Name="scoreText" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
+        	<KineticMath:scoreTextControl x:Name="scoreText" Height="63" Canvas.Top="45" Width="124"/>
         	<Label x:Name="timeText" Canvas.Left="120" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
         </Canvas>
 		<MediaElement Name="ding" Source="../../Media/ding.wav" LoadedBehavior="Manual" Volume="4" />

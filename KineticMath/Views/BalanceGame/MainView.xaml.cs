@@ -69,15 +69,10 @@ namespace KineticMath.Views
         void timerCallback(object sender, EventArgs e)
         {
             BalanceGame bg = (BalanceGame) sender;
-<<<<<<< HEAD
-            scoreText.Content = bg.Score;
-            timeText.Content = 60- bg.Counter;
+            scoreText.TextContent = bg.Score;
+            timeText.Content = bg.TimeLeft;
             
-            if (60 - bg.Counter == 0)
-=======
-            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
             if (bg.TimeLeft == 0)
->>>>>>> 51546a481118e5010c5dfab6bc0ac88ace07fa77
             {
                 notime.Stop();
                 notime.Play();
