@@ -38,7 +38,7 @@ namespace KineticMath.Views
 
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
-        public static int labelDisplayTime = 2000;
+        public static int labelDisplayTime = 750;
         private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
@@ -109,22 +109,19 @@ namespace KineticMath.Views
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
             Storyboard.SetTarget(labelAnimation, uxLoseLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
+            runningAnimations.Add(labelSb);
             labelSb.Children.Add(labelAnimation);
-            labelSb.Begin();
 
-            // Reset
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = RESET_DELAY;
-            timer.Tick += delegate
+            labelSb.Completed += delegate
             {
+                runningAnimations.Remove(labelSb);
                 game.Reset();
-                timer.Stop();
             };
-            timer.Start();
+            labelSb.Begin();
         }
 
         void game_LevelReset(object sender, EventArgs e)
@@ -144,14 +141,15 @@ namespace KineticMath.Views
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(1.75);
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
             Storyboard.SetTarget(labelAnimation, uxWinLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
-            // TODO2: Start level once animation is over
+            runningAnimations.Add(labelSb);
             labelSb.Children.Add(labelAnimation);
             labelSb.Completed += delegate
             {
+                runningAnimations.Remove(labelSb);
                 soundEffect.Stop();
                 game.LoadCurrentLevel();
             };
@@ -194,10 +192,10 @@ namespace KineticMath.Views
                 BallHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(0.1, 0.3),
-                    new Point(0.3, 0.2),
-                    new Point(0.7, 0.2),
-                    new Point(0.9, 0.3)
+                    new Point(0.10, 0.3),
+                    new Point(0.25, 0.1),
+                    new Point(0.65, 0.1),
+                    new Point(0.80, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 _hitZones.Clear();
@@ -331,7 +329,8 @@ namespace KineticMath.Views
         private void HitBall(int index, Vector velocity)
         {
             var pushedBall = game.HeldBalls[index];
-            if (game.PushBall(pushedBall))
+            // Check if any running animations to avoid conflicts
+            if (runningAnimations.Count == 0 && game.PushBall(pushedBall))
             {
                 var ballHolder = this.BallHolders[index];
                 uxMainCanvas.Children.Add(pushedBall);
@@ -358,12 +357,14 @@ namespace KineticMath.Views
                 animationPath.Figures = pfc;*/
                 ballAnimation.PathGeometry = animationPath;
                 ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                ballAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.75));
                 ballAnimation.AutoReverse = false;
 
                 Storyboard.SetTarget(ballAnimation, pushedBall);
                 Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
                 Storyboard ballMove = new Storyboard();
                 ballMove.Children.Add(ballAnimation);
+                runningAnimations.Add(ballMove);
 
                 ballMove.Completed += delegate
                 {

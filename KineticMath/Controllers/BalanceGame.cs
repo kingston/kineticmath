@@ -123,6 +123,11 @@ namespace KineticMath.Controllers
                     {
                         Score++;
                         LevelCompleted(this, EventArgs.Empty);
+                        // Let's make life interesting ;)
+                        if (mode == Mode.Challenge)
+                        {
+                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * 5);
+                        }
                         currentLevel++;
                     }
                 }
@@ -159,7 +164,14 @@ namespace KineticMath.Controllers
                 default:
                     Random rand = new Random();
                     // Generate the answer options
-                    targetRightSide = new int[2];
+                    int rightSideNum = 2;
+                    if (currentLevel < 10)
+                        rightSideNum = 2;
+                    else if (currentLevel < 20)
+                        rightSideNum = 3;
+                    else
+                        rightSideNum = 4;
+                    targetRightSide = new int[rightSideNum];
                     int i = 0;
                     int max = 0;
                     if (currentLevel < 10)

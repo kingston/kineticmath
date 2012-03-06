@@ -78,7 +78,6 @@
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
-            <Label Name="statusLabel" Canvas.Left="808" Canvas.Top="10" Height="74" Width="364" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="35" Content="status"  />
             <Label Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" Content=""  />
             <Image Name ="playAgain" Source="/KineticMath;component/Images/play_again.png" Canvas.Left="137" Canvas.Top="291" Opacity="0" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
@@ -86,6 +85,7 @@
 
             <Label Name="modeLabel" Canvas.Left="32" Canvas.Top="12" Height="72" Width="340" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="ChallengeMode" />
         </Canvas>
-        <MediaElement Name="soundEffect" Source="../../Media/tada.wav" LoadedBehavior="Manual" />
+        <MediaElement Name="soundEffect" Source="../../Media/tada.wav" LoadedBehavior="Manual" Volume="5" />
+        <Label Name="statusLabel" Canvas.Left="736" Canvas.Top="12" Height="72" Width="444" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="35" Content="status" />
     </Canvas>
 </views:BaseView>
