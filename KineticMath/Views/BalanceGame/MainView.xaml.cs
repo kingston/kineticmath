@@ -304,7 +304,7 @@ namespace KineticMath.Views
             if (game.PushBall(pushedBall))
             {
                 var ballHolder = this.BallHolders[index];
-                ballHolder.Children.Add(pushedBall);
+                uxMainCanvas.Children.Add(pushedBall);
 
                 // TODO2: Trigger animation for ball and after animation is triggered
 
@@ -334,7 +334,7 @@ namespace KineticMath.Views
                 ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
                 ballAnimation.AutoReverse = false;
 
-                Storyboard.SetTarget(ballAnimation, ballHolder);
+                Storyboard.SetTarget(ballAnimation, pushedBall);
                 Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
                 Storyboard ballMove = new Storyboard();
                 ballMove.Children.Add(ballAnimation);
@@ -342,7 +342,7 @@ namespace KineticMath.Views
                 ballMove.Completed += delegate
                 {
                     selectingBall = false;
-                    this.BallHolders[index].Children.Remove(pushedBall);
+                    uxMainCanvas.Children.Remove(pushedBall);
                     runningAnimations.Remove(ballMove);
                     game.AddBallToBalance(pushedBall, true); // push ball to left side
                 };
