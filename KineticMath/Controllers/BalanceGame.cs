@@ -15,7 +15,6 @@ namespace KineticMath.Controllers
     /// </summary>
     public class BalanceGame : Game
     {
-        public static int SECOND = 1;
         public static int MINUTE = 60;
 
         DispatcherTimer timer;
@@ -27,19 +26,19 @@ namespace KineticMath.Controllers
             Practice
         }
 
-        public int Counter { get; set; }
         public int Score { get; set; }
 
         public BalanceGame()
         {
             timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(timerHandler);
             mode = Mode.Challenge;
             HeldBalls = new ObservableCollection<Ball>();
             LeftBalanceBalls = new ObservableCollection<Ball>();
             RightBalanceBalls = new ObservableCollection<Ball>();
         }
 
-        public event EventHandler UpdateView;
+        public event EventHandler TimerTicked;
 
         public event EventHandler LevelCompleted;
 
@@ -61,13 +60,16 @@ namespace KineticMath.Controllers
 
         private void timerHandler(Object sender, EventArgs args)
         {
-            Counter++;
-            if (Counter <= MINUTE)
+            if (this.TimeLeft >= 0)
             {
-                System.Console.Write(Counter);
-                UpdateView(this, EventArgs.Empty);
-                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                TimerTicked(this, EventArgs.Empty);
+                timer.Interval = TimeSpan.FromSeconds(1);
                 timer.Start();
+                this.TimeLeft--;
+            }
+            else
+            {
+                timer.Stop();
             }
         }
 
@@ -77,21 +79,26 @@ namespace KineticMath.Controllers
         }
 
         /// <summary>
+        /// The time left in the challenge mode in seconds
+        /// </summary>
+        public int TimeLeft { get; set; }
+
+        /// <summary>
         /// Starts a new game and resets everything
         /// </summary>
         public void NewGame()
         {
             if (mode == Mode.Challenge)
             {
-                if (Counter == 0)
-                    timer.Tick += new EventHandler(timerHandler);
-                else
-                    Counter = 0;
-                
+                if (timer.IsEnabled)
+                {
+                    timer.Stop(); // Reset timer
+                }
+                this.TimeLeft = MINUTE;
                 Score = 0;
                 currentLevel = 1;
                 LoadCurrentLevel();
-                timer.Interval = TimeSpan.FromSeconds(SECOND);
+                timer.Interval = TimeSpan.FromSeconds(1);
                 timer.Start();
             }
             else
@@ -116,6 +123,11 @@ namespace KineticMath.Controllers
                     {
                         Score++;
                         LevelCompleted(this, EventArgs.Empty);
+                        // Let's make life interesting ;)
+                        if (mode == Mode.Challenge)
+                        {
+                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * 5);
+                        }
                         currentLevel++;
                     }
                 }
@@ -152,7 +164,14 @@ namespace KineticMath.Controllers
                 default:
                     Random rand = new Random();
                     // Generate the answer options
-                    targetRightSide = new int[2];
+                    int rightSideNum = 2;
+                    if (currentLevel < 10)
+                        rightSideNum = 2;
+                    else if (currentLevel < 20)
+                        rightSideNum = 3;
+                    else
+                        rightSideNum = 4;
+                    targetRightSide = new int[rightSideNum];
                     int i = 0;
                     int max = 0;
                     if (currentLevel < 10)
@@ -218,9 +237,10 @@ namespace KineticMath.Controllers
         /// <param name="ball">The ball to remove</param>
         public bool PushBall(Ball ball)
         {
+            if (ball == null) return false;
             int ballIdx = this.HeldBalls.IndexOf(ball);
             if (ballIdx == -1) return false;
-            this.HeldBalls[this.HeldBalls.IndexOf(ball)] = null;
+            this.HeldBalls[ballIdx] = null;
             return true;
         }
 

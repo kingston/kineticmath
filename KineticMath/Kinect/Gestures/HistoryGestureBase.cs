@@ -17,12 +17,9 @@ namespace KineticMath.Kinect.Gestures
         public override void ProcessSkeleton(Skeleton skeleton)
         {
             // Clean up old entries
-            if (skeletalHistory.Count > 0)
+            while (skeletalHistory.Count > 0 && DateTime.Now.Subtract(skeletalHistory.First().Time).Milliseconds > maxTimeToLive)
             {
-                while (DateTime.Now.Subtract(skeletalHistory.First().Time).Milliseconds > maxTimeToLive)
-                {
-                    skeletalHistory.RemoveAt(0);
-                }
+                skeletalHistory.RemoveAt(0);
             }
             // TODO3: Reset skeletal history when a new skeleton is used
             skeletalHistory.Add(new SkeletonTimeEntry() { Time = DateTime.Now, Skeleton = skeleton });

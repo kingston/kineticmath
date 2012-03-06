@@ -12,11 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 using Microsoft.Kinect;
 using KineticMath.Messaging;
 using KineticMath.Kinect.Gestures;
 using KineticMath.SubControls;
+using KineticMath.Helpers;
 using System.Windows.Media.Animation;
 
 using KineticMath.Kinect.PointConverters;
@@ -36,7 +38,8 @@ namespace KineticMath.Views
 
         private BalanceGame game;
         private BodyRelativePointConverter bodyConverter;
-        public static int labelDisplayTime = 2000;
+        public static int labelDisplayTime = 750;
+        private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
         public MainView()
@@ -57,7 +60,7 @@ namespace KineticMath.Views
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
-            game.UpdateView += new EventHandler(timerCallback);
+            game.TimerTicked += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
             modeLabel.Content = "Challenge Mode";
             game.NewGame();
@@ -66,11 +69,18 @@ namespace KineticMath.Views
         void timerCallback(object sender, EventArgs e)
         {
             BalanceGame bg = (BalanceGame) sender;
+<<<<<<< HEAD
             scoreText.Content = bg.Score;
             timeText.Content = 60- bg.Counter;
             
             if (60 - bg.Counter == 0)
+=======
+            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
+            if (bg.TimeLeft == 0)
+>>>>>>> 51546a481118e5010c5dfab6bc0ac88ace07fa77
             {
+                notime.Stop();
+                notime.Play();
                 modeLabel.Content = "Time's up!";
                 statusLabel.Content = "You scored " + bg.Score + " points!";
 
@@ -80,9 +90,9 @@ namespace KineticMath.Views
                 playAgain.Opacity = 1;
                 finalScore.Opacity = 1;
                 // Hide it when we're done
-                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
                 labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
                 imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
                 Storyboard.SetTarget(labelAnimation, playAgain);
                 Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
@@ -91,13 +101,19 @@ namespace KineticMath.Views
                 Storyboard labelSb = new Storyboard();
                 labelSb.Children.Add(labelAnimation);
                 labelSb.Children.Add(imageAnimation);
-                
 
-                labelSb.Completed += delegate {
+
+                labelSb.Completed += delegate
+                {
                     modeLabel.Content = "Challenge Mode";
                     game.NewGame();
                 };
                 labelSb.Begin();
+            }
+            else if (bg.TimeLeft < 10)
+            {
+                ding.Stop();
+                ding.Play();
             }
         }
 
@@ -108,15 +124,17 @@ namespace KineticMath.Views
             uxLoseLabel.Opacity = 1;
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
             Storyboard.SetTarget(labelAnimation, uxLoseLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
+            runningAnimations.Add(labelSb);
             labelSb.Children.Add(labelAnimation);
-            labelSb.Completed += delegate 
+
+            labelSb.Completed += delegate
             {
+                runningAnimations.Remove(labelSb);
                 game.Reset();
-                game.LoadCurrentLevel(); 
             };
             labelSb.Begin();
         }
@@ -132,19 +150,22 @@ namespace KineticMath.Views
 
         void game_LevelCompleted(object sender, EventArgs e)
         {
+            soundEffect.Play();
             uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
             uxWinLabel.Opacity = 1;
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
-            labelAnimation.BeginTime = TimeSpan.FromSeconds(1.75);
+            labelAnimation.BeginTime = TimeSpan.FromSeconds(0.75);
             Storyboard.SetTarget(labelAnimation, uxWinLabel);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
-            // TODO2: Start level once animation is over
+            runningAnimations.Add(labelSb);
             labelSb.Children.Add(labelAnimation);
             labelSb.Completed += delegate
             {
+                runningAnimations.Remove(labelSb);
+                soundEffect.Stop();
                 game.LoadCurrentLevel();
             };
             labelSb.Begin();
@@ -167,7 +188,8 @@ namespace KineticMath.Views
         }
 
         // TODO2: Use an actual ball holder UI control, not a canvas
-        private Canvas[] BallHolders;
+        private PointCanvas[] BallHolders;
+        private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
 
         private void SetupBallHolders(int numHolders)
         {
@@ -182,25 +204,35 @@ namespace KineticMath.Views
                         uxMainCanvas.Children.Remove(holder);
                     }
                 }
-                BallHolders = new Canvas[numHolders];
+                BallHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(0.1, 0.3),
-                    new Point(0.3, 0.2),
-                    new Point(0.7, 0.2),
-                    new Point(0.9, 0.3)
+                    new Point(0.10, 0.3),
+                    new Point(0.25, 0.1),
+                    new Point(0.65, 0.1),
+                    new Point(0.80, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
+                _hitZones.Clear();
                 for (int i = 0; i < numHolders; i++)
                 {
-                    Canvas canvas = new Canvas();
-                    canvas.Width = 50;
-                    canvas.Height = 50;
+                    PointCanvas canvas = new PointCanvas();
+                    canvas.Width = 80;
+                    canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
-                    // -25 to center it
-                    Canvas.SetLeft(canvas, holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - 25);
-                    Canvas.SetTop(canvas, holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - 25);
+                    PointCanvas.SetTopLeft(canvas, new Point(
+                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle),
+                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle))
+                    );
                     BallHolders[i] = canvas;
+                    Rect boundaryRect = canvas.GetBoundaryRect();
+                    boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
+                    _hitZones.Add(boundaryRect);
+                }
+                if (hitGesture != null)
+                {
+                    hitGesture.HitRectangles.Clear();
+                    hitGesture.HitRectangles.AddRange(_hitZones);
                 }
             }
         }
@@ -223,26 +255,6 @@ namespace KineticMath.Views
                     game.NewGame();
                     break;
             }
-            //Console.Out.WriteLine("Keydown");
-            //switch (e.Key)
-            //{
-            //    case Key.T:
-            //        seesaw.AddObject(new SubControls.Ball());
-            //        //Console.Out.WriteLine("ball add");
-
-            //        break;
-            //    case Key.S:
-            //        break;
-            //    case Key.R:
-            //        Reset();
-            //        break;
-            //    case Key.Left:
-            //        fallingGroup.ChoosePrevious();
-            //        break;
-            //    case Key.Right:
-            //        fallingGroup.ChooseNext();
-            //        break;
-            //}
         }
 
         public override void OnViewActivated()
@@ -258,17 +270,32 @@ namespace KineticMath.Views
             ParentWindow.RemoveHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
         }
 
+        private List<Rect> _hitZones = new List<Rect>(); // Zones for the hit gesture
+        private HitGesture hitGesture;
+
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(GetBoundingRectangle(uxPersonRectangle), this._sharedData.GestureController);
+            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
 
             JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.Head);
             handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
             _sharedData.GestureController.AddGesture(this, handGestures);
 
-            HandPushGesture handPushGesture = new HandPushGesture();
-            handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
-            _sharedData.GestureController.AddGesture(this, handPushGesture);
+            // TODO: Remove dead code (hand push gesture no longer active)
+            //HandPushGesture handPushGesture = new HandPushGesture();
+            //handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
+            //_sharedData.GestureController.AddGesture(this, handPushGesture);
+            if (hitGesture == null)
+            {
+                hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
+                hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
+            }
+            _sharedData.GestureController.AddGesture(this, hitGesture);
+        }
+
+        void hitGesture_RectHit(object sender, RectHitEventArgs e)
+        {
+            HitBall(e.RectIdx, e.HitVelocity);
         }
 
         void handGesture_JointMoved(object sender, JointMovedEventArgs e)
@@ -286,119 +313,119 @@ namespace KineticMath.Views
             HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
         }
 
+        private PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
+        {
+            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+            //pBezierSegment.Points.Add(new Point(startPoint.X + (endPoint.X - startPoint.X) * 2 / 3, startPoint.Y));
+            //pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - startPoint.Y) * 2 / 3));
+            //pBezierSegment.Points.Add(endPoint);
+            // Compute path
+            int divisions = 10; // The granularity of the path
+            double[] xPoints = ComputeAcceleratePoints(velocity.X, endPoint.X - startPoint.X, divisions);
+            double[] yPoints = ComputeAcceleratePoints(velocity.Y, endPoint.Y - startPoint.Y, divisions);
+
+            for (int i = 0; i < divisions; i++)
+            {
+                pBezierSegment.Points.Add(new Point(startPoint.X + xPoints[i], startPoint.Y + yPoints[i]));
+            }
+            return pBezierSegment;
+        }
+
+        private double[] ComputeAcceleratePoints(double initialSpeed, double distance, int totalTime)
+        {
+            // Using SUVAT equation s = ut + 1/2 at^2
+            double acceleration = 2 * (distance - initialSpeed * totalTime) / (totalTime * totalTime);
+            double[] points = new double[totalTime];
+            for (int i = 1; i <= totalTime; i++)
+            {
+                points[i - 1] = initialSpeed * i + 0.5 * acceleration * (i * i);
+            }
+            return points;
+        }
+
+        private void HitBall(int index, Vector velocity)
+        {
+            var pushedBall = game.HeldBalls[index];
+            // Check if any running animations to avoid conflicts
+            if (runningAnimations.Count == 0 && game.PushBall(pushedBall))
+            {
+                var ballHolder = this.BallHolders[index];
+                uxMainCanvas.Children.Add(pushedBall);
+
+                // TODO2: Trigger animation for ball and after animation is triggered
+
+                PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
+
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+                pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
+                //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+                Point endPoint = new Point(
+                    Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
+                    Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel)
+                );
+                pFigure.Segments.Add(ComputeCurve(pFigure.StartPoint, endPoint, velocity));
+
+                animationPath.Figures.Add(pFigure);
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+
+                /*
+                animationPath.Figures = pfc;*/
+                ballAnimation.PathGeometry = animationPath;
+                ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                ballAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.75));
+                ballAnimation.AutoReverse = false;
+
+                Storyboard.SetTarget(ballAnimation, pushedBall);
+                Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
+                Storyboard ballMove = new Storyboard();
+                ballMove.Children.Add(ballAnimation);
+                runningAnimations.Add(ballMove);
+
+                ballMove.Completed += delegate
+                {
+                    selectingBall = false;
+                    uxMainCanvas.Children.Remove(pushedBall);
+                    runningAnimations.Remove(ballMove);
+                    game.AddBallToBalance(pushedBall, true); // push ball to left side
+                };
+                selectingBall = true;
+                ballMove.Begin();
+                // TODO2: Trigger animation for ball and after animation is triggered
+
+                /*Debug*
+                Path myPath = new Path();
+                myPath.Stroke = Brushes.Black;
+                myPath.StrokeThickness = 1;
+                myPath.Data = animationPath;
+                uxMainCanvas.Children.Add(myPath);
+                /**/
+            }
+        }
+
         private void HandlePushEvent(SkeletonPoint pt)
         {
             if (selectingBall) return;
             Ball pushedBall = null;
+            PointCanvas ballHolder = null;
             foreach (var holder in BallHolders)
             {
-                Rect rect = GetBoundingRectangle(holder);
-                if (rect.Contains(ConvertSkeletonPointTo2DPoint(pt)))
+                Rect rect = holder.GetBoundaryRect();
+                if (rect.Contains(pt.To2DPoint()))
                 {
                     if (holder.Children.Count > 0)
                     {
                         pushedBall = (Ball)holder.Children[0];
+                        ballHolder = holder;
                     }
                 }
             }
             if (pushedBall != null)
             {
                 int index = game.HeldBalls.IndexOf(pushedBall);
-                if (game.PushBall(pushedBall))
-                {
-                    this.BallHolders[index].Children.Add(pushedBall);
-                    // TODO2: Trigger animation for ball and after animation is triggered
-
-                    DoubleAnimationUsingPath ballAnimationX = new DoubleAnimationUsingPath();
-                    DoubleAnimationUsingPath ballAnimationY = new DoubleAnimationUsingPath();
-
-                    PathGeometry animationPath = new PathGeometry();
-                    PathFigure pFigure = new PathFigure();
-                    pFigure.StartPoint = new Point(10, 100);
-                    //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
-
-                    pFigure.Segments.Add(getCurve(index));
-                    animationPath.Figures.Add(pFigure);
-                    // Freeze the PathGeometry for performance benefits.
-                    animationPath.Freeze();
-
-                    /*
-                    animationPath.Figures = pfc;*/
-                    ballAnimationX.PathGeometry = animationPath;
-                    ballAnimationX.BeginTime = TimeSpan.FromSeconds(0);
-                    ballAnimationX.AutoReverse = false;
-                    ballAnimationY.PathGeometry = animationPath;
-                    ballAnimationY.AutoReverse = false;
-                    ballAnimationY.BeginTime = TimeSpan.FromSeconds(0);
-                    Storyboard.SetTarget(ballAnimationX, pushedBall);
-                    Storyboard.SetTarget(ballAnimationY, pushedBall);
-                    Storyboard.SetTargetProperty(ballAnimationX, new PropertyPath("(Canvas.Left)"));
-                    Storyboard.SetTargetProperty(ballAnimationY, new PropertyPath("(Canvas.Top)"));
-                    Storyboard ballMove = new Storyboard();
-                    ballMove.Children.Add(ballAnimationX);
-                    ballMove.Children.Add(ballAnimationY);
-
-                    ballMove.Completed += delegate
-                    {
-                        selectingBall = false;
-                        this.BallHolders[index].Children.Remove(pushedBall);
-                        runningAnimations.Remove(ballMove);
-                        game.AddBallToBalance(pushedBall, true); // push ball to left side
-                    };
-                    selectingBall = true;
-                    ballMove.Begin();
-                    // TODO2: Trigger animation for ball and after animation is triggered
-                }
+                HitBall(index, new Vector(0, 0));
             }
-        }
-
-        private PolyBezierSegment getCurve(int index) {
-            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-            switch (index)
-            {
-                case 0:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(225, 200));
-                    pBezierSegment.Points.Add(new Point(260, 100));
-                    break;
-                case 1:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(225, 200));
-                    pBezierSegment.Points.Add(new Point(260, 100));
-                    break;
-                case 2:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(180, 180));
-                    pBezierSegment.Points.Add(new Point(200, 180));
-                    break;
-                case 3:
-                    pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(150, 190));
-                    pBezierSegment.Points.Add(new Point(160, 160));
-                    pBezierSegment.Points.Add(new Point(200, 180));
-                    break;
-                default:
-                    System.Console.Write("4");
-                     pBezierSegment.Points.Add(new Point(15, 0));
-                    pBezierSegment.Points.Add(new Point(105, 0));
-                    pBezierSegment.Points.Add(new Point(130, 100));
-                    pBezierSegment.Points.Add(new Point(130, 130));
-                   pBezierSegment.Points.Add(new Point(130, 130));
-                    break;
-            }
-
-            return pBezierSegment;
         }
 
         private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
@@ -409,154 +436,12 @@ namespace KineticMath.Views
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Rect rect = GetBoundingRectangle(uxPersonRectangle);
+            Rect rect = uxPersonRectangle.GetBoundaryRect();
             Point pt = e.GetPosition(uxMainCanvas);
             if (rect.Contains(e.GetPosition(uxMainCanvas))) {
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
                 HandlePushEvent(skelPt);
             }
         }
-
-        // TODO3: Extract out to extension methods
-        private Point ConvertSkeletonPointTo2DPoint(SkeletonPoint pt)
-        {
-            return new Point(pt.X, pt.Y);
-        }
-
-        /// <summary>
-        /// Gets the bounding rectangle of an element given the canvas
-        /// 
-        /// TODO3: Extract out somewhere else
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        private Rect GetBoundingRectangle(FrameworkElement element)
-        {
-            return new Rect(Canvas.GetLeft(element), Canvas.GetTop(element), element.Width, element.Height);
-        }
-
-        /*** EVERYTHING BELOW HERE IS OLD CODE ***/
-
-
-       
-
-        //void selectItem()
-        //{
-        //    Ball b = fallingGroup.RemoveSelected();
-        //    if(b != null)
-        //        seesaw.AddObject(b);
-
-        //    if (seesaw.checkAnswer())
-        //    {
-        //        RoundComplete();
-        //    }
-        //    else {
-        //        PromptIfGetWrong();
-        //    }
-        //}
-
-        //void RoundComplete()
-        //{
-        //    uxWinLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-        //    uxWinLabel.Opacity = 1;
-
-        //    levelsCompleted++;
-        //    //difficulty = levelsCompleted / 3 + 1;
-
-        //    // Hide it when we're done
-        //    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
-        //    labelAnimation.BeginTime = TimeSpan.FromSeconds(1);
-        //    Storyboard.SetTarget(labelAnimation, uxWinLabel);
-        //    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-        //    Storyboard labelSb = new Storyboard();
-        //    labelSb.Children.Add(labelAnimation);
-        //    labelAnimation.Completed += new EventHandler(NewRound);
-        //    labelSb.Begin();
-        //}
-
-        //void PromptIfGetWrong()
-        //{
-        //    uxLoseLabel.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-        //    uxLoseLabel.Opacity = 1;
-        //    // Hide it when we're done
-        //    DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(1000)));
-        //    labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-        //    Storyboard.SetTarget(labelAnimation, uxLoseLabel);
-        //    Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
-        //    Storyboard labelSb = new Storyboard();
-        //    labelSb.Children.Add(labelAnimation);
-        //    labelAnimation.Completed += new EventHandler(ResetWrong);
-        //    labelSb.Begin();
-        //}
-
-        //void ClearBalls()
-        //{
-        //    fallingGroup.RemoveAllBalls();
-        //    seesaw.RemoveAllObjects();
-        //}
-
-        //void Mover_move(object sender, MoveEventArgs m)
-        //{
-        //    if (m.GetDirection() == 1)
-        //    {
-        //        System.Console.WriteLine("Move Right");
-        //        fallingGroup.ChooseNext();
-        //    }
-        //    else
-        //    {
-        //        System.Console.WriteLine("Move Left");
-        //        fallingGroup.ChoosePrevious();
-        //    }
-        //}
-
-
-        //private List<int> lhs, rhs;
-        //private int answer;
-
-        //private void Setup()
-        //{
-        //    lhs = new List<int>();
-        //    rhs = new List<int>();
-        //    answer = GenerateQuestion(lhs, rhs);
-        //    SetupBalls();
-        //}
-
-        //private void SetupBalls()
-        //{
-        //    for (int i = 0; i < rhs.Count; i++) {
-        //        seesaw.AddObject(new Brick(rhs[i].ToString(), rhs[i]), false);
-        //    }
-        //    fallingGroup.addBall(lhs);
-        //}
-
-        //private int GenerateQuestion(List<int> lhsArray, List<int> rhsArray)
-        //{
-        //    Random rand = new Random();
-        //    // Generate the answer options
-        //    while (lhsArray.Count < NUM_WEIGHTS)
-        //    {
-        //        int candidate = rand.Next(3, difficulty * 5 + 7);
-        //        if (!lhsArray.Contains(candidate))
-        //        {
-        //            lhsArray.Add(candidate);
-        //        }
-        //    }
-        //    // Pick one to be the correct answer
-        //    int answer = lhsArray[rand.Next(0, NUM_WEIGHTS - 1)];
-        //    // Generate the question
-        //    int sum = 0;
-        //    int maxParts = Math.Min(difficulty + 1, MAX_NUMBERS_TO_ADD);
-        //    while (sum < answer && rhsArray.Count < maxParts - 1)
-        //    {
-        //        int part = rand.Next(1, answer - sum);
-        //        rhsArray.Add(part);
-        //        sum += part;
-        //    }
-        //    if (sum < answer)
-        //    {
-        //        rhsArray.Add(answer - sum);
-        //    }
-        //    return answer;
-        //}
     }
 }

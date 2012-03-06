@@ -6,6 +6,7 @@ namespace KineticMath.SubControls
 {
     public class PointCanvas : Canvas
     {
+        // TODO: Remove PointCanvas as code moved to Seesaw object
         public PointCanvas() : base() { }
         public static readonly DependencyProperty TopLeftProperty = DependencyProperty.Register(
           "TopLeft",
