@@ -219,7 +219,7 @@ namespace KineticMath.Views
                     );
                     BallHolders[i] = canvas;
                     Rect boundaryRect = canvas.GetBoundaryRect();
-                    //boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
+                    boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
                     _hitZones.Add(boundaryRect);
                 }
                 if (hitGesture != null)
