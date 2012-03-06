@@ -72,6 +72,8 @@ namespace KineticMath.Views
             statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
             if (bg.TimeLeft == 0)
             {
+                notime.Stop();
+                notime.Play();
                 modeLabel.Content = "Time's up!";
                 statusLabel.Content = "You scored " + bg.Score + " points!";
 
@@ -81,9 +83,9 @@ namespace KineticMath.Views
                 playAgain.Opacity = 1;
                 finalScore.Opacity = 1;
                 // Hide it when we're done
-                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
                 labelAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(4)));
+                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(5)));
                 imageAnimation.BeginTime = TimeSpan.FromSeconds(0);
                 Storyboard.SetTarget(labelAnimation, playAgain);
                 Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
@@ -92,13 +94,19 @@ namespace KineticMath.Views
                 Storyboard labelSb = new Storyboard();
                 labelSb.Children.Add(labelAnimation);
                 labelSb.Children.Add(imageAnimation);
-                
 
-                labelSb.Completed += delegate {
+
+                labelSb.Completed += delegate
+                {
                     modeLabel.Content = "Challenge Mode";
                     game.NewGame();
                 };
                 labelSb.Begin();
+            }
+            else if (bg.TimeLeft < 10)
+            {
+                ding.Stop();
+                ding.Play();
             }
         }
 

@@ -261,6 +261,8 @@
     <Resource Include="Images\play_again.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Media\ding.wav" />
+    <Content Include="Media\notime.wma" />
     <Content Include="Media\tada.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
