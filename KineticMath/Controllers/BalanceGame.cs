@@ -64,7 +64,8 @@ namespace KineticMath.Controllers
 
         public event EventHandler GameOver;
 
-        private int currentLevel;
+        //Chris: temporarily change it to public to make it work, need to be restored
+        public int currentLevel;
 
         /// <summary>
         /// Starts a new game and resets everything

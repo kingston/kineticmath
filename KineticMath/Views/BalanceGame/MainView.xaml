@@ -89,7 +89,7 @@
             </Canvas>
 
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
-            <Label x:Name="statusLabel" Canvas.Left="1058" Canvas.Top="150" Height="51" Width="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
+            <Label x:Name="statusLabel" Opacity="0" Canvas.Left="1058" Canvas.Top="150" Height="51" Width="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
         </Canvas>
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
         	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />

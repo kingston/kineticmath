@@ -129,7 +129,9 @@ namespace KineticMath.Views
             {
                 playLabelAnimation(uxNoTimeLabel, delegate
                 {
-                    game.Reset();
+                    //Chris: temporary workaround
+                    game.currentLevel++;
+                    game.LoadCurrentLevel();
                 });
             }
         }
