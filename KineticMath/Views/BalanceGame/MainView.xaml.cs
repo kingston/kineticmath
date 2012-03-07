@@ -225,8 +225,8 @@ namespace KineticMath.Views
                 for (int i = 0; i < numHolders; i++)
                 {
                     PointCanvas canvas = new PointCanvas();
-                    canvas.Width = 200;
-                    canvas.Height = 200;
+                    canvas.Width = 80;
+                    canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
                     PointCanvas.SetTopLeft(canvas, new Point(
                         holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle),
