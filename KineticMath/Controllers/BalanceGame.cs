@@ -220,6 +220,7 @@ namespace KineticMath.Controllers
                     break;
                 default:
                     Random rand = new Random();
+                    int prevAnswer = targetRightSide.Sum();
                     // Generate the answer options
                     int rightSideNum = 2;
                     if (currentLevel < 10)
@@ -229,23 +230,31 @@ namespace KineticMath.Controllers
                     else
                         rightSideNum = 4;
                     targetRightSide = new int[rightSideNum];
-                    int i = 0;
-                    int max = 0;
-                    if (currentLevel < 10)
-                        max = 10;
-                    else
-                        max = currentLevel / 10 * 10;
 
-                    while (i < targetRightSide.Length)
+                    for (int i = 0; i < targetRightSide.Length; i++)
                     {
-                        int candidate = rand.Next(1, currentLevel * 3 - 3);
-                        if (!targetRightSide.Contains(candidate))
-                        {
-                            targetRightSide[i] = candidate;
-                            i++;
+                        int candidate;
+                        do {
+                            int min = Math.Max(prevAnswer / (rightSideNum * 3), 1);
+                            int max = currentLevel * 3 - 3;
+                            candidate = rand.Next(min, max);
                         }
+                        while (targetRightSide.Contains(candidate));
+                        targetRightSide[i] = candidate;
                     }
+                    
+                    // Make sure this level's answer is >= previous level + 2
+                    int difference = prevAnswer + 2 - targetRightSide.Sum();
+                    while (difference > 0)
+                    {
+                        int differencePart = rand.Next(1, difference);
+                        targetRightSide[rand.Next(0, targetRightSide.Length - 1)] += differencePart;
+                        difference -= differencePart;
+                    }
+
                     int answer = targetRightSide.Sum();
+
+                    // Build answer set
                     List<int> answerSet = new List<int>();
                     int randOffset, sign;
                     // 0: the real answer
@@ -264,7 +273,7 @@ namespace KineticMath.Controllers
                     answerSet.Add(answer + sign * randOffset);
 
                     curBalls = new int[4];
-                    for (i = 0; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         int index = rand.Next(0, answerSet.Count - 1);
                         curBalls[i] = answerSet[index];
