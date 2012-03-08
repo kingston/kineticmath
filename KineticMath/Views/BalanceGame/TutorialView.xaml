@@ -6,8 +6,65 @@
              xmlns:views="clr-namespace:KineticMath.Views"
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1200" MouseUp="BaseView_MouseUp">
+    <views:BaseView.Resources>
+        <Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <Grid>
+                            <Ellipse x:Name="uxLeftHand" Fill="#7F4D4D4D"/>
+                            <Image Margin="-16.5,-18,-14.5,-19" Source="/KineticMath;component/Images/image0.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Opacity="0.8">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="0.5" ScaleX="-0.5"/>
+                                        <SkewTransform AngleY="0" AngleX="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ThumbStyle1" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <GroupItem x:Name="uxLeftHand" Content="GroupItem" Style="{DynamicResource GroupItemStyle1}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ThumbStyle2" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <GroupItem x:Name="uxRightHand" Content="GroupItem" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource GroupItemStyle1}">
+                                <GroupItem.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                        <SkewTransform AngleY="0" AngleX="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </GroupItem.RenderTransform>
+                            </GroupItem>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </views:BaseView.Resources>
     <Canvas>
-        <Label FontSize="30" Content="Fun Video Tutorial" Canvas.Top="200" Canvas.Left="200"/>
-        <Label FontSize="20" Content="Click to continue..." Canvas.Top="300" Canvas.Left="210"/>
+        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hand, try to hit me!" Canvas.Top="168" Canvas.Left="121"/>
+        <Rectangle Canvas.Left="121" Canvas.Top="44" Height="579" Width="634" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="67" Canvas.Top="168" Height="50" Width="600" x:Name="hitRect" Stroke="Black" Opacity="0" />
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
+        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
     </Canvas>
 </views:BaseView>

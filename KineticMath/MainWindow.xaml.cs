@@ -51,8 +51,8 @@ namespace KineticMath
 
             // Set up views
             viewCollection = new Dictionary<string, IView>();
-            LoadView(typeof(MainView));
-
+            //LoadView(typeof(MainView));
+            LoadView(typeof(TutorialView));
             // Listen for log messages if we're debugging
             
             //DebugHelper.GetInstance().DebugMessageReceived += new EventHandler<DebugMessageReceivedEventArgs>(MainWindow_DebugMessageReceived);

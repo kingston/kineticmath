@@ -12,6 +12,8 @@ namespace KineticMath.Kinect
     public class GestureController
     {
         private List<IGesture> gestures = new List<IGesture>();
+        private List<IGesture> removedGestures = new List<IGesture>();
+        private List<IGesture> addedGestures = new List<IGesture>();
         private Dictionary<IView, List<IGesture>> gestureMap = new Dictionary<IView, List<IGesture>>();
         private IKinectService kinect;
 
@@ -29,7 +31,17 @@ namespace KineticMath.Kinect
             Skeleton skel = (from s in e.Skeletons
                                      where s.TrackingState == SkeletonTrackingState.Tracked
                                      select s).FirstOrDefault();
+            foreach (var gesture in removedGestures)
+            {
+                gestures.Remove(gesture);
+            }
 
+            foreach (var gesture in addedGestures)
+            {
+                gestures.Add(gesture);
+            }
+            removedGestures.Clear();
+            addedGestures.Clear();
             if (skel != null)
             {
                 if (SkeletonPreProcessed != null)
@@ -55,12 +67,13 @@ namespace KineticMath.Kinect
                 if (!gestureMap.ContainsKey(currentView)) gestureMap.Add(currentView, new List<IGesture>());
                 gestureMap[currentView].Add(gesture);
             }
-            gestures.Add(gesture);
+            addedGestures.Add(gesture);
         }
 
         public void RemoveGesture(IGesture gesture)
         {
-            gestures.Remove(gesture);
+            removedGestures.Add(gesture);
+            //gestures.Remove(gesture);
         }
 
         public void ClearViewGestures(IView view)
