@@ -245,19 +245,31 @@ namespace KineticMath.Controllers
                             i++;
                         }
                     }
-                    i = 0;
-                    curBalls = new int[4];
                     int answer = targetRightSide.Sum();
-                    while (i < curBalls.Length)
+                    List<int> answerSet = new List<int>();
+                    int randOffset, sign;
+                    // 0: the real answer
+                    answerSet.Add(answer);
+                    // 1: answer +- 1~3
+                    randOffset = rand.Next(1, 3);
+                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+                    answerSet.Add(answer + sign * randOffset);
+                    // 2: answer +- 10
+                    randOffset = 10;
+                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+                    answerSet.Add(answer + sign * randOffset);
+                    // 3: answer +- 10 +- 1~3
+                    randOffset += rand.Next(1, 3);
+                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+                    answerSet.Add(answer + sign * randOffset);
+
+                    curBalls = new int[4];
+                    for (i = 0; i < 4; i++)
                     {
-                        int candidate = rand.Next(Convert.ToInt32(Math.Min(answer * 0.5, 1)), answer * 2);
-                        if (!curBalls.Contains(candidate) && candidate != answer)
-                        {
-                            curBalls[i] = candidate;
-                            i++;
-                        }
+                        int index = rand.Next(0, answerSet.Count - 1);
+                        curBalls[i] = answerSet[index];
+                        answerSet.RemoveAt(index);
                     }
-                    curBalls[rand.Next(0, curBalls.Length)] = answer;
                     break;
             }
             SetupLevel();
