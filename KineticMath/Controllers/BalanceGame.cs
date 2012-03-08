@@ -231,25 +231,20 @@ namespace KineticMath.Controllers
                         rightSideNum = 4;
                     targetRightSide = new int[rightSideNum];
 
-                    for (int i = 0; i < targetRightSide.Length; i++)
+                    int targetAnswer = prevAnswer + rand.Next(2, Math.Max(currentLevel * 2 / 3, 4));
+                    for (int i = 0; i < targetRightSide.Length - 1; i++)
                     {
-                        int candidate;
-                        do {
-                            int min = Math.Max(prevAnswer / (rightSideNum * 3), 1);
-                            int max = currentLevel * 3 - 3;
-                            candidate = rand.Next(min, max);
-                        }
-                        while (targetRightSide.Contains(candidate));
-                        targetRightSide[i] = candidate;
+                        targetRightSide[i] = targetAnswer / rightSideNum;
                     }
-                    
-                    // Make sure this level's answer is >= previous level + 2
-                    int difference = prevAnswer + 2 - targetRightSide.Sum();
-                    while (difference > 0)
+                    targetRightSide[targetRightSide.Length - 1] = 0;
+                    targetRightSide[targetRightSide.Length - 1] = targetAnswer - targetRightSide.Sum();
+
+                    for (int i = 0; i < targetRightSide.Length - 1; i++)
                     {
-                        int differencePart = rand.Next(1, difference);
-                        targetRightSide[rand.Next(0, targetRightSide.Length - 1)] += differencePart;
-                        difference -= differencePart;
+                        int randMove = rand.Next(0, Math.Max(targetRightSide[i] / 2, 1));
+                        int side = rand.Next(1, 100) < 50 ? -1 : 1;
+                        targetRightSide[i] += side * randMove;
+                        targetRightSide[i + 1] += -side * randMove;
                     }
 
                     int answer = targetRightSide.Sum();
