@@ -38,15 +38,19 @@ namespace KineticMath.Kinect.Gestures
                 SkeletonPoint pt = pointConverter.ConvertPoint(skeleton.Joints[type].Position);
                 if (type == JointType.HandLeft)
                 {
-                    DebugHelper.GetInstance().LogMessage(this.HitRectangles[1].ToString() + " - " + pt.ToReadableString());
+                    //DebugHelper.GetInstance().LogMessage(this.HitRectangles[1].ToString() + " - " + pt.ToReadableString());
                 }
                 int rectIdx = HitTestRects(pt);
                 if (rectIdx > -1)
                 {
                     Vector velocity = ComputeJointVelocity(type);
-                    if (RectHit != null)
+                    // Max velocity
+                    if (Math.Sqrt(velocity.X * velocity.X + velocity.Y * velocity.Y) > 10)
                     {
-                        RectHit(this, new RectHitEventArgs() { Joint = type, HitVelocity = velocity, RectIdx = rectIdx });
+                        if (RectHit != null)
+                        {
+                            RectHit(this, new RectHitEventArgs() { Joint = type, HitVelocity = velocity, RectIdx = rectIdx });
+                        }
                     }
                 }
             }

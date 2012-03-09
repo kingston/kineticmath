@@ -105,10 +105,12 @@ namespace KineticMath.Views
             switch (currentState)
             {
                 case State.HITME:
-                    instructionBlock.Text = "You're doing so well! \nHit me again and I'll tell you how to play the game.";
+                    instructionBlock.Text = "You're doing so well! \nHit the block again to play the game.";
                     currentState = State.RULES;
                     break;
                 case State.RULES:
+                    this.SendMessage(new ChangeViewMessage(typeof(MainView)));
+                    break;
                     instructionBlock.Text = "The game is simple, you just need to hit the bird.\n" + 
                                             "Choose the bird with number equal to sum of numbers on righthand side of the sea-saw.\n"+
                                             "Ready? Hit me again to play the game!";

@@ -52,7 +52,6 @@ namespace KineticMath.SubControls
         {
             InitializeComponent();
             init(text, weight);
-            
         }
 
         private void init(String text, double weight)
@@ -61,6 +60,11 @@ namespace KineticMath.SubControls
             this.Text = text;
             this.Weight = weight;
             this.Height = BIRD_HEIGHT;
+            if (weight >= 10)
+            {
+                this.ValueText.FontSize = 40;
+                Canvas.SetTop(this.ValueText, 6);
+            }
         }
     }
 }
