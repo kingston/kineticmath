@@ -31,12 +31,15 @@ namespace KineticMath.SubControls
         private const int MAX_ROTATION_ANGLE = 30;
         private BalanceGame game;
         private double originalOffset = 0;
-
         private double currentBottom = 0;
+        private const double rightBallPanelLeft = 192;
+        private double rightBallPanelLeftAdjustment = 0.0;
+        List<Storyboard> runningAnimations;
 
         public Seesaw()
         {
             InitializeComponent();
+            runningAnimations = new List<Storyboard>();
         }
 
         public void RegisterGame(BalanceGame game)
@@ -47,11 +50,37 @@ namespace KineticMath.SubControls
             this.game = game;
         }
 
+        public void animateRightBlocks()
+        {
+            rightBallPanelLeftAdjustment += 8.0;
+            moveRightPanelTo(rightBallPanelLeft + rightBallPanelLeftAdjustment, new Duration(TimeSpan.FromSeconds(1.0)));
+        }
+
+        void moveRightPanelTo(double newPosition, Duration duration)
+        {
+            DoubleAnimation animation = new DoubleAnimation(newPosition, duration);
+            animation.BeginTime = TimeSpan.FromSeconds(0);
+            Storyboard.SetTarget(animation, rightBallPanel);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Canvas.LeftProperty));
+            Storyboard sb = new Storyboard();
+            sb.Children.Add(animation);
+            runningAnimations.Add(sb);
+            sb.Completed += delegate
+            {
+                runningAnimations.Remove(sb);
+            };
+            sb.Begin();
+        }
+
         void game_LevelReset(object sender, EventArgs e)
         {
             originalOffset = 0;
             currentBottom = 0;
             // TODO2: Terminate all animations
+            runningAnimations.Clear();
+            // Reset rightBallPanel position
+            rightBallPanelLeftAdjustment = 0.0;
+            moveRightPanelTo(rightBallPanelLeft, new Duration(TimeSpan.FromSeconds(0.0)));
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

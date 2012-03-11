@@ -87,7 +87,6 @@ namespace KineticMath.Controllers
                     LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
                     if (LivesLeft > 0)
                     {
-                        TimeLeft = TEN_SECOND;
                     }
                     else
                     {
@@ -323,6 +322,13 @@ namespace KineticMath.Controllers
         public void Reset()
         {
             SetupLevel();
+            if (mode == Mode.Classic)
+            {
+                if (LivesLeft > 0)
+                {
+                    TimeLeft = TEN_SECOND;
+                }
+            }
         }
 
         /// <summary>

@@ -93,6 +93,10 @@ namespace KineticMath.Views
             }
             else if (game.mode == BalanceGame.Mode.Classic)
             {
+                if (bg.TimeLeft > 0)
+                {
+                    seesaw.animateRightBlocks();
+                }
                 if (bg.TimeLeft <= 3)
                 {
                     ding.Stop();

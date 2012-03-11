@@ -18,7 +18,8 @@
                     <ScaleTransform ScaleY="1"/>
                 </WrapPanel.RenderTransform>
             </WrapPanel>
-            <Canvas x:Name="rightBallPanel" Canvas.Left="257" Canvas.Top="10" Height="240" Width="61" />
+            <!-- Remember to update rightBallPanelLeft in Seesaw.xaml.cs when adjusting Canvas.Left-->
+            <Canvas Name="rightBallPanel" Canvas.Left="192" Canvas.Top="10" Height="240" Width="125" />
         </Canvas>
         <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
         <Path Stretch="Fill" Fill="#FFAD6B29" Data="F1 M 914.747,433.242L 962.744,536.621L 938.745,536.621L 806.083,536.621L 777.219,536.621L 825.215,433.242L 914.747,433.242 Z " Height="63.217" Canvas.Left="144.012" Canvas.Top="258.039" Width="113.451"/>
