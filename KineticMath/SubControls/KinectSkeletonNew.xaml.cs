@@ -14,7 +14,9 @@ using System.Windows.Shapes;
 
 using KineticMath.Kinect;
 using Microsoft.Kinect;
-using Coding4Fun.Kinect.Wpf; 
+using Coding4Fun.Kinect.Wpf;
+
+using KineticMath.Kinect.PointConverters;
 
 namespace KineticMath.SubControls
 {
@@ -23,10 +25,10 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class KinectSkeletonNew : UserControl
     {
-        private IKinectService kinectService;
         //Scaling constants
         public static float k_xMaxJointScale = 1.5f;
         public static float k_yMaxJointScale = 1.5f;
+        private IPointConverter pointConverter;
 
         public KinectSkeletonNew()
         {
@@ -35,11 +37,74 @@ namespace KineticMath.SubControls
             //Canvas.SetZIndex(uxKinectImage, -10000);
         }
 
-        public void InitializeSkeleton(IKinectService kinectService)
+        public void InitializeSkeleton(GestureController gestureController, IPointConverter pointConverter)
         {
             //kinectService.ImageFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(kinectService_ImageFrameReady);
-            kinectService.SkeletonUpdated += new EventHandler<SkeletonEventArgs>(kinectService_SkeletonUpdated);
-            this.kinectService = kinectService;
+            gestureController.SkeletonPreProcessed += new EventHandler<SkeletonPreProcessedEventArgs>(gestureController_SkeletonPreProcessed);
+            this.pointConverter = pointConverter;
+        }
+
+        void gestureController_SkeletonPreProcessed(object sender, SkeletonPreProcessedEventArgs e)
+        {
+            Skeleton skeleton = e.Skeleton;
+            List<JointType[]> jointChains = new List<JointType[]>();
+            jointChains.Add(new JointType[] { JointType.ShoulderLeft, JointType.ElbowLeft, JointType.HandLeft });
+            jointChains.Add(new JointType[] { JointType.ShoulderRight, JointType.ElbowRight, JointType.HandRight });
+            jointChains.Add(new JointType[] { JointType.HipLeft, JointType.KneeLeft, JointType.FootLeft });
+            jointChains.Add(new JointType[] { JointType.HipRight, JointType.KneeRight, JointType.FootRight });
+            foreach (var jointChain in jointChains)
+            {
+                for (int i = 0; i < jointChain.Length - 1; i++)
+                {
+                    positionLimb(skeleton, jointChain[i], jointChain[i + 1]);
+                }
+            }
+            // Position elements
+            PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
+            PositionElement(uxHeadPart, skeleton.Joints[JointType.Head], true);
+        }
+
+        private void PositionBody(FrameworkElement element, Skeleton skel)
+        {
+        }
+
+        private void PositionElement(FrameworkElement element, Joint joint, bool center) {
+            SkeletonPoint pt = pointConverter.ConvertPoint(joint.Position);
+            double dx = 0;
+            double dy = 0;
+            if (center)
+            {
+                dx = element.ActualWidth / 2;
+                dy = element.ActualHeight / 2;
+            }
+            Canvas.SetLeft(element, pt.X - dx);
+            Canvas.SetTop(element, pt.Y - dy);
+        }
+
+        private Dictionary<String, Line> LimbToLineDict = new Dictionary<string, Line>();
+
+        void positionLimb(Skeleton skeleton, JointType jointType1, JointType jointType2)
+        {
+            SkeletonPoint pt1 = pointConverter.ConvertPoint(skeleton.Joints[jointType1].Position);
+            SkeletonPoint pt2 = pointConverter.ConvertPoint(skeleton.Joints[jointType2].Position);
+            String limbKey = jointType1.ToString() + "-" + jointType2.ToString();
+            if (!LimbToLineDict.ContainsKey(limbKey))
+            {
+                Line newLine = new Line();
+                newLine.Stroke = Brushes.Black;
+                newLine.StrokeThickness = 26;
+                newLine.StrokeStartLineCap = PenLineCap.Round;
+                newLine.StrokeEndLineCap = PenLineCap.Round;
+                Canvas.SetTop(newLine, 0);
+                Canvas.SetLeft(newLine, 0);
+                uxMainCanvas.Children.Add(newLine);
+                LimbToLineDict.Add(limbKey, newLine);
+            }
+            Line line = LimbToLineDict[limbKey];
+            line.X1 = pt1.X;
+            line.X2 = pt2.X;
+            line.Y1 = pt1.Y;
+            line.Y2 = pt2.Y;
         }
 
         void kinectService_SkeletonUpdated(object sender, SkeletonEventArgs e)

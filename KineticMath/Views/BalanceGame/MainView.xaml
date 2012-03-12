@@ -73,10 +73,12 @@
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
-        <Rectangle Canvas.Left="50" Canvas.Top="192.5" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="127" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerSkeleton" />
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
+            <Label x:Name="finalScore" Canvas.Left="424" Canvas.Top="92" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
             <Label Canvas.Left="110" Canvas.Top="192" Width="1050" FontSize="80" FontWeight="Bold" Content="Correct!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxStatusLabel" />
         </Canvas>
