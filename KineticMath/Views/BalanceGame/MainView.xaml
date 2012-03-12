@@ -76,13 +76,10 @@
         <Rectangle Canvas.Left="50" Canvas.Top="192.5" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
-        <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
+        <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
             <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="158" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
-            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
-            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
-            <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Time's up! Try next round!" Foreground="Blue" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxNoTimeLabel" />
-
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
+            <Label Canvas.Left="110" Canvas.Top="192" Width="1050" FontSize="80" FontWeight="Bold" Content="Correct!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxStatusLabel" />
         </Canvas>
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
         	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
