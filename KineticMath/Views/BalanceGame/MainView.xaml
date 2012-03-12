@@ -66,17 +66,17 @@
         <KineticMath:Background Height="Auto" Width="Auto" Canvas.Left="-33" Canvas.Top="-2" Loaded="Background_Loaded" />
         <my:Seesaw Canvas.Left="662" Canvas.Top="236" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
-        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
+        
         <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Orange" />
         <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" x:Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
-        <Rectangle Canvas.Left="127" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="41" Canvas.Top="218" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerSkeleton" />
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
-        
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
             <Label x:Name="finalScore" Canvas.Left="424" Canvas.Top="92" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
@@ -97,6 +97,6 @@
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
         <MediaElement Name="soundEffect" Source="../../Media/tada.mp3" LoadedBehavior="Manual" Volume="1" />
         <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="157" x:Name="playAgain" Opacity="0" />
-        <Label x:Name="finalScore" Canvas.Left="436" Canvas.Top="93" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" />
+       
     </Canvas>
 </views:BaseView>
