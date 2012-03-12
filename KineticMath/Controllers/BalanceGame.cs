@@ -181,6 +181,10 @@ namespace KineticMath.Controllers
                     {
                         this.LivesLeft--;
                     }
+                    if (LevelLost != null)
+                    {
+                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
+                    }
                     if (LivesLeft <= 0)
                     {
                         timer.Stop();
@@ -189,10 +193,7 @@ namespace KineticMath.Controllers
                             GameOver(this, EventArgs.Empty);
                         }
                     }
-                    else if (LevelLost != null)
-                    {
-                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
-                    }
+                  
                 }
             }
             if (mode == Mode.Classic)

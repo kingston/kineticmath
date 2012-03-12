@@ -111,13 +111,16 @@ namespace KineticMath.Views
         {
             BalanceGame bg = (BalanceGame)sender;
 
-            if (game.mode == BalanceGame.Mode.Classic)
-                lifeCanvas.Children.RemoveAt(0);
+            //if (game.mode == BalanceGame.Mode.Classic)
+             //   lifeCanvas.Children.RemoveAt(0);
 
             modeLabel.Content = "Game Over!";
 
             finalScore.Content = "Score: " + bg.Score;
-            playLabelAnimation(finalScore, null);
+            playLabelAnimation(finalScore, delegate
+            {
+                finalScore.Opacity = 0;
+            });
 
             playAgain.BeginAnimation(UIElement.OpacityProperty, null);
             playAgain.Opacity = 1;
