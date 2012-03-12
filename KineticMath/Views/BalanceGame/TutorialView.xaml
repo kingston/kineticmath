@@ -61,15 +61,15 @@
         </Style>
     </views:BaseView.Resources>
     <Canvas>
-      
-        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hands and hit the block!" Canvas.Top="121" Canvas.Left="179" Height="121" Width="540" Panel.ZIndex="1" />
-        <Rectangle Canvas.Left="0" Canvas.Top="0" Height="613" Width="854" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
-        <Rectangle Canvas.Left="100" Canvas.Top="214" Height="165" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
-        <Rectangle Canvas.Left="607" Canvas.Top="214" Height="165" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />
-        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="312" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
-        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="522" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
-        <my:Bird Opacity="1" Canvas.Left="114" Canvas.Top="240" Height="110" x:Name="bird1" Panel.ZIndex="1" />
-        <my:Bird Opacity="0" Canvas.Left="607" Canvas.Top="228" Height="110" x:Name="bird2" Panel.ZIndex="1" />
+
+        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hands and hit the block!" Canvas.Top="88" Canvas.Left="60" Height="121" Width="540" Panel.ZIndex="1" />
+        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="50" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="400" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="212" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
+        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="422" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
+        <my:Bird Opacity="1" Canvas.Left="60" Canvas.Top="200" Height="110" x:Name="bird1" Panel.ZIndex="1" />
+        <my:Bird Opacity="0" Canvas.Left="407" Canvas.Top="200" Height="110" x:Name="bird2" Panel.ZIndex="1" />
         <my1:Background Canvas.Left="0" Canvas.Top="0" Height="675" x:Name="background1" Width="1280" Panel.ZIndex="0" />
     </Canvas>
 </views:BaseView>

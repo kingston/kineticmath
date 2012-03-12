@@ -226,10 +226,10 @@ namespace KineticMath.Views
                 BallHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(0.10, 0.3),
-                    new Point(0.25, 0.1),
+                    new Point(0.1, 0.3),
+                    new Point(0.35, 0.1),
                     new Point(0.65, 0.1),
-                    new Point(0.80, 0.3)
+                    new Point(0.9, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 _hitZones.Clear();
@@ -240,8 +240,8 @@ namespace KineticMath.Views
                     canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
                     PointCanvas.SetTopLeft(canvas, new Point(
-                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle),
-                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle))
+                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - canvas.Width / 2,
+                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - canvas.Height / 2)
                     );
                     BallHolders[i] = canvas;
                     Rect boundaryRect = canvas.GetBoundaryRect();
