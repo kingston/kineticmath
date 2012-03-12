@@ -45,7 +45,7 @@ namespace KineticMath.Kinect.Gestures
                 {
                     Vector velocity = ComputeJointVelocity(type);
                     // Max velocity
-                    if (Math.Sqrt(velocity.X * velocity.X + velocity.Y * velocity.Y) > 10)
+                    if (Math.Sqrt(velocity.X * velocity.X + velocity.Y * velocity.Y) > 20)
                     {
                         if (RectHit != null)
                         {
