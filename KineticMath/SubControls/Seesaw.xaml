@@ -20,22 +20,42 @@
             </WrapPanel>
             <!-- Remember to update rightBallPanelLeft in Seesaw.xaml.cs when adjusting Canvas.Left-->
             <Canvas Name="rightBallPanel" Canvas.Left="192" Canvas.Top="10" Height="240" Width="125" />
+            <Ellipse Height="21.503" Canvas.Left="140" Stroke="#FF580707" StrokeThickness="3" Canvas.Top="271.497" Width="6" Fill="#FF760606"/>
         </Canvas>
         <Polygon Points="1,0 2,2 0,2" Fill="Orange" Width="50" Height="50" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Left="175" Canvas.Top="271" />
-        <Path Stretch="Fill" Fill="#FFAD6B29" Data="F1 M 914.747,433.242L 962.744,536.621L 938.745,536.621L 806.083,536.621L 777.219,536.621L 825.215,433.242L 914.747,433.242 Z " Height="63.217" Canvas.Left="144.012" Canvas.Top="258.039" Width="113.451"/>
+        <Path Stretch="Fill" Fill="#FFAD6B29" Data="F1 M 914.747,433.242L 962.744,536.621L 938.745,536.621L 806.083,536.621L 777.219,536.621L 825.215,433.242L 914.747,433.242 Z " Height="86.217" Canvas.Left="122.012" Canvas.Top="254.371" Width="154.727"/>
         <Rectangle Stretch="Fill" Fill="#FFAD6B29" Height="14.393" Canvas.Left="170.259" Canvas.Top="254.371" Width="60.957"/>
-        <Path Stretch="Fill" Fill="#FF653713" Data="F1 M 877.346,439.314C 877.346,435.245 874.051,431.95 869.982,431.95C 865.913,431.95 862.618,435.245 862.618,439.314C 862.618,443.383 865.913,446.679 869.982,446.679C 874.051,446.679 877.346,443.383 877.346,439.314 Z " Height="9.008" Canvas.Left="196.234" Canvas.Top="257.248" Width="9.007"/>
-        <Ellipse Stretch="Fill" Fill="#FF703F0E" Height="41.562" Canvas.Left="180.034" Canvas.Top="272.855" Width="41.561"/>
-        <Viewbox Height="34.819" Canvas.Left="183.347" Canvas.Top="276.285" Width="34.819">
+        <Path Stretch="Fill" Fill="#FF653713" Data="F1 M 877.346,439.314C 877.346,435.245 874.051,431.95 869.982,431.95C 865.913,431.95 862.618,435.245 862.618,439.314C 862.618,443.383 865.913,446.679 869.982,446.679C 874.051,446.679 877.346,443.383 877.346,439.314 Z " Height="9.008" Canvas.Left="194.484" Canvas.Top="257.992" Width="9.007"/>
+        <Ellipse Stretch="Fill" Fill="#FF703F0E" Height="60.562" Canvas.Left="170.172" Canvas.Top="275.855" Width="60.561" d:IsHidden="True"/>
+        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True">
         	<Canvas x:Name="EqualSign" Width="56.9391" Height="56.9391">
         		<Ellipse Width="56.9391" Height="56.9391" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="#FFB6FF07"/>
-        		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left"><TextBlock.RenderTransform>
-        				<TransformGroup>
-        					<MatrixTransform Matrix="1.33333,0,0,1.33333,9.03701,-19.4216"/>
-        				</TransformGroup>
-        			</TextBlock.RenderTransform><Run FontFamily="Segoe UI" FontSize="45" Text="=" Foreground="#FF41560E"/></TextBlock>
+        		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="68.458" Canvas.Top="32.545"><TextBlock.RenderTransform>
+	<TransformGroup>
+		<ScaleTransform ScaleY="1.33333" ScaleX="1.33333"/>
+		<SkewTransform/>
+		<RotateTransform Angle="90"/>
+		<TranslateTransform X="9.03701" Y="-19.4216"/>
+	</TransformGroup>
+        			</TextBlock.RenderTransform><Run Foreground="#FF41560E" FontSize="45" FontFamily="Segoe UI" Text=":)"/></TextBlock>
         	</Canvas>
-        </Viewbox> 
+        </Viewbox>
+        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True">
+        	<Canvas x:Name="EqualSign1" Width="56.9391" Height="56.9391">
+        		<Ellipse Width="56.9391" Height="56.9391" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="#FFCC0000"/>
+        		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="58.479" Canvas.Top="31.667" Foreground="Black" FontSize="36"><TextBlock.RenderTransform>
+        				<TransformGroup>
+        					<ScaleTransform ScaleY="1.33333" ScaleX="1.33333"/>
+        					<SkewTransform/>
+        					<RotateTransform Angle="90"/>
+        					<TranslateTransform X="9.03701" Y="-19.4216"/>
+        				</TransformGroup>
+        			</TextBlock.RenderTransform><Run FontFamily="Segoe UI" Text=":("/></TextBlock>
+        	</Canvas>
+        </Viewbox>
+        <Canvas Height="13.395" Canvas.Left="170" Canvas.Top="273.855" Width="24.5"/>
+        <Image x:Name="angry" Height="65" Canvas.Left="159.216" Source="/KineticMath;component/Resources/angryface-copy.png" Stretch="Fill" Canvas.Top="269" Width="79"/>
+        <Image x:Name="happy" Height="62" Canvas.Left="175" Source="/KineticMath;component/Resources/happyface-copy.png" Stretch="Fill" Canvas.Top="268" Width="46" Opacity="0"/> 
     </Canvas>
 
     <UserControl.Resources>

@@ -8,7 +8,7 @@
              d:DesignHeight="80" d:DesignWidth="80" Width="170">
     <Canvas Name="canvas" Width="150" Height="80">
         <Viewbox Height="19.099" Canvas.Left="112.998" Canvas.Top="35.031" Width="36.723">
-        	<Canvas Width="52.9998" Height="27.5649">
+        	<Canvas x:Name="rightwing" Width="52.9998" Height="27.5649">
         		<Path Width="50.7177" Height="25.3569" Canvas.Left="0.138672" Canvas.Top="1.41901" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 0.138672,3.53149L 4.36426,1.41901L 50.8563,8.6026L 47.8975,13.0562L 39.0219,14.9422L 35.642,20.2274L 27.1873,20.6476L 25.4974,26.7759L 0.138672,26.7759L 0.138672,3.53149 Z "/>
         		<Viewbox Width="52.9998" Height="27.5649" Canvas.Left="0" Canvas.Top="0">
         			<Canvas Width="52.9998" Height="27.5649">
@@ -45,7 +45,7 @@
         	</Canvas>
         </Viewbox>
         <Viewbox Height="19.099" Canvas.Left="-4" Canvas.Top="35.204" Width="36.722">
-        	<Canvas Width="52.9996" Height="27.5649">
+        	<Canvas x:Name="leftwing" Width="52.9996" Height="27.5649">
         		<Path Width="50.7177" Height="25.3569" Canvas.Left="2.14331" Canvas.Top="1.41901" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 52.861,3.53149L 48.6354,1.41901L 2.14331,8.6026L 5.10205,13.0562L 13.9779,14.9422L 17.3577,20.2274L 25.8124,20.6476L 27.5022,26.7759L 52.861,26.7759L 52.861,3.53149 Z "/>
         		<Viewbox Width="52.9996" Height="27.5649" Canvas.Left="0" Canvas.Top="0">
         			<Canvas Width="52.9996" Height="27.5649">
