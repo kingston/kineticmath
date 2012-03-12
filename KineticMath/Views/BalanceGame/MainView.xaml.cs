@@ -125,7 +125,8 @@ namespace KineticMath.Views
         void game_LevelLost(object sender, EventArgs e)
         {
             LevelLostEventArgs args = (LevelLostEventArgs)e;
-            if (game.mode == BalanceGame.Mode.Classic)
+         
+            if (game.mode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
                 lifeCanvas.Children.RemoveAt(0);
 
             if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
