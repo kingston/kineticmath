@@ -53,7 +53,7 @@ namespace KineticMath.SubControls
         public void animateRightBlocks()
         {
             rightBallPanelLeftAdjustment += 5.0;
-            moveRightPanelTo(rightBallPanelLeft + rightBallPanelLeftAdjustment, new Duration(TimeSpan.FromSeconds(1.0)));
+            moveRightPanelTo(rightBallPanelLeft + rightBallPanelLeftAdjustment, new Duration(TimeSpan.FromSeconds(1.0)), game.TimeLeft);
         }
 
         public void resetRightBallPanel()
@@ -72,14 +72,40 @@ namespace KineticMath.SubControls
             
         }
 
-        void moveRightPanelTo(double newPosition, Duration duration)
+        void moveRightPanelTo(double newPosition, Duration duration, int timeLeft)
         {
+            Storyboard sb = new Storyboard();
+            DoubleAnimation shellAnimation = null;
+
+            if (timeLeft <= 3)
+            {
+
+                if (rightBallPanel.Children.Count != 0)
+                {
+                    foreach (Object obj in rightBallPanel.Children)
+                    {
+
+                        Path shell = ((Pig)obj).outside;
+                        shell.BeginAnimation(UIElement.OpacityProperty, null);
+                        shell.Opacity = 1;
+
+                        shellAnimation = new DoubleAnimation(1, 0, duration);
+                        shellAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                        Storyboard.SetTarget(shellAnimation, shell);
+                        Storyboard.SetTargetProperty(shellAnimation, new PropertyPath(UIElement.OpacityProperty));
+                        sb.Children.Add(shellAnimation);
+                    }
+                }
+            }
+
             DoubleAnimation animation = new DoubleAnimation(newPosition, duration);
             animation.BeginTime = TimeSpan.FromSeconds(0);
             Storyboard.SetTarget(animation, rightBallPanel);
             Storyboard.SetTargetProperty(animation, new PropertyPath(Canvas.LeftProperty));
-            Storyboard sb = new Storyboard();
+            
             sb.Children.Add(animation);
+            if (shellAnimation != null)
+                
             runningAnimations.Add(sb);
             sb.Completed += delegate
             {
@@ -96,7 +122,7 @@ namespace KineticMath.SubControls
             runningAnimations.Clear();
             // Reset rightBallPanel position
             rightBallPanelLeftAdjustment = 0.0;
-            moveRightPanelTo(rightBallPanelLeft, new Duration(TimeSpan.FromSeconds(0.0)));
+            moveRightPanelTo(rightBallPanelLeft, new Duration(TimeSpan.FromSeconds(0.0)), game.TimeLeft);
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
