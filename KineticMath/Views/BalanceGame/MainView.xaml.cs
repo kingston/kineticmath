@@ -141,6 +141,7 @@ namespace KineticMath.Views
                 playLabelAnimation(uxNoTimeLabel, delegate
                 {
                     //Chris: temporary workaround
+                    seesaw.resetRightBallPanel();
                     game.currentLevel++;
                     game.LoadCurrentLevel();
                 });
