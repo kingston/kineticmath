@@ -152,6 +152,7 @@ namespace KineticMath.Views
         {
             foreach (var animation in runningAnimations)
             {
+                animation.SkipToFill();
                 animation.Stop();
             }
             runningAnimations.Clear();
@@ -166,8 +167,10 @@ namespace KineticMath.Views
 
         void playLabelAnimation(Label label, EventHandler onComplete)
         {
-            label.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-            label.Opacity = 1;
+            DoubleAnimation appearAnimation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(0)));
+            appearAnimation.BeginTime = TimeSpan.FromSeconds(0.0);
+            Storyboard.SetTarget(appearAnimation, label);
+            Storyboard.SetTargetProperty(appearAnimation, new PropertyPath(UIElement.OpacityProperty));
 
             // Hide it when we're done
             DoubleAnimation labelAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(labelDisplayTime)));
@@ -175,7 +178,7 @@ namespace KineticMath.Views
             Storyboard.SetTarget(labelAnimation, label);
             Storyboard.SetTargetProperty(labelAnimation, new PropertyPath(UIElement.OpacityProperty));
             Storyboard labelSb = new Storyboard();
-            runningAnimations.Add(labelSb);
+            labelSb.Children.Add(appearAnimation);
             labelSb.Children.Add(labelAnimation);
             labelSb.Completed += delegate
             {
@@ -187,6 +190,7 @@ namespace KineticMath.Views
                 labelSb.Completed += onComplete;
                 
             }
+            runningAnimations.Add(labelSb);
             labelSb.Begin();
             
            
