@@ -32,7 +32,7 @@ namespace KineticMath.SubControls
         {
             InitializeComponent();
             //Force video to the background
-            Canvas.SetZIndex(uxKinectImage, -10000);
+            //Canvas.SetZIndex(uxKinectImage, -10000);
         }
 
         public void InitializeSkeleton(IKinectService kinectService)
@@ -53,28 +53,28 @@ namespace KineticMath.SubControls
             if (skeleton != null)
             {
                 //set positions on our joints of interest (already defined as Ellipse objects in the xaml)
-                SetEllipsePosition(headEllipse, skeleton.Joints[JointType.Head]);
-                SetEllipsePosition(leftEllipse, skeleton.Joints[JointType.HandLeft]);
-                SetEllipsePosition(rightEllipse, skeleton.Joints[JointType.HandRight]);
-                SetEllipsePosition(shoulderCenter, skeleton.Joints[JointType.ShoulderCenter]);
-                SetEllipsePosition(shoulderRight, skeleton.Joints[JointType.ShoulderRight]);
-                SetEllipsePosition(shoulderLeft, skeleton.Joints[JointType.ShoulderLeft]);
-                SetEllipsePosition(ankleRight, skeleton.Joints[JointType.AnkleRight]);
-                SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                SetEllipsePosition(elbowLeft, skeleton.Joints[JointType.ElbowLeft]);
-                SetEllipsePosition(elbowRight, skeleton.Joints[JointType.ElbowRight]);
-                SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                SetEllipsePosition(kneeLeft, skeleton.Joints[JointType.KneeLeft]);
-                SetEllipsePosition(kneeRight, skeleton.Joints[JointType.KneeRight]);
-                SetEllipsePosition(hipCenter, skeleton.Joints[JointType.HipCenter]);
+                //SetEllipsePosition(headEllipse, skeleton.Joints[JointType.Head]);
+                //SetEllipsePosition(leftEllipse, skeleton.Joints[JointType.HandLeft]);
+                //SetEllipsePosition(rightEllipse, skeleton.Joints[JointType.HandRight]);
+                //SetEllipsePosition(shoulderCenter, skeleton.Joints[JointType.ShoulderCenter]);
+                //SetEllipsePosition(shoulderRight, skeleton.Joints[JointType.ShoulderRight]);
+                //SetEllipsePosition(shoulderLeft, skeleton.Joints[JointType.ShoulderLeft]);
+                //SetEllipsePosition(ankleRight, skeleton.Joints[JointType.AnkleRight]);
+                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
+                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
+                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
+                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
+                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
+                //SetEllipsePosition(elbowLeft, skeleton.Joints[JointType.ElbowLeft]);
+                //SetEllipsePosition(elbowRight, skeleton.Joints[JointType.ElbowRight]);
+                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
+                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
+                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
+                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
+                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
+                //SetEllipsePosition(kneeLeft, skeleton.Joints[JointType.KneeLeft]);
+                //SetEllipsePosition(kneeRight, skeleton.Joints[JointType.KneeRight]);
+                //SetEllipsePosition(hipCenter, skeleton.Joints[JointType.HipCenter]);
             }
         }
 
@@ -97,7 +97,7 @@ namespace KineticMath.SubControls
         void kinectService_ImageFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
             //Automagically create BitmapSource for Video
-            uxKinectImage.Source = e.OpenColorImageFrame().ToBitmapSource();
+            //uxKinectImage.Source = e.OpenColorImageFrame().ToBitmapSource();
         }
     }
 }
