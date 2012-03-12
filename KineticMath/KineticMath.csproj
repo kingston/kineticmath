@@ -300,6 +300,12 @@
     </BlendEmbeddedFont>
     <Resource Include="Images\brick.jpg" />
     <Resource Include="Images\image0.png" />
+    <Resource Include="Resources\angryface-copy.png" />
+    <Resource Include="Resources\happyface-copy.png" />
+    <Resource Include="SubControls\angryface.png" />
+    <Resource Include="SubControls\happyface.png" />
+    <Resource Include="SubControls\Image1.png" />
+    <Resource Include="SubControls\Image2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\brick.gif" />
@@ -321,7 +327,8 @@
     <Content Include="Media\WinterBells.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\Binaries\Microsoft.Expression.Blend.WPF.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />
+  <!--<Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />-->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

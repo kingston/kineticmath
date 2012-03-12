@@ -73,7 +73,7 @@
                 <ScaleTransform ScaleY="1"/>
             </TextBlock.RenderTransform>
         </TextBlock>
-        <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="50" Canvas.Top="192.5" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
@@ -88,14 +88,14 @@
                 <my:Bird Canvas.Left="180" Canvas.Top="0" Height="90" x:Name="life3" />
             </Canvas>
 
-            <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
+            <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans" FontWeight="Bold" Foreground="#FF1771AB" />
             <Label x:Name="statusLabel" Opacity="0" Canvas.Left="1058" Canvas.Top="150" Height="51" Width="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
         </Canvas>
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
-        	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
-        	<Label x:Name="timeLabel" Canvas.Left="120" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Time" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />
-        	<KineticMath:scoreTextControl x:Name="scoreText" Height="63" Canvas.Top="45" Width="124"/>
-        	<Label x:Name="timeText" Canvas.Left="120" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
+        	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans" Foreground="#FF1771AB" FontWeight="Bold"  />
+        	<Label x:Name="timeLabel" Canvas.Left="120" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Time" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans" Foreground="#FF1771AB" FontWeight="Bold"  />
+        	<KineticMath:scoreTextControl x:Name="scoreText" Height="63" Canvas.Top="45" Width="124" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans"/>
+        	<Label x:Name="timeText" Canvas.Left="120" Canvas.Top="45" Height="63" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="33.333" Content="0" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans" Foreground="#FF1771AB" FontWeight="Bold" RenderTransformOrigin="1.516,0.619"  />
         </Canvas>
 		<MediaElement Name="ding" Source="../../Media/ding.wav" LoadedBehavior="Manual" Volume="4" />
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
