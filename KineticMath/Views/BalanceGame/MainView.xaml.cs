@@ -63,11 +63,7 @@ namespace KineticMath.Views
             game.GameOver += new EventHandler(game_GameOver);
             game.TimerTicked += new EventHandler(timerCallback);
             seesaw.RegisterGame(game);
-            lifeCanvas.Opacity = 0;
-            modeLabel.Content = "Challenge Mode";
-            ChallengeModeGUI.Visibility = System.Windows.Visibility.Visible;
-            game.setMode(BalanceGame.Mode.Challenge);
-            game.NewGame();
+            startNewMode(BalanceGame.Mode.Classic);
         }
 
         void timerCallback(object sender, EventArgs e)
