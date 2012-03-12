@@ -126,7 +126,12 @@ namespace KineticMath.Views
         {
             LevelLostEventArgs args = (LevelLostEventArgs)e;
             if (game.mode == BalanceGame.Mode.Classic)
-                lifeCanvas.Children.RemoveAt(0);
+            {
+                if (lifeCanvas.Children.Count > 0)
+                {
+                    lifeCanvas.Children.RemoveAt(0);
+                }
+            }
 
             if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
             {
@@ -347,6 +352,7 @@ namespace KineticMath.Views
                 hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
+            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
             _sharedData.GestureController.AddGesture(this, hitGesture);
         }
 
