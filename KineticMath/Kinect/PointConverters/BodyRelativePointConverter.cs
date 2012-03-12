@@ -43,8 +43,23 @@ namespace KineticMath.Kinect.PointConverters
             Skeleton skel = e.Skeleton;
             SkeletonPoint leftFoot = skel.Joints[JointType.FootLeft].Position;
             SkeletonPoint rightFoot = skel.Joints[JointType.FootRight].Position;
-            float minFootY = Math.Min(leftFoot.Y, rightFoot.Y);
-            if (skel.TrackingId != curSkeletonId && skel.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
+            float minFootY;
+            JointTrackingState leftFootTracking = skel.Joints[JointType.FootLeft].TrackingState;
+            JointTrackingState rightFootTracking = skel.Joints[JointType.FootRight].TrackingState;
+            bool footTracked = true;
+            if (leftFootTracking == JointTrackingState.Tracked && rightFootTracking == JointTrackingState.Tracked)
+                minFootY = Math.Min(leftFoot.Y, rightFoot.Y);
+            else if (leftFootTracking == JointTrackingState.Tracked)
+                minFootY = leftFoot.Y;
+            else if (rightFootTracking == JointTrackingState.Tracked)
+                minFootY = rightFoot.Y;
+            else
+            {
+                footTracked = false;
+                minFootY = leftFoot.Y; // Not sure what's best in this case
+            }
+
+            if (skel.TrackingId != curSkeletonId && skel.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked && footTracked)
             {
                 SkeletonPoint shoulderPos = skel.Joints[JointType.ShoulderCenter].Position;
 
