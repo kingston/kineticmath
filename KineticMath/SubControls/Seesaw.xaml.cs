@@ -56,6 +56,21 @@ namespace KineticMath.SubControls
             moveRightPanelTo(rightBallPanelLeft + rightBallPanelLeftAdjustment, new Duration(TimeSpan.FromSeconds(1.0)));
         }
 
+        public void animateRotateBlocks() {
+            DoubleAnimation da = new DoubleAnimation();
+            da.From = 0;
+            da.To = 90;
+            da.Completed += delegate
+            {
+                rightBallPanel.RenderTransform = new RotateTransform();
+            };
+            da.Duration = new Duration(TimeSpan.FromSeconds(3));
+            RotateTransform rt = new RotateTransform(0, 70, Canvas.GetTop(rightBallPanel) + rightBallPanel.Height);
+            rightBallPanel.RenderTransform = rt;
+            rt.BeginAnimation(RotateTransform.AngleProperty, da);
+            
+        }
+
         void moveRightPanelTo(double newPosition, Duration duration)
         {
             DoubleAnimation animation = new DoubleAnimation(newPosition, duration);

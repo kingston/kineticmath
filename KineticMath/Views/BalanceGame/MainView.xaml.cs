@@ -96,6 +96,9 @@ namespace KineticMath.Views
                 {
                     seesaw.animateRightBlocks();
                 }
+                else {
+                    seesaw.animateRotateBlocks();
+                }
                 if (bg.TimeLeft <= 3)
                 {
                     ding.Stop();
