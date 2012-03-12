@@ -69,12 +69,14 @@ namespace KineticMath.Views
 
         void timerCallback(object sender, EventArgs e)
         {
+            if (!gameActive) return;
             BalanceGame bg = (BalanceGame) sender;
             scoreText.TextContent = bg.Score;
             timeText.Content = bg.TimeLeft;
 
             if (bg.TimeLeft == 0)
             {
+                gameActive = false;
                 notime.Stop();
                 notime.Play();
             }
@@ -137,7 +139,7 @@ namespace KineticMath.Views
                 showStatusLabel("Try again!", Brushes.Orange, delegate
                 {
                     game.Reset();
-                    if (game.LivesLeft > 0) gameActive = true;
+                    if (game.LivesLeft > 0) { gameActive = true; }
                 });
             }
             else
@@ -209,6 +211,7 @@ namespace KineticMath.Views
             {
                 soundEffect.Stop();
                 game.LoadCurrentLevel();
+                gameActive = true;
             });
         }
 
@@ -418,6 +421,7 @@ namespace KineticMath.Views
             // Check if any running animations to avoid conflicts
             if (this.gameActive && runningAnimations.Count == 0 && game.PushBall(pushedBall))
             {
+                gameActive = false;
                 var ballHolder = this.BallHolders[index];
                 uxMainCanvas.Children.Add(pushedBall);
 
@@ -438,8 +442,6 @@ namespace KineticMath.Views
                 // Freeze the PathGeometry for performance benefits.
                 animationPath.Freeze();
 
-                /*
-                animationPath.Figures = pfc;*/
                 ballAnimation.PathGeometry = animationPath;
                 ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
                 ballAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.75));
