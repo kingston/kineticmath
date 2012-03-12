@@ -62,7 +62,7 @@
     </views:BaseView.Resources>
     <Canvas>
 
-        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hands and hit the block!" Canvas.Top="88" Canvas.Left="60" Height="121" Width="540" Panel.ZIndex="1" />
+        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Canvas.Top="75" Canvas.Left="338" Height="121" Width="540" Panel.ZIndex="1" TextAlignment="Center" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF0003C2" ><Run FontWeight="Bold" Text="Move your hands and hit the block!"/></TextBlock>
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <Rectangle Canvas.Left="50" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
         <Rectangle Canvas.Left="400" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />
@@ -71,5 +71,20 @@
         <my:Bird Opacity="1" Canvas.Left="60" Canvas.Top="200" Height="110" x:Name="bird1" Panel.ZIndex="1" />
         <my:Bird Opacity="0" Canvas.Left="407" Canvas.Top="200" Height="110" x:Name="bird2" Panel.ZIndex="1" />
         <my1:Background Canvas.Left="0" Canvas.Top="0" Height="675" x:Name="background1" Width="1280" Panel.ZIndex="0" />
+        <Rectangle Fill="White" Height="98" Canvas.Left="312" Stroke="#FF272727" StrokeThickness="0" Canvas.Top="48" Width="592" RadiusX="15" RadiusY="15"/>
+        <Path Data="M-54.503333,22.166667 L-81.006641,102.33333 -110.75358,20.370007" Fill="White" Height="81.964" Stretch="Fill" Stroke="#FF272727" StrokeThickness="0" Width="56.25" Canvas.Left="910" Canvas.Top="56.036" RenderTransformOrigin="0.5,0.5">
+        	<Path.RenderTransform>
+        		<TransformGroup>
+        			<ScaleTransform/>
+        			<SkewTransform/>
+        			<RotateTransform Angle="-90"/>
+        			<TranslateTransform/>
+        		</TransformGroup>
+        	</Path.RenderTransform>
+        </Path>
+        <Ellipse Fill="#FF272727" StrokeThickness="0" Stroke="#FF272727" HorizontalAlignment="Left" Height="140" VerticalAlignment="Top" Width="140" Canvas.Left="996" Canvas.Top="30"/>
+        <Path x:Name="ellipse" Data="M70,28.5 C70,43.135546 54.777681,55 36,55 17.222319,55 2,43.135546 2,28.5 2,13.864454 17.222319,23 36,23 54.777681,23 70,13.864454 70,28.5 z" Fill="#FFF7E77C" Stretch="Fill" Stroke="#FF272727" StrokeThickness="4" HorizontalAlignment="Left" Height="61.675" VerticalAlignment="Top" Width="114.402" Canvas.Left="1008.137" Canvas.Top="89.479"/>
+        <Ellipse Height="8.077" StrokeThickness="4" Width="8.077" Fill="#FF212121" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="1090.231" Canvas.Top="106.731"/>
+        <Ellipse Height="8.077" StrokeThickness="4" Fill="#FF212121" VerticalAlignment="Top" Width="8.077" Canvas.Left="1036.384" Canvas.Top="106.731"/>
     </Canvas>
 </views:BaseView>
