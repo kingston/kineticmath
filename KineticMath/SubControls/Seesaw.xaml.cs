@@ -140,6 +140,7 @@ namespace KineticMath.SubControls
             // Reset rightBallPanel position
             rightBallPanelLeftAdjustment = 0.0;
             moveRightPanelTo(rightBallPanelLeft, new Duration(TimeSpan.FromSeconds(0.0)), game.TimeLeft);
+            resetRightBallPanel();
         }
 
         void BalanceBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
