@@ -227,10 +227,10 @@ namespace KineticMath.Views
                 BallHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
-                    new Point(0.1, 0.3),
-                    new Point(0.35, 0.1),
-                    new Point(0.65, 0.1),
-                    new Point(0.9, 0.3)
+                    new Point(0.15, 0.3),
+                    new Point(0.35, 0.05),
+                    new Point(0.65, 0.05),
+                    new Point(0.85, 0.3)
                 };
                 if (numHolders > holderPositions.Length) throw new InvalidOperationException("You must define the locations of all holders");
                 _hitZones.Clear();
