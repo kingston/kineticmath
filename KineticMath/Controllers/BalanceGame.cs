@@ -87,6 +87,7 @@ namespace KineticMath.Controllers
                     LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
                     if (LivesLeft > 0)
                     {
+                        this.TimeLeft = TEN_SECOND;
                     }
                     else
                     {
@@ -176,7 +177,7 @@ namespace KineticMath.Controllers
                 }
                 else
                 {
-                    if (mode != Mode.Practice)
+                    if (mode == Mode.Classic)
                     {
                         this.LivesLeft--;
                     }

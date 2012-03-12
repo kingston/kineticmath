@@ -54,8 +54,8 @@
         	</Canvas>
         </Viewbox>
         <Canvas Height="13.395" Canvas.Left="170" Canvas.Top="273.855" Width="24.5"/>
-        <Image Height="65" Canvas.Left="159.216" Source="/KineticMath;component/Resources/angryface-copy.png" Stretch="Fill" Canvas.Top="269" Width="79"/>
-        <Image Height="62" Canvas.Left="175" Source="/KineticMath;component/Resources/happyface-copy.png" Stretch="Fill" Canvas.Top="268" Width="46" Opacity="0"/> 
+        <Image x:Name="angry" Height="65" Canvas.Left="159.216" Source="/KineticMath;component/Resources/angryface-copy.png" Stretch="Fill" Canvas.Top="269" Width="79"/>
+        <Image x:Name="happy" Height="62" Canvas.Left="175" Source="/KineticMath;component/Resources/happyface-copy.png" Stretch="Fill" Canvas.Top="268" Width="46" Opacity="0"/> 
     </Canvas>
 
     <UserControl.Resources>
