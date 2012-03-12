@@ -68,6 +68,6 @@
         		</Viewbox>
         	</Canvas>
         </Viewbox>
-        <TextBlock Canvas.Left="38.723" FontSize="53.333" Canvas.Top="-9.591" Height="90" x:Name="ValueText" Text="1" TextAlignment="Center" Width="68" Foreground="#FF2609B2" FontWeight="Bold" FontFamily="/KineticMath;component/Fonts/#Full Dece Sans"/>
+        <TextBlock Canvas.Left="38.723" FontSize="33.333" Canvas.Top="1.409" Height="90" x:Name="ValueText" Text="1" TextAlignment="Center" Width="68" Foreground="#FF2609B2" FontWeight="Bold" FontFamily="/KineticMath;component/Fonts/#Kristen ITC"/>
     </Canvas>
 </src:SeesawObject>
