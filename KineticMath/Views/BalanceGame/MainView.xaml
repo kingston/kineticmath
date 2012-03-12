@@ -77,7 +77,6 @@
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
-            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="158" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
             <Label Canvas.Left="110" Canvas.Top="192" Width="1050" FontSize="80" FontWeight="Bold" Content="Correct!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxStatusLabel" />
         </Canvas>
@@ -96,5 +95,6 @@
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
         <MediaElement Name="soundEffect" Source="../../Media/tada.mp3" LoadedBehavior="Manual" Volume="1" />
         <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="157" x:Name="playAgain" Opacity="0" />
+        <Label x:Name="finalScore" Canvas.Left="436" Canvas.Top="93" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40" />
     </Canvas>
 </views:BaseView>
