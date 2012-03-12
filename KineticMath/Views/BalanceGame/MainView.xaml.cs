@@ -73,7 +73,6 @@ namespace KineticMath.Views
         void timerCallback(object sender, EventArgs e)
         {
             BalanceGame bg = (BalanceGame) sender;
-            statusLabel.Content = "Score: " + bg.Score + " Remaining: " + bg.TimeLeft;
             scoreText.TextContent = bg.Score;
             timeText.Content = bg.TimeLeft;
 
@@ -112,8 +111,10 @@ namespace KineticMath.Views
         {
             BalanceGame bg = (BalanceGame)sender;
 
+            if (game.mode == BalanceGame.Mode.Classic)
+                lifeCanvas.Children.RemoveAt(0);
+
             modeLabel.Content = "Game Over!";
-            statusLabel.Content = "You scored " + bg.Score + " points!";
 
             finalScore.Content = "Score: " + bg.Score;
             playLabelAnimation(finalScore, null);
@@ -260,27 +261,45 @@ namespace KineticMath.Views
             switch (e.Key)
             {
                 case Key.D1:
-                    lifeCanvas.Opacity = 1;
-                    modeLabel.Content = "Classic Mode";
-                    game.setMode(BalanceGame.Mode.Classic);
-                    game.NewGame();
+                    startNewMode(BalanceGame.Mode.Classic);
                     break;
                 case Key.D2:
+                    startNewMode(BalanceGame.Mode.Challenge);
+                    break;
+                case Key.D3:
+                    startNewMode(BalanceGame.Mode.Practice);
+                    break;
+            }
+        }
+
+        private void startNewMode(BalanceGame.Mode mode) {
+            playAgain.Opacity = 0;
+            switch (mode) {
+                case BalanceGame.Mode.Classic:
+                    lifeCanvas.Opacity = 1;
+                    modeLabel.Content = "Classic Mode";
+                    lifeCanvas.Children.RemoveRange(0, 3);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Image heart = new Image();
+                        heart.Source = new BitmapImage(new Uri("/KineticMath;component/Images/heart.png", UriKind.Relative));
+                        lifeCanvas.Children.Add(heart);
+                        Canvas.SetLeft(heart, 50 * i);
+                    }
+                    break;
+                case BalanceGame.Mode.Challenge:
                     lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Challenge Mode";
                     ChallengeModeGUI.Visibility = System.Windows.Visibility.Visible;
-                    game.setMode(BalanceGame.Mode.Challenge);
-                    game.NewGame();
                     break;
-                case Key.D3:
+                case BalanceGame.Mode.Practice:
                     lifeCanvas.Opacity = 0;
                     modeLabel.Content = "Practice Mode";
                     ChallengeModeGUI.Visibility = System.Windows.Visibility.Hidden;
-                    statusLabel.Content = "";
-                    game.setMode(BalanceGame.Mode.Practice);
-                    game.NewGame();
                     break;
             }
+            game.setMode(mode);
+            game.NewGame();
         }
 
         public override void OnViewActivated()
