@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using KineticMath.Kinect;
 using Microsoft.Kinect;
 using Coding4Fun.Kinect.Wpf;
+using KineticMath.Helpers;
 
 using KineticMath.Kinect.PointConverters;
 
@@ -60,15 +61,52 @@ namespace KineticMath.SubControls
                 }
             }
             // Position elements
-            PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
+            PositionBody(uxMainBody, skeleton);
+            //PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
             PositionElement(uxHeadPart, skeleton.Joints[JointType.Head], true);
         }
 
-        private void PositionBody(FrameworkElement element, Skeleton skel)
+        private void PositionBody(Path body, Skeleton skel)
         {
+            JointType[] jointChain = new JointType[] { JointType.ShoulderLeft, JointType.Head, JointType.ShoulderRight, JointType.HipRight, JointType.HipLeft };
+            PathGeometry geometry = new PathGeometry();
+            String path = "";
+            bool firstPoint = true;
+            for (int i = 0; i < jointChain.Length; i++)
+            {
+                var pt = GetPoint(skel, jointChain[i]);
+                // Hard code neck
+                if (jointChain[i] == JointType.Head)
+                {
+                    // Average with shoulder
+                    var shoulderPt = GetPoint(skel, JointType.ShoulderCenter);
+                    pt.X = pt.X * 0.1f + shoulderPt.X * 0.9f;
+                    pt.Y = pt.Y * 0.1f + shoulderPt.Y * 0.9f;
+                }
+                if (firstPoint)
+                {
+                    path += "M " + pt.X.ToString() + "," + pt.Y.ToString() + " ";
+                    firstPoint = false;
+                }
+                else
+                {
+                    path += "L " + pt.X.ToString() + "," + pt.Y.ToString();
+                }
+            }
+            // Close the path
+            path += " z";
+            Canvas.SetLeft(uxMainBody, 0);
+            Canvas.SetTop(uxMainBody, 0);
+            uxMainBody.Data = Geometry.Parse(path);
         }
 
-        private void PositionElement(FrameworkElement element, Joint joint, bool center) {
+        private SkeletonPoint GetPoint(Skeleton skel, JointType type)
+        {
+            return pointConverter.ConvertPoint(skel.Joints[type].Position);
+        }
+
+        private void PositionElement(FrameworkElement element, Joint joint, bool center)
+        {
             SkeletonPoint pt = pointConverter.ConvertPoint(joint.Position);
             double dx = 0;
             double dy = 0;
@@ -92,6 +130,8 @@ namespace KineticMath.SubControls
             {
                 Line newLine = new Line();
                 newLine.Stroke = Brushes.Black;
+                byte gray = 55;
+                newLine.Stroke = new SolidColorBrush(Color.FromRgb(gray, gray, gray));
                 newLine.StrokeThickness = 26;
                 newLine.StrokeStartLineCap = PenLineCap.Round;
                 newLine.StrokeEndLineCap = PenLineCap.Round;
