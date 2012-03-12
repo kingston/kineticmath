@@ -183,17 +183,22 @@ namespace KineticMath.Views
             labelSb.Completed += delegate
             {
                 runningAnimations.Remove(labelSb);
+                seesaw.IsHappy = false;
             };
             if (onComplete != null)
             {
                 labelSb.Completed += onComplete;
+                
             }
             labelSb.Begin();
+            
+           
         }
 
         void game_LevelCompleted(object sender, EventArgs e)
         {
             soundEffect.Play();
+            seesaw.IsHappy = true;
             showStatusLabel("Correct!", Brushes.Green, delegate
             {
                 soundEffect.Stop();
@@ -497,6 +502,11 @@ namespace KineticMath.Views
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
                 HandlePushEvent(skelPt);
             }
+        }
+
+        private void Background_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
