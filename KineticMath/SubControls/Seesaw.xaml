@@ -26,8 +26,8 @@
         <Path Stretch="Fill" Fill="#FFAD6B29" Data="F1 M 914.747,433.242L 962.744,536.621L 938.745,536.621L 806.083,536.621L 777.219,536.621L 825.215,433.242L 914.747,433.242 Z " Height="86.217" Canvas.Left="122.012" Canvas.Top="254.371" Width="154.727"/>
         <Rectangle Stretch="Fill" Fill="#FFAD6B29" Height="14.393" Canvas.Left="170.259" Canvas.Top="254.371" Width="60.957"/>
         <Path Stretch="Fill" Fill="#FF653713" Data="F1 M 877.346,439.314C 877.346,435.245 874.051,431.95 869.982,431.95C 865.913,431.95 862.618,435.245 862.618,439.314C 862.618,443.383 865.913,446.679 869.982,446.679C 874.051,446.679 877.346,443.383 877.346,439.314 Z " Height="9.008" Canvas.Left="194.484" Canvas.Top="257.992" Width="9.007"/>
-        <Ellipse Stretch="Fill" Fill="#FF703F0E" Height="60.562" Canvas.Left="170.172" Canvas.Top="275.855" Width="60.561" d:IsHidden="True"/>
-        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True">
+        <Ellipse Stretch="Fill" Fill="#FF703F0E" Height="60.562" Canvas.Left="170.172" Canvas.Top="275.855" Width="60.561" d:IsHidden="True" Opacity="0"/>
+        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True" Opacity="0">
         	<Canvas x:Name="EqualSign" Width="56.9391" Height="56.9391">
         		<Ellipse Width="56.9391" Height="56.9391" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="#FFB6FF07"/>
         		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="68.458" Canvas.Top="32.545"><TextBlock.RenderTransform>
@@ -40,7 +40,7 @@
         			</TextBlock.RenderTransform><Run Foreground="#FF41560E" FontSize="45" FontFamily="Segoe UI" Text=":)"/></TextBlock>
         	</Canvas>
         </Viewbox>
-        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True">
+        <Viewbox Height="50.736" Canvas.Left="175" Canvas.Top="280.853" Width="50.736" d:IsHidden="True" Opacity="0">
         	<Canvas x:Name="EqualSign1" Width="56.9391" Height="56.9391">
         		<Ellipse Width="56.9391" Height="56.9391" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="#FFCC0000"/>
         		<TextBlock TextAlignment="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.Left="58.479" Canvas.Top="31.667" Foreground="Black" FontSize="36"><TextBlock.RenderTransform>

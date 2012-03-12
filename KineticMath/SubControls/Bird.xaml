@@ -35,6 +35,5 @@
         	</Canvas>
         </Viewbox>
         <TextBlock Canvas.Left="29.666" FontSize="50" Canvas.Top="-1.334" Height="68" x:Name="ValueText" Text="1" TextAlignment="Center" VerticalAlignment="Center" Width="58" Foreground="#FF1F1BB8" FontWeight="Bold"/>
-        <Image Height="105" Source="Image1.png" Stretch="Fill" Width="168"/>
     </Canvas>
 </src:SeesawObject>
