@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:KineticMath.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="675" d:DesignWidth="1200" MouseUp="BaseView_MouseUp" xmlns:my="clr-namespace:KineticMath.SubControls">
+             d:DesignHeight="675" d:DesignWidth="1200" MouseUp="BaseView_MouseUp" xmlns:my="clr-namespace:KineticMath.SubControls" xmlns:my1="clr-namespace:KineticMath">
     <views:BaseView.Resources>
         <Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -61,11 +61,15 @@
         </Style>
     </views:BaseView.Resources>
     <Canvas>
-        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hands and hit the block!" Canvas.Top="168" Canvas.Left="121"/>
-        <Rectangle Canvas.Left="121" Canvas.Top="44" Height="579" Width="634" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
-        <Rectangle Canvas.Left="206" Canvas.Top="21" Height="153" Width="197" x:Name="hitRect" Stroke="Black" Opacity="0" />
-        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
-        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
-        <my:Bird Canvas.Left="235" Canvas.Top="44" Height="110" x:Name="bird1" />
+      
+        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Text="Move your hands and hit the block!" Canvas.Top="121" Canvas.Left="179" Height="121" Width="540" Panel.ZIndex="1" />
+        <Rectangle Canvas.Left="0" Canvas.Top="0" Height="613" Width="854" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="100" Canvas.Top="214" Height="165" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="607" Canvas.Top="214" Height="165" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="312" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
+        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="522" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
+        <my:Bird Opacity="1" Canvas.Left="114" Canvas.Top="240" Height="110" x:Name="bird1" Panel.ZIndex="1" />
+        <my:Bird Opacity="0" Canvas.Left="607" Canvas.Top="228" Height="110" x:Name="bird2" Panel.ZIndex="1" />
+        <my1:Background Canvas.Left="0" Canvas.Top="0" Height="675" x:Name="background1" Width="1280" Panel.ZIndex="0" />
     </Canvas>
 </views:BaseView>

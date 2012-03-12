@@ -19,6 +19,7 @@ using KineticMath.Messaging;
 using KineticMath.Kinect.PointConverters;
 using KineticMath.Kinect.Gestures;
 using Microsoft.Kinect;
+using System.Windows.Media.Animation;
 
 namespace KineticMath.Views
 {
@@ -68,7 +69,6 @@ namespace KineticMath.Views
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
             _sharedData.GestureController.AddGesture(this, hitGesture);
-
         }
 
         private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
@@ -76,10 +76,11 @@ namespace KineticMath.Views
         void setHitZone()
         {
             _hitZones.Clear();
-            Rect boundaryRect = hitRect.GetBoundaryRect();
+            Rect boundaryRect = hitRect1.GetBoundaryRect();
+            Rect boundaryRect2 = hitRect2.GetBoundaryRect();
             boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
-            Console.WriteLine(boundaryRect.Height);
             _hitZones.Add(boundaryRect);
+            _hitZones.Add(boundaryRect2);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)
@@ -105,26 +106,69 @@ namespace KineticMath.Views
             switch (currentState)
             {
                 case State.HITME:
-                    instructionBlock.Text = "You're doing so well! \nHit the block again to play the game.";
-                    currentState = State.RULES;
+                    if (index == 0)
+                    {
+                        instructionBlock.Text = "You're doing so well! \nHit the block again to start the game.";
+                        bird1.Opacity = 0;
+                        bird2.Opacity = 1;
+                        currentState = State.RULES;
+                    }
                     break;
                 case State.RULES:
-                    this.SendMessage(new ChangeViewMessage(typeof(MainView)));
+                    if (index == 1)
+                    {
+                        startBrickAnimation();
+                    }
                     break;
-                    instructionBlock.Text = "The game is simple, you just need to hit the bird.\n" + 
+                    
+                    /*instructionBlock.Text = "The game is simple, you just need to hit the bird.\n" + 
                                             "Choose the bird with number equal to sum of numbers on righthand side of the sea-saw.\n"+
                                             "Ready? Hit me again to play the game!";
                     currentState = State.HITMEAGAIN;
-                    break;
+                    break;*/
                 case State.HITMEAGAIN:
                     //_sharedData.GestureController.RemoveGesture(handGestures);
                     //_sharedData.GestureController.RemoveGesture(hitGesture);
                     this.SendMessage(new ChangeViewMessage(typeof(MainView)));
                     break;
             }
-            setHitZone();
+            
 
         }
+
+        private void startBrickAnimation(){
+
+            PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
+            PathGeometry animationPath = new PathGeometry();
+            PathFigure pFigure = new PathFigure();
+            //I don't know how to get its position....
+            pFigure.StartPoint = new Point(607, 228);
+            Point endPoint = new Point(200,200);
+            pFigure.Segments.Add(MainView.ComputeCurve(pFigure.StartPoint, endPoint, new Vector(0,0)));
+
+            animationPath.Figures.Add(pFigure);
+            // Freeze the PathGeometry for performance benefits.
+            animationPath.Freeze();
+
+            /*
+            animationPath.Figures = pfc;*/
+            ballAnimation.PathGeometry = animationPath;
+            ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
+            ballAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
+            ballAnimation.AutoReverse = false;
+
+            Storyboard.SetTarget(ballAnimation, bird2);
+            Storyboard.SetTargetProperty(ballAnimation, new PropertyPath("(TopLeft)"));
+            Storyboard ballMove = new Storyboard();
+            ballMove.Children.Add(ballAnimation);
+
+            ballMove.Completed += delegate
+            {
+                this.SendMessage(new ChangeViewMessage(typeof(MainView)));
+            };
+            ballMove.Begin();
+        }
+
         private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
         {
             Canvas.SetLeft(element, pt.X - element.ActualWidth / 2);

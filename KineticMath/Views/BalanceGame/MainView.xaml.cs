@@ -355,7 +355,7 @@ namespace KineticMath.Views
             HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
         }
 
-        private PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
+        public static PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
         {
             PolyBezierSegment pBezierSegment = new PolyBezierSegment();
             //pBezierSegment.Points.Add(new Point(startPoint.X + (endPoint.X - startPoint.X) * 2 / 3, startPoint.Y));
@@ -373,7 +373,7 @@ namespace KineticMath.Views
             return pBezierSegment;
         }
 
-        private double[] ComputeAcceleratePoints(double initialSpeed, double distance, int totalTime)
+        public static double[] ComputeAcceleratePoints(double initialSpeed, double distance, int totalTime)
         {
             // Using SUVAT equation s = ut + 1/2 at^2
             double acceleration = 2 * (distance - initialSpeed * totalTime) / (totalTime * totalTime);
@@ -397,7 +397,6 @@ namespace KineticMath.Views
                 // TODO2: Trigger animation for ball and after animation is triggered
 
                 PointAnimationUsingPath ballAnimation = new PointAnimationUsingPath();
-
                 PathGeometry animationPath = new PathGeometry();
                 PathFigure pFigure = new PathFigure();
                 pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
