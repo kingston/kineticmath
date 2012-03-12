@@ -134,14 +134,14 @@ namespace KineticMath.Views
 
             if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
             {
-                playLabelAnimation(uxLoseLabel, delegate
+                showStatusLabel("Try again!", Brushes.Orange, delegate
                 {
                     game.Reset();
                 });
             }
             else
             {
-                playLabelAnimation(uxNoTimeLabel, delegate
+                showStatusLabel("Time's up!\nTry a new round!", Brushes.Blue, delegate
                 {
                     //Chris: temporary workaround
                     seesaw.resetRightBallPanel();
@@ -158,6 +158,13 @@ namespace KineticMath.Views
                 animation.Stop();
             }
             runningAnimations.Clear();
+        }
+
+        private void showStatusLabel(String labelString, Brush foreground, EventHandler onComplete)
+        {
+            uxStatusLabel.Content = labelString;
+            uxStatusLabel.Foreground = foreground;
+            playLabelAnimation(uxStatusLabel, onComplete);
         }
 
         void playLabelAnimation(Label label, EventHandler onComplete)
@@ -187,7 +194,7 @@ namespace KineticMath.Views
         void game_LevelCompleted(object sender, EventArgs e)
         {
             soundEffect.Play();
-            playLabelAnimation(uxWinLabel, delegate
+            showStatusLabel("Correct!", Brushes.Green, delegate
             {
                 soundEffect.Stop();
                 game.LoadCurrentLevel();
