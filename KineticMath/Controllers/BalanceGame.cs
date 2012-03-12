@@ -84,9 +84,9 @@ namespace KineticMath.Controllers
                 if (mode == Mode.Classic)
                 {
                     LivesLeft--;
-                    LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
                     if (LivesLeft > 0)
                     {
+                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
                         this.TimeLeft = TEN_SECOND;
                     }
                     else
@@ -181,11 +181,14 @@ namespace KineticMath.Controllers
                     {
                         this.LivesLeft--;
                     }
-                    if (LevelLost != null)
+                    if (LivesLeft > 0)
                     {
-                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
+                        if (LevelLost != null)
+                        {
+                            LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
+                        }
                     }
-                    if (LivesLeft <= 0)
+                    else
                     {
                         timer.Stop();
                         if (GameOver != null)

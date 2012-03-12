@@ -42,6 +42,7 @@ namespace KineticMath.Views
         private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
+        private bool gameActive = false;
         public MainView()
         {
             InitializeComponent();
@@ -105,10 +106,11 @@ namespace KineticMath.Views
 
         void game_GameOver(object sender, EventArgs e)
         {
+            gameActive = false;
             BalanceGame bg = (BalanceGame)sender;
 
-            //if (game.mode == BalanceGame.Mode.Classic)
-             //   lifeCanvas.Children.RemoveAt(0);
+            if (game.mode == BalanceGame.Mode.Classic)
+                lifeCanvas.Children.Clear();
 
             modeLabel.Content = "Game Over!";
 
@@ -124,6 +126,7 @@ namespace KineticMath.Views
 
         void game_LevelLost(object sender, EventArgs e)
         {
+            gameActive = false;
             LevelLostEventArgs args = (LevelLostEventArgs) e;
          
             if (game.mode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
@@ -134,6 +137,7 @@ namespace KineticMath.Views
                 showStatusLabel("Try again!", Brushes.Orange, delegate
                 {
                     game.Reset();
+                    if (game.LivesLeft > 0) gameActive = true;
                 });
             }
             else
@@ -144,6 +148,7 @@ namespace KineticMath.Views
                     seesaw.resetRightBallPanel();
                     game.currentLevel++;
                     game.LoadCurrentLevel();
+                    if (game.LivesLeft > 0) gameActive = true;
                 });
             }
         }
@@ -317,6 +322,7 @@ namespace KineticMath.Views
             }
             game.setMode(mode);
             game.NewGame();
+            gameActive = true;
         }
 
         public override void OnViewActivated()
@@ -410,7 +416,7 @@ namespace KineticMath.Views
         {
             var pushedBall = game.HeldBalls[index];
             // Check if any running animations to avoid conflicts
-            if (runningAnimations.Count == 0 && game.PushBall(pushedBall))
+            if (this.gameActive && runningAnimations.Count == 0 && game.PushBall(pushedBall))
             {
                 var ballHolder = this.BallHolders[index];
                 uxMainCanvas.Children.Add(pushedBall);
