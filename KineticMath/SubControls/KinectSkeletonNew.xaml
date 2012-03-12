@@ -7,30 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="560" d:DesignWidth="640">
     <Canvas x:Name="uxMainCanvas">
-        <Rectangle Height="501" Canvas.Left="56" Stroke="Black" Canvas.Top="34" Width="521" Fill="White" d:IsLocked="True"/>
-        <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480 " x:Name="uxKinectImage" Stretch="Fill" Width="640" d:IsLocked="True" />
-        <Ellipse Canvas.Left="270" Canvas.Top="126" Height="50" x:Name="headEllipse" Stroke="Black" Width="50" Fill="Orange" />
-        <Ellipse Canvas.Left="384" Canvas.Top="253" Height="35" x:Name="rightEllipse" Stroke="Black" Width="35" Fill="Blue" />
-        <Ellipse Canvas.Left="158" Canvas.Top="253" Fill="Blue" Height="35" x:Name="leftEllipse" Stroke="Black" Width="35" />
-        <Ellipse Canvas.Left="282" Canvas.Top="174" Fill="PaleGoldenrod" Height="25" x:Name="shoulderCenter" Stroke="Black" Width="25" />
-        <Ellipse Canvas.Left="317" Canvas.Top="182" Fill="SpringGreen" Height="18" x:Name="shoulderRight" Stroke="Black" Width="16" />
-        <Ellipse Canvas.Left="245" Canvas.Top="182" Fill="SpringGreen" Height="18" x:Name="shoulderLeft" Stroke="Black" Width="17" />
-        <Ellipse Canvas.Left="224" Canvas.Top="373" Fill="Salmon" Height="16" x:Name="ankleLeft" Stroke="Black" Width="16" />
-        <Ellipse Canvas.Left="313" Canvas.Top="381" Fill="Salmon" Height="16" x:Name="ankleRight" Stroke="Black" Width="16" />
-        <Ellipse Canvas.Left="214" Canvas.Top="381" Fill="SpringGreen" Height="26" x:Name="footLeft" Stroke="Black" Width="26" />
-        <Ellipse Canvas.Left="321" Canvas.Top="390" Fill="SpringGreen" Height="26" x:Name="footRight" Stroke="Black" Width="26" />
-        <Ellipse Canvas.Left="177" Canvas.Top="253" Fill="Salmon" Height="16" x:Name="wristLeft" Stroke="Black" Width="16" />
-        <Rectangle Fill="#FF545454" Height="72.98" Canvas.Left="183.404" RadiusY="13" RadiusX="13" StrokeThickness="4" Canvas.Top="212.51" Width="26" RenderTransformOrigin="2.447,0.116" Stroke="#FF272727">
-    		<Rectangle.RenderTransform>
-    			<TransformGroup>
-    				<ScaleTransform/>
-    				<SkewTransform/>
-    				<RotateTransform Angle="45"/>
-    				<TranslateTransform X="4.986" Y="44.004"/>
-    			</TransformGroup>
-    		</Rectangle.RenderTransform>
-    	</Rectangle>
-        <Rectangle Fill="#FF545454" Height="72.98" Canvas.Left="221.404" RadiusY="13" RadiusX="13" StrokeThickness="4" Canvas.Top="175.51" Width="26" RenderTransformOrigin="0.5,0.5" Stroke="#FF272727">
+
+        <Rectangle Fill="#FF545454" Height="113.286" Canvas.Left="207.154" RadiusY="7" RadiusX="7" StrokeThickness="4" Canvas.Top="169.607" Width="26" RenderTransformOrigin="0.5,0.5" Stroke="#FF272727">
+
         	<Rectangle.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>

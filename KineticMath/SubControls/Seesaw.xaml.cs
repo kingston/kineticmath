@@ -24,10 +24,27 @@ namespace KineticMath.SubControls
     /// <summary>
     /// Interaction logic for SplashScreen.xaml
     /// </summary>
-    /// 
-
+    //
+	
     public partial class Seesaw : UserControl
     {
+		private bool _isHappy=false;
+		public bool IsHappy{
+			get{ return _isHappy; }
+			set{ 
+				_isHappy = value; 
+				if(_isHappy)
+				{
+					angry.Opacity=0;
+					happy.Opacity=1;
+				}else
+				{
+					angry.Opacity=1;
+					happy.Opacity=0;
+				}
+			}
+		}
+		
         private const int MAX_ROTATION_ANGLE = 30;
         private BalanceGame game;
         private double originalOffset = 0;

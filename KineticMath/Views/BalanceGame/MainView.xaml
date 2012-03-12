@@ -77,7 +77,7 @@
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Panel.ZIndex="100">
-            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="236" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
+            <Label x:Name="finalScore" Canvas.Left="137" Canvas.Top="158" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Are you sure? Try again!" Foreground="Orange" HorizontalContentAlignment="Center" Opacity="0" x:Name="uxLoseLabel" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Congratulations!  You got it!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxWinLabel" />
             <Label Canvas.Left="150" Canvas.Top="65" Width="900" FontSize="60" Content="Time's up! Try next round!" Foreground="Blue" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxNoTimeLabel" />
@@ -98,6 +98,6 @@
 		<MediaElement Name="ding" Source="../../Media/ding.wav" LoadedBehavior="Manual" Volume="4" />
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
         <MediaElement Name="soundEffect" Source="../../Media/tada.mp3" LoadedBehavior="Manual" Volume="1" />
-        <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="385" x:Name="playAgain" Opacity="0" />
+        <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="157" x:Name="playAgain" Opacity="0" />
     </Canvas>
 </views:BaseView>
