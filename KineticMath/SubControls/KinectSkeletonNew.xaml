@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="560" d:DesignWidth="640">
     <Canvas x:Name="uxMainCanvas">
-        <Rectangle Height="501" Canvas.Left="56" Stroke="Black" Canvas.Top="34" Width="521" Fill="White" d:IsLocked="True"/>
         <Rectangle Fill="#FF545454" Height="113.286" Canvas.Left="207.154" RadiusY="7" RadiusX="7" StrokeThickness="4" Canvas.Top="169.607" Width="26" RenderTransformOrigin="0.5,0.5" Stroke="#FF272727">
         	<Rectangle.RenderTransform>
         		<TransformGroup>

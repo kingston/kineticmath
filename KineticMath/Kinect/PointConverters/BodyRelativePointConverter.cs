@@ -26,10 +26,11 @@ namespace KineticMath.Kinect.PointConverters
         //  Foot to Half Way Point: 115 (just above hip)
         private const double SHOULDER_TO_EXTENDED_ARM_RATIO = 230.0 / 150;
 
-        // TODO: Add a meaningful scale for the scale factor
-        private float scaleFactor = 1.0f; //The scale factor to scale from points in Kinect space to canvas space
+        private float scaleFactor = 310.0f; //The scale factor to scale from points in Kinect space to canvas space
         private SkeletonPoint bottomCenterPoint; // The bottom center location of the skeleton
         private int curSkeletonId = 0;
+
+        private List<float> scaleHistory = new List<float>();
 
         public BodyRelativePointConverter(Rect activeRect, GestureController controller)
         {
@@ -59,16 +60,23 @@ namespace KineticMath.Kinect.PointConverters
                 minFootY = leftFoot.Y; // Not sure what's best in this case
             }
 
-            if (skel.TrackingId != curSkeletonId && skel.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked && footTracked)
+            if (skel.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked && footTracked)
             {
                 SkeletonPoint shoulderPos = skel.Joints[JointType.ShoulderCenter].Position;
 
                 // ## Compute scale factor for larger/smaller people based off spine to foot height ##
                 double shoulderHeight = shoulderPos.Y - minFootY; // Get the spinal height and use it a rough guide
                 double fullHeight = SHOULDER_TO_EXTENDED_ARM_RATIO * shoulderHeight; // Get the full height as a scale
-                scaleFactor = (float) (ActiveRectangle.Height / fullHeight);
-
-                curSkeletonId = skel.TrackingId;
+                float scale = (float)(ActiveRectangle.Height / fullHeight);
+                
+                if (skel.TrackingId != curSkeletonId)
+                {
+                    scaleHistory.Clear();
+                    curSkeletonId = skel.TrackingId;
+                }
+                if (scaleHistory.Count > 5) scaleHistory.RemoveAt(0);
+                scaleHistory.Add(scale);
+                scaleFactor = scaleHistory.Average();
             }
             bottomCenterPoint = skel.Joints[JointType.HipCenter].Position;
             bottomCenterPoint.Y = minFootY;
