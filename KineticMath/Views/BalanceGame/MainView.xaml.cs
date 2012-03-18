@@ -165,12 +165,12 @@ namespace KineticMath.Views
 
         private void showStatusLabel(String labelString, Brush foreground, EventHandler onComplete)
         {
-            uxStatusLabel.Content = labelString;
+            uxStatusLabel.Text = labelString;
             uxStatusLabel.Foreground = foreground;
             playLabelAnimation(uxStatusLabel, onComplete);
         }
 
-        void playLabelAnimation(Label label, EventHandler onComplete)
+        void playLabelAnimation(FrameworkElement label, EventHandler onComplete)
         {
             DoubleAnimation appearAnimation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(0)));
             appearAnimation.BeginTime = TimeSpan.FromSeconds(0.0);
