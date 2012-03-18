@@ -77,7 +77,8 @@ namespace KineticMath.Controllers
             gameTimer = new DispatcherTimer();
             gameTimer.Tick += new EventHandler(timerHandler);
             currentMode = Mode.Classic;
-            HeldBalls = new ObservableCollection<SeesawObject>();
+            PlayerOneHeldBalls = new ObservableCollection<SeesawObject>();
+            PlayerTwoHeldBalls = new ObservableCollection<SeesawObject>();
             LeftBalanceBalls = new ObservableCollection<SeesawObject>();
             RightBalanceBalls = new ObservableCollection<SeesawObject>();
         }
@@ -99,6 +100,20 @@ namespace KineticMath.Controllers
         public event EventHandler GameOver;
 
         private int currentLevel;
+
+        private bool _twoPlayerMode;
+
+        public bool TwoPlayerMode
+        {
+            get
+            {
+                return _twoPlayerMode;
+            }
+            set
+            {
+                _twoPlayerMode = value;
+            }
+        }
 
         /// <summary>
         /// Starts a new game and resets everything
@@ -202,8 +217,10 @@ namespace KineticMath.Controllers
                         }
                         currentLevel++;
                     }
+                    if (currentMode == Mode.Classic)
+                        TimeLeft = CLASSIC_LEVEL_TIME;
                 }
-                else
+                else if (!_twoPlayerMode || RightBalanceBalls.Any(s => s is Bird))
                 {
                     if (currentMode == Mode.Classic)
                     {
@@ -224,14 +241,15 @@ namespace KineticMath.Controllers
                             GameOver(this, EventArgs.Empty);
                         }
                     }
-                  
+                    if (currentMode == Mode.Classic)
+                        TimeLeft = CLASSIC_LEVEL_TIME;
+
                 }
             }
-            if (currentMode == Mode.Classic)
-                TimeLeft = CLASSIC_LEVEL_TIME;
         }
 
-        private int[] curBalls;
+        private int[] curOneBalls;
+        private int[] curTwoBalls;
         private int[] targetRightSide;
 
         public void LoadCurrentLevel()
@@ -239,16 +257,46 @@ namespace KineticMath.Controllers
             switch (currentLevel)
             {
                 case 1:
-                    curBalls = new int[] { 2, 4, 5, 6 };
-                    targetRightSide = new int[] { 2, 3 };
+                    if (_twoPlayerMode)
+                    {
+                        curOneBalls = new int[] { 2, 4, 5, 7 };
+                        curTwoBalls = new int[] { 1, 2, 3, 4 };
+                        targetRightSide = new int[] { 2, 4 };
+                    }
+                    else
+                    {
+                        curOneBalls = new int[] { 2, 4, 5, 6 };
+                        curTwoBalls = new int[] { };
+                        targetRightSide = new int[] { 2, 3 };
+                    }
                     break;
                 case 2:
-                    curBalls = new int[] { 5, 7, 3, 6 };
-                    targetRightSide = new int[] { 5, 1 };
+                    if (_twoPlayerMode)
+                    {
+                        curOneBalls = new int[] { 8, 10, 6, 9 };
+                        curTwoBalls = new int[] { 1, 2, 4, 3 };
+                        targetRightSide = new int[] { 5, 2 };
+                    }
+                    else
+                    {
+                        curOneBalls = new int[] { 5, 7, 3, 6 };
+                        curTwoBalls = new int[] { };
+                        targetRightSide = new int[] { 5, 1 };
+                    }
                     break;
                 case 3:
-                    curBalls = new int[] { 2, 4, 6, 3 };
-                    targetRightSide = new int[] { 4, 2 };
+                    if (_twoPlayerMode)
+                    {
+                        curOneBalls = new int[] { 2, 4, 6, 5 };
+                        curTwoBalls = new int[] { 2, 3, 5, 6 };
+                        targetRightSide = new int[] { 1, 2 };
+                    }
+                    else
+                    {
+                        curOneBalls = new int[] { 2, 4, 6, 3 };
+                        curTwoBalls = new int[] { };
+                        targetRightSide = new int[] { 4, 2 };
+                    }
                     break;
                 default:
                     Random rand = new Random();
@@ -261,49 +309,37 @@ namespace KineticMath.Controllers
                         rightSideNum = 3;
                     else
                         rightSideNum = 4;
-                    targetRightSide = new int[rightSideNum];
-
                     int targetAnswer = prevAnswer + rand.Next(2, Math.Max(currentLevel * 2 / 3, 4));
-                    for (int i = 0; i < targetRightSide.Length - 1; i++)
-                    {
-                        targetRightSide[i] = targetAnswer / rightSideNum;
-                    }
-                    targetRightSide[targetRightSide.Length - 1] = 0;
-                    targetRightSide[targetRightSide.Length - 1] = targetAnswer - targetRightSide.Sum();
+                    targetRightSide = GetRandomPartsToSum(rightSideNum, targetAnswer);
 
-                    for (int i = 0; i < targetRightSide.Length - 1; i++)
+                    int secondPlayerPart = 0;
+                    if (_twoPlayerMode)
                     {
-                        int randMove = rand.Next(0, Math.Max(targetRightSide[i] / 2, 1));
-                        int side = rand.Next(1, 100) < 50 ? -1 : 1;
-                        targetRightSide[i] += side * randMove;
-                        targetRightSide[i + 1] += -side * randMove;
+                        // Add second player's parts as well
+                        secondPlayerPart = rand.Next(2, currentLevel * 3);
+
+                        // Second player's answer set
+                        List<int> playerTwoAnswers = GetAnswerSet(secondPlayerPart);
+
+                        curTwoBalls = new int[4];
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int index = rand.Next(0, playerTwoAnswers.Count - 1);
+                            curTwoBalls[i] = playerTwoAnswers[index];
+                            playerTwoAnswers.RemoveAt(index);
+                        }
                     }
 
-                    int answer = targetRightSide.Sum();
+                    int answer = targetRightSide.Sum() + secondPlayerPart;
 
                     // Build answer set
-                    List<int> answerSet = new List<int>();
-                    int randOffset, sign;
-                    // 0: the real answer
-                    answerSet.Add(answer);
-                    // 1: answer +- 1~3
-                    randOffset = rand.Next(1, 3);
-                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
-                    answerSet.Add(answer + sign * randOffset);
-                    // 2: answer +- 10
-                    randOffset = 10;
-                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
-                    answerSet.Add(answer + sign * randOffset);
-                    // 3: answer +- 10 +- 1~3
-                    randOffset += rand.Next(1, 3);
-                    sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
-                    answerSet.Add(answer + sign * randOffset);
+                    List<int> answerSet = GetAnswerSet(answer);
 
-                    curBalls = new int[4];
+                    curOneBalls = new int[4];
                     for (int i = 0; i < 4; i++)
                     {
                         int index = rand.Next(0, answerSet.Count - 1);
-                        curBalls[i] = answerSet[index];
+                        curOneBalls[i] = answerSet[index];
                         answerSet.RemoveAt(index);
                     }
                     break;
@@ -311,15 +347,67 @@ namespace KineticMath.Controllers
             SetupLevel();
         }
 
+        private List<int> GetAnswerSet(int answer)
+        {
+            Random rand = new Random();
+            List<int> answerSet = new List<int>();
+            int randOffset, sign;
+            // 0: the real answer
+            answerSet.Add(answer);
+            // 1: answer +- 1~3
+            randOffset = rand.Next(1, 3);
+            sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+            answerSet.Add(answer + sign * randOffset);
+            // 2: answer +- 10
+            randOffset = 10;
+            sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+            answerSet.Add(answer + sign * randOffset);
+            // 3: answer +- 10 +- 1~3
+            randOffset += rand.Next(1, 3);
+            sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
+            answerSet.Add(answer + sign * randOffset);
+            return answerSet;
+        }
+
+        /// <summary>
+        /// Produces a random array of integers that sum to a target sum
+        /// </summary>
+        /// <param name="targetSum"></param>
+        /// <returns></returns>
+        private int[] GetRandomPartsToSum(int numParts, int targetSum)
+        {
+            int[] parts = new int[numParts];
+            Random rand = new Random();
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                parts[i] = targetSum / numParts;
+            }
+            parts[targetRightSide.Length - 1] = targetSum - targetRightSide.Sum();
+
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                int randMove = rand.Next(0, Math.Max(targetRightSide[i] / 2, 1));
+                int side = rand.NextDouble() < 0.5 ? -1 : 1;
+                parts[i] += side * randMove;
+                parts[i + 1] += -side * randMove;
+            }
+            return parts;
+        }
+
         private void SetupLevel()
         {
             if (LevelReset != null) LevelReset(null, EventArgs.Empty);
-            HeldBalls.Clear();
+            PlayerOneHeldBalls.Clear();
+            PlayerTwoHeldBalls.Clear();
             LeftBalanceBalls.Clear();
             RightBalanceBalls.Clear();
-            foreach (var weight in curBalls)
+            foreach (var weight in curOneBalls)
             {
-                HeldBalls.Add(new Bird(weight.ToString(), weight));
+                PlayerOneHeldBalls.Add(new Bird(weight.ToString(), weight));
+            }
+            foreach (var weight in curTwoBalls)
+            {
+                PlayerTwoHeldBalls.Add(new Bird(weight.ToString(), weight));
             }
             foreach (var weight in targetRightSide)
             {
@@ -333,7 +421,7 @@ namespace KineticMath.Controllers
         /// <returns></returns>
         public int GetMaximumValue()
         {
-            return Math.Max(curBalls.Sum(), targetRightSide.Sum());
+            return Math.Max(curOneBalls.Sum(), targetRightSide.Sum() + curTwoBalls.Sum());
         }
 
         /// <summary>
@@ -343,9 +431,13 @@ namespace KineticMath.Controllers
         public bool PushBall(SeesawObject ball)
         {
             if (ball == null) return false;
-            int ballIdx = this.HeldBalls.IndexOf(ball);
-            if (ballIdx == -1) return false;
-            this.HeldBalls[ballIdx] = null;
+            int ballOneIdx = this.PlayerOneHeldBalls.IndexOf(ball);
+            int ballTwoIdx = this.PlayerTwoHeldBalls.IndexOf(ball);
+
+            if (ballOneIdx > -1) this.PlayerOneHeldBalls[ballOneIdx] = null;
+            else if (ballTwoIdx > -1) this.PlayerTwoHeldBalls[ballTwoIdx] = null;
+            else return false;
+
             return true;
         }
 
@@ -387,7 +479,9 @@ namespace KineticMath.Controllers
             return RightBalanceBalls.Sum(s => s.Weight) - LeftBalanceBalls.Sum(s => s.Weight);
         }
 
-        public ObservableCollection<SeesawObject> HeldBalls { get; private set; }
+        public ObservableCollection<SeesawObject> PlayerOneHeldBalls { get; private set; }
+
+        public ObservableCollection<SeesawObject> PlayerTwoHeldBalls { get; private set; }
 
         public ObservableCollection<SeesawObject> LeftBalanceBalls { get; private set; }
 

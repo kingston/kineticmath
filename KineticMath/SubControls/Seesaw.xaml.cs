@@ -101,16 +101,18 @@ namespace KineticMath.SubControls
                 {
                     foreach (Object obj in rightBallPanel.Children)
                     {
+                        if (obj is Pig)
+                        {
+                            Path shell = ((Pig)obj).outside;
+                            shell.BeginAnimation(UIElement.OpacityProperty, null);
+                            shell.Opacity = 1;
 
-                        Path shell = ((Pig)obj).outside;
-                        shell.BeginAnimation(UIElement.OpacityProperty, null);
-                        shell.Opacity = 1;
-
-                        shellAnimation = new DoubleAnimation(1, 0, duration);
-                        shellAnimation.BeginTime = TimeSpan.FromSeconds(0);
-                        Storyboard.SetTarget(shellAnimation, shell);
-                        Storyboard.SetTargetProperty(shellAnimation, new PropertyPath(UIElement.OpacityProperty));
-                        sb.Children.Add(shellAnimation);
+                            shellAnimation = new DoubleAnimation(1, 0, duration);
+                            shellAnimation.BeginTime = TimeSpan.FromSeconds(0);
+                            Storyboard.SetTarget(shellAnimation, shell);
+                            Storyboard.SetTargetProperty(shellAnimation, new PropertyPath(UIElement.OpacityProperty));
+                            sb.Children.Add(shellAnimation);
+                        }
                     }
                 }
             }
@@ -180,14 +182,11 @@ namespace KineticMath.SubControls
         {
             if (isLeft)
             {
-                obj.OnLeftSeesaw = true;
                 leftBallPanel.Children.Add(obj);
             }
             else
             {
                 rightBallPanel.Children.Add(obj);
-                Canvas.SetBottom(obj, currentBottom);
-                currentBottom += obj.Height;
             }
         }
 
@@ -196,18 +195,26 @@ namespace KineticMath.SubControls
         {
             if (isLeft)
             {
-                obj.OnLeftSeesaw = false;
                 leftBallPanel.Children.Remove(obj);
             }
             else
             {
                 rightBallPanel.Children.Remove(obj);
             }
-            RenderWeights();
         }
 
         private void RenderWeights()
         {
+            // Render right panel manually
+            double bottom = 0;
+            foreach (FrameworkElement child in rightBallPanel.Children)
+            {
+                Canvas.SetLeft(child, 0);
+                // TODO: Hack fix
+                if (child is Bird) child.Height = 80;
+                Canvas.SetTop(child, rightBallPanel.Height - bottom - child.Height);
+                bottom += child.Height;
+            }
             // Work out rotation
             double angle = game.GetBalanceOffset() / game.GetMaximumValue() * MAX_ROTATION_ANGLE;
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
