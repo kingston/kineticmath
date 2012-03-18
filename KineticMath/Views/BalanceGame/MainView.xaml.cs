@@ -79,7 +79,7 @@ namespace KineticMath.Views
                 notime.Play();
             }
 
-            if (game.mode == BalanceGame.Mode.Challenge)
+            if (game.CurrentMode == BalanceGame.Mode.Challenge)
             {
                 if (bg.TimeLeft < 10)
                 {
@@ -87,7 +87,7 @@ namespace KineticMath.Views
                     ding.Play();
                 }
             }
-            else if (game.mode == BalanceGame.Mode.Classic)
+            else if (game.CurrentMode == BalanceGame.Mode.Classic)
             {
                 if (bg.TimeLeft > 0)
                 {
@@ -109,7 +109,7 @@ namespace KineticMath.Views
             gameActive = false;
             BalanceGame bg = (BalanceGame)sender;
 
-            if (game.mode == BalanceGame.Mode.Classic)
+            if (game.CurrentMode == BalanceGame.Mode.Classic)
                 lifeCanvas.Children.Clear();
 
             modeLabel.Content = "Game Over!";
@@ -129,7 +129,7 @@ namespace KineticMath.Views
             gameActive = false;
             LevelLostEventArgs args = (LevelLostEventArgs) e;
          
-            if (game.mode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
+            if (game.CurrentMode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
                 lifeCanvas.Children.RemoveAt(0);
 
             if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
@@ -144,9 +144,7 @@ namespace KineticMath.Views
             {
                 showStatusLabel("Time's up!\nTry a new round!", Brushes.Blue, delegate
                 {
-                    //Chris: temporary workaround
                     seesaw.resetRightBallPanel();
-                    game.currentLevel++;
                     game.LoadCurrentLevel();
                     if (game.LivesLeft > 0) gameActive = true;
                 });
@@ -320,7 +318,7 @@ namespace KineticMath.Views
                     ChallengeModeGUI.Visibility = System.Windows.Visibility.Hidden;
                     break;
             }
-            game.setMode(mode);
+            game.CurrentMode = mode;
             game.NewGame();
             gameActive = true;
         }
