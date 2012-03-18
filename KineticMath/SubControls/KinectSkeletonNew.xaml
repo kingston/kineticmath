@@ -66,10 +66,5 @@
     	<Path x:Name="ellipse" Data="M70,28.5 C70,43.135546 54.777681,55 36,55 17.222319,55 2,43.135546 2,28.5 2,13.864454 17.222319,23 36,23 54.777681,23 70,13.864454 70,28.5 z" Fill="#FFF7E77C" Height="45.816" Canvas.Left="253.016" Stretch="Fill" Stroke="#FF272727" StrokeThickness="4" Canvas.Top="140.184" Width="84.984" Opacity="0"/>
         <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Canvas.ZIndex="1" />
         <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Canvas.ZIndex="1" />
-        <!--<ec:PathListBox Height="57" Canvas.Left="261" Canvas.Top="126" Width="72">
-    		<ec:PathListBox.LayoutPaths>
-    			<ec:LayoutPath SourceElement="{Binding ElementName=ellipse}"/>
-    		</ec:PathListBox.LayoutPaths>
-    	</ec:PathListBox>-->
     </Canvas>
 </UserControl>

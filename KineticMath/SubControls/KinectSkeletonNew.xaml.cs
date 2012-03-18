@@ -34,13 +34,10 @@ namespace KineticMath.SubControls
         public KinectSkeletonNew()
         {
             InitializeComponent();
-            //Force video to the background
-            //Canvas.SetZIndex(uxKinectImage, -10000);
         }
 
         public void InitializeSkeleton(GestureController gestureController, IPointConverter pointConverter)
         {
-            //kinectService.ImageFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(kinectService_ImageFrameReady);
             gestureController.SkeletonPreProcessed += new EventHandler<SkeletonPreProcessedEventArgs>(gestureController_SkeletonPreProcessed);
             this.pointConverter = pointConverter;
         }
@@ -62,7 +59,6 @@ namespace KineticMath.SubControls
             }
             // Position elements
             PositionBody(uxMainBody, skeleton);
-            //PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
             PositionElement(uxHeadPart, skeleton.Joints[JointType.Head], true);
             PositionElement(uxLeftHand, skeleton.Joints[JointType.HandLeft], true);
             PositionElement(uxRightHand, skeleton.Joints[JointType.HandRight], true);
@@ -147,45 +143,7 @@ namespace KineticMath.SubControls
             line.X2 = pt2.X;
             line.Y1 = pt1.Y;
             line.Y2 = pt2.Y;
-        }
-
-        void kinectService_SkeletonUpdated(object sender, SkeletonEventArgs e)
-        {
-            //get the first tracked skeleton
-            Skeleton skeleton = (from s in e.Skeletons
-                                     where s.TrackingState == SkeletonTrackingState.Tracked
-                                     select s).FirstOrDefault();
-
-
-            if (skeleton != null)
-            {
-                //set positions on our joints of interest (already defined as Ellipse objects in the xaml)
-                //SetEllipsePosition(headEllipse, skeleton.Joints[JointType.Head]);
-                //SetEllipsePosition(leftEllipse, skeleton.Joints[JointType.HandLeft]);
-                //SetEllipsePosition(rightEllipse, skeleton.Joints[JointType.HandRight]);
-                //SetEllipsePosition(shoulderCenter, skeleton.Joints[JointType.ShoulderCenter]);
-                //SetEllipsePosition(shoulderRight, skeleton.Joints[JointType.ShoulderRight]);
-                //SetEllipsePosition(shoulderLeft, skeleton.Joints[JointType.ShoulderLeft]);
-                //SetEllipsePosition(ankleRight, skeleton.Joints[JointType.AnkleRight]);
-                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                //SetEllipsePosition(elbowLeft, skeleton.Joints[JointType.ElbowLeft]);
-                //SetEllipsePosition(elbowRight, skeleton.Joints[JointType.ElbowRight]);
-                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                //SetEllipsePosition(kneeLeft, skeleton.Joints[JointType.KneeLeft]);
-                //SetEllipsePosition(kneeRight, skeleton.Joints[JointType.KneeRight]);
-                //SetEllipsePosition(hipCenter, skeleton.Joints[JointType.HipCenter]);
-            }
-        }
-
-       
+        }      
 
         private void SetEllipsePosition(Ellipse ellipse, Joint joint)
         {
@@ -199,12 +157,6 @@ namespace KineticMath.SubControls
                 byte val = (byte)(Math.Floor((joint.Position.Z - 0.8) * 255 / 2));
                 ellipse.Fill = new SolidColorBrush(Color.FromRgb(val, val, val));
             }
-        }
-
-        void kinectService_ImageFrameReady(object sender, ColorImageFrameReadyEventArgs e)
-        {
-            //Automagically create BitmapSource for Video
-            //uxKinectImage.Source = e.OpenColorImageFrame().ToBitmapSource();
         }
     }
 }

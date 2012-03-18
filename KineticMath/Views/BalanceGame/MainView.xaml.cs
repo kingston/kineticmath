@@ -346,21 +346,13 @@ namespace KineticMath.Views
         {
             bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
 
-            JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.Head);
-            handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            _sharedData.GestureController.AddGesture(this, handGestures);
-
-            // TODO: Remove dead code (hand push gesture no longer active)
-            //HandPushGesture handPushGesture = new HandPushGesture();
-            //handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
-            //_sharedData.GestureController.AddGesture(this, handPushGesture);
             if (hitGesture == null)
             {
                 hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
-            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
             _sharedData.GestureController.AddGesture(this, hitGesture);
+            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)
@@ -368,27 +360,9 @@ namespace KineticMath.Views
             HitBall(e.RectIdx, e.HitVelocity);
         }
 
-        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
-        {
-            // Show the movement on the screen
-            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
-            // TODO2: Make pretty way to reflect hand movements
-            //if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
-            //else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
-            //else if (e.JointType == JointType.Head) SetCanvasLocationCentered(uxTester, pt);
-        }
-
-        void handPushGesture_HandPushed(object sender, HandPushedEventArgs e)
-        {
-            HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
-        }
-
         public static PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
         {
             PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-            //pBezierSegment.Points.Add(new Point(startPoint.X + (endPoint.X - startPoint.X) * 2 / 3, startPoint.Y));
-            //pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - startPoint.Y) * 2 / 3));
-            //pBezierSegment.Points.Add(endPoint);
             // Compute path
             int divisions = 10; // The granularity of the path
             double[] xPoints = ComputeAcceleratePoints(velocity.X, endPoint.X - startPoint.X, divisions);
@@ -461,14 +435,6 @@ namespace KineticMath.Views
                 selectingBall = true;
                 ballMove.Begin();
                 // TODO2: Trigger animation for ball and after animation is triggered
-
-                /*Debug*
-                Path myPath = new Path();
-                myPath.Stroke = Brushes.Black;
-                myPath.StrokeThickness = 1;
-                myPath.Data = animationPath;
-                uxMainCanvas.Children.Add(myPath);
-                /**/
             }
         }
 
@@ -510,11 +476,6 @@ namespace KineticMath.Views
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
                 HandlePushEvent(skelPt);
             }
-        }
-
-        private void Background_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
