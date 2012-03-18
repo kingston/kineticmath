@@ -6,21 +6,67 @@
              xmlns:ec="http://schemas.microsoft.com/expression/2010/controls" x:Class="KineticMath.SubControls.KinectSkeletonNew" 
              mc:Ignorable="d" 
              d:DesignHeight="560" d:DesignWidth="640">
+    <UserControl.Resources>
+        <Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <Grid>
+                            <Ellipse x:Name="uxLeftHand" Fill="#7F4D4D4D"/>
+                            <Image Margin="-16.5,-18,-14.5,-19" Source="/KineticMath;component/Images/image0.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Opacity="0.8">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="0.5" ScaleX="-0.5"/>
+                                        <SkewTransform AngleY="0" AngleX="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ThumbStyle1" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <GroupItem x:Name="uxLeftHand" Content="GroupItem" Style="{DynamicResource GroupItemStyle1}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ThumbStyle2" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <GroupItem x:Name="uxRightHand" Content="GroupItem" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource GroupItemStyle1}">
+                                <GroupItem.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                        <SkewTransform AngleY="0" AngleX="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </GroupItem.RenderTransform>
+                            </GroupItem>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Canvas x:Name="uxMainCanvas">
     	<Path StrokeLineJoin="Round" Data="M2,7 C2,4.2385763 4.2385763,2 7,2 L81,2 C83.761424,2 86,4.2385763 86,7 L79,103 C79,105.76142 76.761424,108 74,108 L14,108 C11.238576,108 9,105.76142 9,103 z" Name="uxMainBody" Fill="#FF272727" Canvas.Left="245" Stroke="#FF272727" StrokeThickness="30" Canvas.ZIndex="1"  Canvas.Top="183" />
         <Ellipse Fill="#FF272727" Height="104" Name="uxHeadPart" RenderTransformOrigin="0.5,0" Canvas.Left="244" StrokeThickness="0" Canvas.Top="96" Width="104" Stroke="#FF272727"/>
     	<Path x:Name="ellipse" Data="M70,28.5 C70,43.135546 54.777681,55 36,55 17.222319,55 2,43.135546 2,28.5 2,13.864454 17.222319,23 36,23 54.777681,23 70,13.864454 70,28.5 z" Fill="#FFF7E77C" Height="45.816" Canvas.Left="253.016" Stretch="Fill" Stroke="#FF272727" StrokeThickness="4" Canvas.Top="140.184" Width="84.984" Opacity="0"/>
-        <Grid Height="95.323" Canvas.Left="350.149" Canvas.Top="176.003" Width="48.101" RenderTransformOrigin="0.5,0.5">
-        	<Grid.RenderTransform>
-        		<TransformGroup>
-        			<ScaleTransform ScaleY="1" ScaleX="-1"/>
-        			<SkewTransform AngleY="0" AngleX="0"/>
-        			<RotateTransform Angle="0"/>
-        			<TranslateTransform/>
-        		</TransformGroup>
-        	</Grid.RenderTransform>
-        </Grid>
-    	<!--<ec:PathListBox Height="57" Canvas.Left="261" Canvas.Top="126" Width="72">
+        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Canvas.ZIndex="1" />
+        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Canvas.ZIndex="1" />
+        <!--<ec:PathListBox Height="57" Canvas.Left="261" Canvas.Top="126" Width="72">
     		<ec:PathListBox.LayoutPaths>
     			<ec:LayoutPath SourceElement="{Binding ElementName=ellipse}"/>
     		</ec:PathListBox.LayoutPaths>

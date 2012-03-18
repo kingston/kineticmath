@@ -64,6 +64,8 @@ namespace KineticMath.SubControls
             PositionBody(uxMainBody, skeleton);
             //PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
             PositionElement(uxHeadPart, skeleton.Joints[JointType.Head], true);
+            PositionElement(uxLeftHand, skeleton.Joints[JointType.HandLeft], true);
+            PositionElement(uxRightHand, skeleton.Joints[JointType.HandRight], true);
         }
 
         private void PositionBody(Path body, Skeleton skel)

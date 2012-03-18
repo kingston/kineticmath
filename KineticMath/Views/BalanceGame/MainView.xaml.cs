@@ -373,9 +373,9 @@ namespace KineticMath.Views
             // Show the movement on the screen
             SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
             // TODO2: Make pretty way to reflect hand movements
-            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
-            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
-            else if (e.JointType == JointType.Head) SetCanvasLocationCentered(uxTester, pt);
+            //if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
+            //else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
+            //else if (e.JointType == JointType.Head) SetCanvasLocationCentered(uxTester, pt);
         }
 
         void handPushGesture_HandPushed(object sender, HandPushedEventArgs e)

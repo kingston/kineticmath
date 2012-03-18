@@ -69,6 +69,7 @@ namespace KineticMath.Views
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
             _sharedData.GestureController.AddGesture(this, hitGesture);
+            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
         }
 
         private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
