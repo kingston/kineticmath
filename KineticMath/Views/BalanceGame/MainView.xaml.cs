@@ -484,7 +484,9 @@ namespace KineticMath.Views
                     selectingBall = false;
                     uxMainCanvas.Children.Remove(pushedBall);
                     runningAnimations.Remove(ballMove);
-                    game.AddBallToBalance(pushedBall, isPlayerOne); // push ball to left side
+                    // Reset ball move animation
+                    pushedBall.BeginAnimation(SeesawObject.TopLeftProperty, null);
+                    game.AddBallToBalance(pushedBall, isPlayerOne);
                 };
                 selectingBall = true;
                 ballMove.Begin();

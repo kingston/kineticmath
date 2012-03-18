@@ -23,9 +23,7 @@ namespace KineticMath.SubControls
 {
     /// <summary>
     /// Interaction logic for SplashScreen.xaml
-    /// </summary>
-    //
-	
+    /// </summary>	
     public partial class Seesaw : UserControl
     {
 		private bool _isHappy=false;
@@ -48,7 +46,6 @@ namespace KineticMath.SubControls
         private const int MAX_ROTATION_ANGLE = 30;
         private BalanceGame game;
         private double originalOffset = 0;
-        private double currentBottom = 0;
         private const double rightBallPanelLeft = 192;
         private double rightBallPanelLeftAdjustment = 0.0;
         List<Storyboard> runningAnimations;
@@ -136,7 +133,6 @@ namespace KineticMath.SubControls
         void game_LevelReset(object sender, EventArgs e)
         {
             originalOffset = 0;
-            currentBottom = 0;
             // TODO2: Terminate all animations
             runningAnimations.Clear();
             // Reset rightBallPanel position
@@ -167,7 +163,7 @@ namespace KineticMath.SubControls
                 Panel panel = isLeft ? (Panel) leftBallPanel : (Panel) rightBallPanel;
                 panel.Children.Clear();
             }
-            int offset = (int) game.GetBalanceOffset();
+            int offset = (int)game.GetBalanceOffset();
             if (offset != originalOffset)
             {
                 // TODO2: Trigger balance animation
@@ -209,22 +205,23 @@ namespace KineticMath.SubControls
             double bottom = 0;
             foreach (FrameworkElement child in rightBallPanel.Children)
             {
-                Canvas.SetLeft(child, 0);
-                // TODO: Hack fix
-                if (child is Bird) child.Height = 80;
-                Canvas.SetTop(child, rightBallPanel.Height - bottom - child.Height);
+                // Center child
+                child.UpdateLayout();
+                Canvas.SetLeft(child, (rightBallPanel.Width - child.ActualWidth) / 2);
+                Canvas.SetTop(child, rightBallPanel.Height - bottom - child.ActualHeight);
+                child.Opacity = 0.5;
                 bottom += child.Height;
             }
             // Work out rotation
             double angle = game.GetBalanceOffset() / game.GetMaximumValue() * MAX_ROTATION_ANGLE;
             uxBalanceCanvas.RenderTransform = new RotateTransform(angle);
 
-            DoubleAnimationUsingKeyFrames rotateAnimation = FindResource("doubleAnimation") as DoubleAnimationUsingKeyFrames;
+            //DoubleAnimationUsingKeyFrames rotateAnimation = FindResource("doubleAnimation") as DoubleAnimationUsingKeyFrames;
 
-            Storyboard.SetTarget(rotateAnimation, uxBalanceCanvas);
-            Storyboard.SetTargetProperty(rotateAnimation,  new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)"));
-            Storyboard ballMove = new Storyboard();
-            ballMove.Children.Add(rotateAnimation);
+            //Storyboard.SetTarget(rotateAnimation, uxBalanceCanvas);
+            //Storyboard.SetTargetProperty(rotateAnimation,  new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)"));
+            //Storyboard ballMove = new Storyboard();
+            //ballMove.Children.Add(rotateAnimation);
         }
     }
 }

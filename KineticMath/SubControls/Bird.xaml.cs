@@ -19,18 +19,7 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class Bird : SeesawObject
     {
-        public static double BIRD_HEIGHT = 110;
-
-        private bool _onLeftSeeSaw;
-        public bool OnLeftSeeSaw
-        {
-            get { return _onLeftSeeSaw; }
-            set { 
-                _onLeftSeeSaw = value;
-                if (value)
-                    ValueText.RenderTransform = new ScaleTransform(1, -1);
-            }
-        }
+        public static double BIRD_HEIGHT = 75;
         
         public String Text
         {

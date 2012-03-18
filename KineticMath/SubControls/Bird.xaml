@@ -6,7 +6,7 @@
              xmlns:src="clr-namespace:KineticMath.SubControls"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="117">
-    <Canvas Name="canvas" Width="125" Height="80">
+    <Canvas Name="canvas" Width="117" Height="75">
         <Viewbox Height="73.321" Width="117">
         	<Canvas Width="167.018" Height="104.667">
         		<Path Width="37.0078" Height="18.504" Canvas.Left="128.509" Canvas.Top="41.4459" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 128.509,42.9876L 131.592,41.4459L 165.517,46.6882L 163.358,49.9382L 156.881,51.3145L 154.415,55.1712L 148.246,55.4779L 147.013,59.9499L 128.509,59.9499L 128.509,42.9876 Z "/>
