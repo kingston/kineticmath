@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -29,8 +30,33 @@ namespace KineticMath.SubControls
                 _onLeftSeeSaw = value;
                 if (value)
                     ValueText.RenderTransform = new ScaleTransform(1, -1);
+
             }
         }
+
+        private bool _isflying;
+
+        public bool IsFlying
+        {
+            get { return _isflying; }
+            set
+            {
+                _isflying = value;
+                Storyboard sb = (Storyboard) this.FindResource("Flying");
+                Console.WriteLine("isFlying = " + value +"  "+sb.ToString());
+                if (_isflying)
+                {
+                    sb.Resume();
+                }
+                else
+                    sb.Pause();
+
+                
+            }
+        }
+
+        public delegate void StopFlyingEventHandler(Object sender, EventArgs e);
+        public event StopFlyingEventHandler StopFlying;
         
         public String Text
         {

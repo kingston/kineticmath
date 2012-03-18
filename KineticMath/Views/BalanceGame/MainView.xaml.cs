@@ -42,6 +42,7 @@ namespace KineticMath.Views
         private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
+        private bool gameActive = false;
         public MainView()
         {
             InitializeComponent();
@@ -68,17 +69,19 @@ namespace KineticMath.Views
 
         void timerCallback(object sender, EventArgs e)
         {
+            if (!gameActive) return;
             BalanceGame bg = (BalanceGame) sender;
             scoreText.TextContent = bg.Score;
             timeText.Content = bg.TimeLeft;
 
             if (bg.TimeLeft == 0)
             {
+                gameActive = false;
                 notime.Stop();
                 notime.Play();
             }
 
-            if (game.mode == BalanceGame.Mode.Challenge)
+            if (game.CurrentMode == BalanceGame.Mode.Challenge)
             {
                 if (bg.TimeLeft < 10)
                 {
@@ -86,7 +89,7 @@ namespace KineticMath.Views
                     ding.Play();
                 }
             }
-            else if (game.mode == BalanceGame.Mode.Classic)
+            else if (game.CurrentMode == BalanceGame.Mode.Classic)
             {
                 if (bg.TimeLeft > 0)
                 {
@@ -105,10 +108,11 @@ namespace KineticMath.Views
 
         void game_GameOver(object sender, EventArgs e)
         {
+            gameActive = false;
             BalanceGame bg = (BalanceGame)sender;
 
-            //if (game.mode == BalanceGame.Mode.Classic)
-             //   lifeCanvas.Children.RemoveAt(0);
+            if (game.CurrentMode == BalanceGame.Mode.Classic)
+                lifeCanvas.Children.Clear();
 
             modeLabel.Content = "Game Over!";
 
@@ -124,9 +128,10 @@ namespace KineticMath.Views
 
         void game_LevelLost(object sender, EventArgs e)
         {
+            gameActive = false;
             LevelLostEventArgs args = (LevelLostEventArgs) e;
          
-            if (game.mode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
+            if (game.CurrentMode == BalanceGame.Mode.Classic && lifeCanvas.Children.Count != 0)
                 lifeCanvas.Children.RemoveAt(0);
 
             if (args.reason == LevelLostEventArgs.Reason.WrongAnswer)
@@ -134,16 +139,16 @@ namespace KineticMath.Views
                 showStatusLabel("Try again!", Brushes.Orange, delegate
                 {
                     game.Reset();
+                    if (game.LivesLeft > 0) { gameActive = true; }
                 });
             }
             else
             {
                 showStatusLabel("Time's up!\nTry a new round!", Brushes.Blue, delegate
                 {
-                    //Chris: temporary workaround
                     seesaw.resetRightBallPanel();
-                    game.currentLevel++;
                     game.LoadCurrentLevel();
+                    if (game.LivesLeft > 0) gameActive = true;
                 });
             }
         }
@@ -160,12 +165,12 @@ namespace KineticMath.Views
 
         private void showStatusLabel(String labelString, Brush foreground, EventHandler onComplete)
         {
-            uxStatusLabel.Content = labelString;
+            uxStatusLabel.Text = labelString;
             uxStatusLabel.Foreground = foreground;
             playLabelAnimation(uxStatusLabel, onComplete);
         }
 
-        void playLabelAnimation(Label label, EventHandler onComplete)
+        void playLabelAnimation(FrameworkElement label, EventHandler onComplete)
         {
             DoubleAnimation appearAnimation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(0)));
             appearAnimation.BeginTime = TimeSpan.FromSeconds(0.0);
@@ -204,6 +209,7 @@ namespace KineticMath.Views
             {
                 soundEffect.Stop();
                 game.LoadCurrentLevel();
+                gameActive = true;
             });
         }
 
@@ -315,8 +321,9 @@ namespace KineticMath.Views
                     ChallengeModeGUI.Visibility = System.Windows.Visibility.Hidden;
                     break;
             }
-            game.setMode(mode);
+            game.CurrentMode = mode;
             game.NewGame();
+            gameActive = true;
         }
 
         public override void OnViewActivated()
@@ -339,21 +346,13 @@ namespace KineticMath.Views
         {
             bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
 
-            JointMoveGestures handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.Head);
-            handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            _sharedData.GestureController.AddGesture(this, handGestures);
-
-            // TODO: Remove dead code (hand push gesture no longer active)
-            //HandPushGesture handPushGesture = new HandPushGesture();
-            //handPushGesture.HandPushed += new EventHandler<HandPushedEventArgs>(handPushGesture_HandPushed);
-            //_sharedData.GestureController.AddGesture(this, handPushGesture);
             if (hitGesture == null)
             {
                 hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
-            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
             _sharedData.GestureController.AddGesture(this, hitGesture);
+            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)
@@ -361,27 +360,9 @@ namespace KineticMath.Views
             HitBall(e.RectIdx, e.HitVelocity);
         }
 
-        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
-        {
-            // Show the movement on the screen
-            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
-            // TODO2: Make pretty way to reflect hand movements
-            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
-            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
-            else if (e.JointType == JointType.Head) SetCanvasLocationCentered(uxTester, pt);
-        }
-
-        void handPushGesture_HandPushed(object sender, HandPushedEventArgs e)
-        {
-            HandlePushEvent(bodyConverter.ConvertPoint(e.Position));
-        }
-
         public static PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
         {
             PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-            //pBezierSegment.Points.Add(new Point(startPoint.X + (endPoint.X - startPoint.X) * 2 / 3, startPoint.Y));
-            //pBezierSegment.Points.Add(new Point(endPoint.X, endPoint.Y - (endPoint.Y - startPoint.Y) * 2 / 3));
-            //pBezierSegment.Points.Add(endPoint);
             // Compute path
             int divisions = 10; // The granularity of the path
             double[] xPoints = ComputeAcceleratePoints(velocity.X, endPoint.X - startPoint.X, divisions);
@@ -410,8 +391,9 @@ namespace KineticMath.Views
         {
             var pushedBall = game.HeldBalls[index];
             // Check if any running animations to avoid conflicts
-            if (runningAnimations.Count == 0 && game.PushBall(pushedBall))
+            if (this.gameActive && runningAnimations.Count == 0 && game.PushBall(pushedBall))
             {
+                gameActive = false;
                 var ballHolder = this.BallHolders[index];
                 uxMainCanvas.Children.Add(pushedBall);
 
@@ -432,8 +414,6 @@ namespace KineticMath.Views
                 // Freeze the PathGeometry for performance benefits.
                 animationPath.Freeze();
 
-                /*
-                animationPath.Figures = pfc;*/
                 ballAnimation.PathGeometry = animationPath;
                 ballAnimation.BeginTime = TimeSpan.FromSeconds(0);
                 ballAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.75));
@@ -451,18 +431,11 @@ namespace KineticMath.Views
                     uxMainCanvas.Children.Remove(pushedBall);
                     runningAnimations.Remove(ballMove);
                     game.AddBallToBalance(pushedBall, true); // push ball to left side
+                    (pushedBall as Bird).IsFlying = false;
                 };
                 selectingBall = true;
                 ballMove.Begin();
                 // TODO2: Trigger animation for ball and after animation is triggered
-
-                /*Debug*
-                Path myPath = new Path();
-                myPath.Stroke = Brushes.Black;
-                myPath.StrokeThickness = 1;
-                myPath.Data = animationPath;
-                uxMainCanvas.Children.Add(myPath);
-                /**/
             }
         }
 
@@ -504,11 +477,6 @@ namespace KineticMath.Views
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
                 HandlePushEvent(skelPt);
             }
-        }
-
-        private void Background_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -8,66 +8,11 @@
              xmlns:my="clr-namespace:KineticMath.SubControls" xmlns:KineticMath="clr-namespace:KineticMath" x:Class="KineticMath.Views.MainView"
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1280" Width="1280">
-	<views:BaseView.Resources>
-		<Style x:Key="GroupItemStyle1" TargetType="{x:Type GroupItem}">
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type GroupItem}">
-						<Grid>
-							<Ellipse x:Name="uxLeftHand" Fill="#7F4D4D4D"/>
-							<Image Margin="-16.5,-18,-14.5,-19" Source="/KineticMath;component/Images/image0.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Opacity="0.8">
-								<Image.RenderTransform>
-									<TransformGroup>
-										<ScaleTransform ScaleY="0.5" ScaleX="-0.5"/>
-										<SkewTransform AngleY="0" AngleX="0"/>
-										<RotateTransform Angle="0"/>
-										<TranslateTransform/>
-									</TransformGroup>
-								</Image.RenderTransform>
-							</Image>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<Style x:Key="ThumbStyle1" TargetType="{x:Type Thumb}">
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type Thumb}">
-						<Grid>
-							<GroupItem x:Name="uxLeftHand" Content="GroupItem" Style="{DynamicResource GroupItemStyle1}"/>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<Style x:Key="ThumbStyle2" TargetType="{x:Type Thumb}">
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type Thumb}">
-						<Grid>
-							<GroupItem x:Name="uxRightHand" Content="GroupItem" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource GroupItemStyle1}">
-								<GroupItem.RenderTransform>
-									<TransformGroup>
-										<ScaleTransform ScaleY="1" ScaleX="-1"/>
-										<SkewTransform AngleY="0" AngleX="0"/>
-										<RotateTransform Angle="0"/>
-										<TranslateTransform/>
-									</TransformGroup>
-								</GroupItem.RenderTransform>
-							</GroupItem>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</views:BaseView.Resources>
     <Canvas Width="1280" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
-        <KineticMath:Background Height="Auto" Width="Auto" Canvas.Left="-33" Canvas.Top="-2" Loaded="Background_Loaded" />
+        <KineticMath:Background Height="Auto" Width="Auto" />
         <my:Seesaw Canvas.Left="662" Canvas.Top="236" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
-        
-        <Ellipse Canvas.Left="250" Canvas.Top="300" Width="50" Height="50" x:Name="uxTester" Fill="Orange" />
+
         <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" x:Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
             <TextBlock.RenderTransform>
                 <ScaleTransform ScaleY="1"/>
@@ -75,12 +20,15 @@
         </TextBlock>
         <Rectangle Canvas.Left="41" Canvas.Top="218" Height="457.5" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerSkeleton" />
-        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="400" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50"/>
-        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="150" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50"/>
+
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
             <Label x:Name="finalScore" Canvas.Left="424" Canvas.Top="92" Height="58" Width="334" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="40"  />
             <Label x:Name="modeLabel" Canvas.Left="24.5" Canvas.Top="12" Height="72" Width="397" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="45" Content="Challenge Mode" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" FontWeight="Bold" Foreground="#FF1771AB" />
-            <Label Canvas.Left="110" Canvas.Top="192" Width="1050" FontSize="80" FontWeight="Bold" Content="Correct!" Foreground="Green" HorizontalContentAlignment="Center" Opacity="0.0" x:Name="uxStatusLabel" />
+            <TextBlock x:Name="uxStatusLabel" TextAlignment="Center" Canvas.Left="110" Canvas.Top="192" Width="1050" FontSize="100" FontWeight="Bold" Text="Correct!" Foreground="Green" Opacity="0.0">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.5" BlurRadius="4" />
+                </TextBlock.Effect>
+            </TextBlock>
         </Canvas>
         <Canvas x:Name="ChallengeModeGUI" Height="128" Canvas.Left="1036" Canvas.Top="12" Width="244">
         	<Label x:Name="scoreLabel" Height="51" Width="124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="26.667" Content="Score" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF1771AB" FontWeight="Bold"  />

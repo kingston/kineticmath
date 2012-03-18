@@ -6,17 +6,70 @@
              xmlns:src="clr-namespace:KineticMath.SubControls"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="117">
+	<src:SeesawObject.Resources>
+		<Storyboard x:Key="Flying" RepeatBehavior="Forever" >
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="right_wing">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="10"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="-10"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="right_wing">
+				<EasingPointKeyFrame KeyTime="0" Value="0.05,0.5"/>
+				<EasingPointKeyFrame KeyTime="0:0:1" Value="0.05,0.5"/>
+			</PointAnimationUsingKeyFrames>
+		
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="left_wing">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="-10"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="10"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="left_wing">
+				<EasingPointKeyFrame KeyTime="0" Value="0.95,0.5"/>
+				<EasingPointKeyFrame KeyTime="0:0:1" Value="0.95,0.5"/>
+			</PointAnimationUsingKeyFrames>
+		</Storyboard>
+	</src:SeesawObject.Resources>
+	<src:SeesawObject.Triggers>
+		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+			<BeginStoryboard Name="BeginFlying" Storyboard="{StaticResource Flying}" />
+		</EventTrigger>
+        <!--<EventTrigger RoutedEvent="StopFLying">
+            <PauseStoryboard BeginStoryboardName="beginFlying"  />
+        </EventTrigger>-->
+	</src:SeesawObject.Triggers>
     <Canvas Name="canvas" Width="125" Height="80">
         <Viewbox Height="73.321" Width="117">
         	<Canvas Width="167.018" Height="104.667">
-        		<Path Width="37.0078" Height="18.504" Canvas.Left="128.509" Canvas.Top="41.4459" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 128.509,42.9876L 131.592,41.4459L 165.517,46.6882L 163.358,49.9382L 156.881,51.3145L 154.415,55.1712L 148.246,55.4779L 147.013,59.9499L 128.509,59.9499L 128.509,42.9876 Z "/>
-        		<Path Width="38.9232" Height="11.7533" Canvas.Left="128.095" Canvas.Top="40.4863" Stretch="Fill" Fill="#FF666666" Data="F1 M 128.923,43.8151L 131.742,42.4056L 164.016,47.3926L 162.218,50.3893L 147.013,50.3893L 147.013,52.2396L 163.266,52.2396L 167.018,45.9837L 131.443,40.4863L 128.095,42.1602L 128.923,43.8151 Z "/>
-        		<Path Width="19.916" Height="5.58716" Canvas.Left="137.745" Canvas.Top="50.8158" Stretch="Fill" Fill="#FF666666" Data="F1 M 156.102,50.8158L 153.903,54.2552L 149.158,54.3425L 137.745,54.5527L 137.779,56.4029L 149.191,56.1927L 154.928,56.0872L 157.661,51.8131L 156.102,50.8158 Z "/>
-        		<Path Width="21.0046" Height="6.15292" Canvas.Left="128.462" Canvas.Top="54.7207" Stretch="Fill" Fill="#FF666666" Data="F1 M 147.851,54.7207L 145.943,58.1412L 128.462,59.0261L 128.556,60.8736L 147.06,59.9382L 149.467,55.6218L 147.851,54.7207 Z "/>
-        		<Path Width="37.0079" Height="18.504" Canvas.Left="1.50122" Canvas.Top="40.8293" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 38.5091,42.3711L 35.4258,40.8293L 1.50122,46.0716L 3.66016,49.3216L 10.1367,50.6979L 12.6028,54.5547L 18.7721,54.8613L 20.0052,59.3333L 38.5091,59.3333L 38.5091,42.3711 Z "/>
-        		<Path Width="38.9231" Height="11.7533" Canvas.Left="0" Canvas.Top="39.8697" Stretch="Fill" Fill="#FF666666" Data="F1 M 38.9231,41.5436L 35.5755,39.8697L 0,45.3672L 3.75195,51.623L 20.0052,51.623L 20.0052,49.7728L 4.80017,49.7728L 3.00256,46.7761L 35.2754,41.7891L 38.0951,43.1986L 38.9231,41.5436 Z "/>
-        		<Path Width="19.9159" Height="5.58716" Canvas.Left="9.35742" Canvas.Top="50.1992" Stretch="Fill" Fill="#FF666666" Data="F1 M 9.35742,51.1965L 12.0905,55.4707L 17.8268,55.5762L 29.2396,55.7864L 29.2733,53.9361L 17.8607,53.7259L 13.1152,53.6387L 10.916,50.1992L 9.35742,51.1965 Z "/>
-        		<Path Width="21.0047" Height="6.15289" Canvas.Left="17.5513" Canvas.Top="54.1042" Stretch="Fill" Fill="#FF666666" Data="F1 M 17.5513,55.0052L 19.9583,59.321L 38.4622,60.2571L 38.556,58.4095L 21.0755,57.5247L 19.1674,54.1042L 17.5513,55.0052 Z "/>
+        		<Canvas x:Name="right_wing" Height="20.388" Canvas.Left="128.095" Canvas.Top="40.486" Width="38.923" RenderTransformOrigin="0.5,0.5">
+        			<Canvas.RenderTransform>
+        				<TransformGroup>
+        					<ScaleTransform/>
+        					<SkewTransform/>
+        					<RotateTransform/>
+        					<TranslateTransform/>
+        				</TransformGroup>
+        			</Canvas.RenderTransform>
+        			<Path Width="37.008" Height="18.504" Canvas.Left="0.414" Canvas.Top="0.96" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 128.509,42.9876L 131.592,41.4459L 165.517,46.6882L 163.358,49.9382L 156.881,51.3145L 154.415,55.1712L 148.246,55.4779L 147.013,59.9499L 128.509,59.9499L 128.509,42.9876 Z "/>
+        			<Path Width="38.923" Height="11.753" Stretch="Fill" Fill="#FF666666" Data="F1 M 128.923,43.8151L 131.742,42.4056L 164.016,47.3926L 162.218,50.3893L 147.013,50.3893L 147.013,52.2396L 163.266,52.2396L 167.018,45.9837L 131.443,40.4863L 128.095,42.1602L 128.923,43.8151 Z "/>
+        			<Path Width="19.916" Height="5.587" Canvas.Left="9.65" Canvas.Top="10.33" Stretch="Fill" Fill="#FF666666" Data="F1 M 156.102,50.8158L 153.903,54.2552L 149.158,54.3425L 137.745,54.5527L 137.779,56.4029L 149.191,56.1927L 154.928,56.0872L 157.661,51.8131L 156.102,50.8158 Z "/>
+        			<Path Width="21.005" Height="6.153" Canvas.Left="0.367" Canvas.Top="14.234" Stretch="Fill" Fill="#FF666666" Data="F1 M 147.851,54.7207L 145.943,58.1412L 128.462,59.0261L 128.556,60.8736L 147.06,59.9382L 149.467,55.6218L 147.851,54.7207 Z "/>
+        		</Canvas>
+        		<Canvas x:Name="left_wing" Height="20.387" Canvas.Top="39.87" Width="38.923">
+        			<Canvas.RenderTransform>
+        				<TransformGroup>
+        					<ScaleTransform/>
+        					<SkewTransform/>
+        					<RotateTransform/>
+        					<TranslateTransform/>
+        				</TransformGroup>
+        			</Canvas.RenderTransform>
+        			<Path Width="37.008" Height="18.504" Canvas.Left="1.501" Canvas.Top="0.96" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 38.5091,42.3711L 35.4258,40.8293L 1.50122,46.0716L 3.66016,49.3216L 10.1367,50.6979L 12.6028,54.5547L 18.7721,54.8613L 20.0052,59.3333L 38.5091,59.3333L 38.5091,42.3711 Z "/>
+        			<Path Width="38.923" Height="11.753" Canvas.Left="0" Stretch="Fill" Fill="#FF666666" Data="F1 M 38.9231,41.5436L 35.5755,39.8697L 0,45.3672L 3.75195,51.623L 20.0052,51.623L 20.0052,49.7728L 4.80017,49.7728L 3.00256,46.7761L 35.2754,41.7891L 38.0951,43.1986L 38.9231,41.5436 Z "/>
+        			<Path Width="19.916" Height="5.588" Canvas.Left="9.357" Canvas.Top="10.329" Stretch="Fill" Fill="#FF666666" Data="F1 M 9.35742,51.1965L 12.0905,55.4707L 17.8268,55.5762L 29.2396,55.7864L 29.2733,53.9361L 17.8607,53.7259L 13.1152,53.6387L 10.916,50.1992L 9.35742,51.1965 Z "/>
+        			<Path Width="21.005" Height="6.153" Canvas.Left="17.551" Canvas.Top="14.234" Stretch="Fill" Fill="#FF666666" Data="F1 M 17.5513,55.0052L 19.9583,59.321L 38.4622,60.2571L 38.556,58.4095L 21.0755,57.5247L 19.1674,54.1042L 17.5513,55.0052 Z "/>
+        		</Canvas>
         		<Path Width="89.3333" Height="89.3333" Canvas.Left="39.1758" Canvas.Top="1.33334" Stretch="Fill" Fill="#FFFFEB3F" Data="F1 M 128.509,78.2044C 128.509,85.0872 122.93,90.6667 116.047,90.6667L 51.638,90.6667C 44.7552,90.6667 39.1758,85.0872 39.1758,78.2044L 39.1758,13.7957C 39.1758,6.91269 44.7552,1.33334 51.638,1.33334L 116.047,1.33334C 122.93,1.33334 128.509,6.91269 128.509,13.7957L 128.509,78.2044"/>
         		<Path Width="92" Height="92" Canvas.Left="37.8424" Canvas.Top="0" Stretch="Fill" Fill="#FF000000" Data="F1 M 128.509,78.2044L 127.176,78.2044C 127.175,81.2819 125.932,84.0554 123.916,86.0735C 121.898,88.0898 119.124,89.3327 116.047,89.3333L 51.638,89.3333C 48.5605,89.3327 45.7864,88.0898 43.7689,86.0735C 41.7526,84.0554 40.5098,81.2819 40.5091,78.2044L 40.5091,13.7957C 40.5098,10.718 41.7526,7.94467 43.7689,5.92645C 45.7864,3.91016 48.5605,2.66733 51.638,2.66669L 116.047,2.66669C 119.124,2.66733 121.898,3.91016 123.916,5.92645C 125.932,7.94467 127.175,10.718 127.176,13.7957L 127.176,78.2044L 128.509,78.2044L 129.842,78.2044L 129.842,13.7957C 129.842,6.17578 123.667,0.000671387 116.047,0L 51.638,0C 44.0182,0.000671387 37.8431,6.17578 37.8424,13.7957L 37.8424,78.2044C 37.8431,85.8242 44.0182,91.9994 51.638,92L 116.047,92C 123.667,91.9994 129.842,85.8242 129.842,78.2044L 128.509,78.2044 Z "/>
         		<Path Width="4.91669" Height="5.68546" Canvas.Left="91.8424" Canvas.Top="9.53842" Stretch="Fill" Fill="#FF000000" Data="F1 M 96.7591,12.3808C 96.7591,13.9513 95.6588,15.2239 94.3008,15.2239C 92.9427,15.2239 91.8424,13.9513 91.8424,12.3808C 91.8424,10.8112 92.9427,9.53842 94.3008,9.53842C 95.6588,9.53842 96.7591,10.8112 96.7591,12.3808 Z "/>

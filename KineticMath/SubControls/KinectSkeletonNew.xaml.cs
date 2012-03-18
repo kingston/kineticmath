@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using KineticMath.Kinect;
 using Microsoft.Kinect;
 using Coding4Fun.Kinect.Wpf;
+using KineticMath.Helpers;
 
 using KineticMath.Kinect.PointConverters;
 
@@ -33,13 +34,10 @@ namespace KineticMath.SubControls
         public KinectSkeletonNew()
         {
             InitializeComponent();
-            //Force video to the background
-            //Canvas.SetZIndex(uxKinectImage, -10000);
         }
 
         public void InitializeSkeleton(GestureController gestureController, IPointConverter pointConverter)
         {
-            //kinectService.ImageFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(kinectService_ImageFrameReady);
             gestureController.SkeletonPreProcessed += new EventHandler<SkeletonPreProcessedEventArgs>(gestureController_SkeletonPreProcessed);
             this.pointConverter = pointConverter;
         }
@@ -47,6 +45,7 @@ namespace KineticMath.SubControls
         void gestureController_SkeletonPreProcessed(object sender, SkeletonPreProcessedEventArgs e)
         {
             Skeleton skeleton = e.Skeleton;
+            // Seralize
             List<JointType[]> jointChains = new List<JointType[]>();
             jointChains.Add(new JointType[] { JointType.ShoulderLeft, JointType.ElbowLeft, JointType.HandLeft });
             jointChains.Add(new JointType[] { JointType.ShoulderRight, JointType.ElbowRight, JointType.HandRight });
@@ -60,15 +59,53 @@ namespace KineticMath.SubControls
                 }
             }
             // Position elements
-            PositionElement(uxMainBody, skeleton.Joints[JointType.ShoulderLeft], false);
+            PositionBody(uxMainBody, skeleton);
             PositionElement(uxHeadPart, skeleton.Joints[JointType.Head], true);
+            PositionElement(uxLeftHand, skeleton.Joints[JointType.HandLeft], true);
+            PositionElement(uxRightHand, skeleton.Joints[JointType.HandRight], true);
         }
 
-        private void PositionBody(FrameworkElement element, Skeleton skel)
+        private void PositionBody(Path body, Skeleton skel)
         {
+            JointType[] jointChain = new JointType[] { JointType.ShoulderLeft, JointType.Head, JointType.ShoulderRight, JointType.HipRight, JointType.HipLeft };
+            PathGeometry geometry = new PathGeometry();
+            String path = "";
+            bool firstPoint = true;
+            for (int i = 0; i < jointChain.Length; i++)
+            {
+                var pt = GetPoint(skel, jointChain[i]);
+                // Hard code neck
+                if (jointChain[i] == JointType.Head)
+                {
+                    // Average with shoulder
+                    var shoulderPt = GetPoint(skel, JointType.ShoulderCenter);
+                    pt.X = pt.X * 0.1f + shoulderPt.X * 0.9f;
+                    pt.Y = pt.Y * 0.1f + shoulderPt.Y * 0.9f;
+                }
+                if (firstPoint)
+                {
+                    path += "M " + pt.X.ToString() + "," + pt.Y.ToString() + " ";
+                    firstPoint = false;
+                }
+                else
+                {
+                    path += "L " + pt.X.ToString() + "," + pt.Y.ToString();
+                }
+            }
+            // Close the path
+            path += " z";
+            Canvas.SetLeft(uxMainBody, 0);
+            Canvas.SetTop(uxMainBody, 0);
+            uxMainBody.Data = Geometry.Parse(path);
         }
 
-        private void PositionElement(FrameworkElement element, Joint joint, bool center) {
+        private SkeletonPoint GetPoint(Skeleton skel, JointType type)
+        {
+            return pointConverter.ConvertPoint(skel.Joints[type].Position);
+        }
+
+        private void PositionElement(FrameworkElement element, Joint joint, bool center)
+        {
             SkeletonPoint pt = pointConverter.ConvertPoint(joint.Position);
             double dx = 0;
             double dy = 0;
@@ -92,6 +129,8 @@ namespace KineticMath.SubControls
             {
                 Line newLine = new Line();
                 newLine.Stroke = Brushes.Black;
+                byte gray = 55;
+                newLine.Stroke = new SolidColorBrush(Color.FromRgb(gray, gray, gray));
                 newLine.StrokeThickness = 26;
                 newLine.StrokeStartLineCap = PenLineCap.Round;
                 newLine.StrokeEndLineCap = PenLineCap.Round;
@@ -105,45 +144,7 @@ namespace KineticMath.SubControls
             line.X2 = pt2.X;
             line.Y1 = pt1.Y;
             line.Y2 = pt2.Y;
-        }
-
-        void kinectService_SkeletonUpdated(object sender, SkeletonEventArgs e)
-        {
-            //get the first tracked skeleton
-            Skeleton skeleton = (from s in e.Skeletons
-                                     where s.TrackingState == SkeletonTrackingState.Tracked
-                                     select s).FirstOrDefault();
-
-
-            if (skeleton != null)
-            {
-                //set positions on our joints of interest (already defined as Ellipse objects in the xaml)
-                //SetEllipsePosition(headEllipse, skeleton.Joints[JointType.Head]);
-                //SetEllipsePosition(leftEllipse, skeleton.Joints[JointType.HandLeft]);
-                //SetEllipsePosition(rightEllipse, skeleton.Joints[JointType.HandRight]);
-                //SetEllipsePosition(shoulderCenter, skeleton.Joints[JointType.ShoulderCenter]);
-                //SetEllipsePosition(shoulderRight, skeleton.Joints[JointType.ShoulderRight]);
-                //SetEllipsePosition(shoulderLeft, skeleton.Joints[JointType.ShoulderLeft]);
-                //SetEllipsePosition(ankleRight, skeleton.Joints[JointType.AnkleRight]);
-                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                //SetEllipsePosition(elbowLeft, skeleton.Joints[JointType.ElbowLeft]);
-                //SetEllipsePosition(elbowRight, skeleton.Joints[JointType.ElbowRight]);
-                //SetEllipsePosition(ankleLeft, skeleton.Joints[JointType.AnkleLeft]);
-                //SetEllipsePosition(footLeft, skeleton.Joints[JointType.FootLeft]);
-                //SetEllipsePosition(footRight, skeleton.Joints[JointType.FootRight]);
-                //SetEllipsePosition(wristLeft, skeleton.Joints[JointType.WristLeft]);
-                //SetEllipsePosition(wristRight, skeleton.Joints[JointType.WristRight]);
-                //SetEllipsePosition(kneeLeft, skeleton.Joints[JointType.KneeLeft]);
-                //SetEllipsePosition(kneeRight, skeleton.Joints[JointType.KneeRight]);
-                //SetEllipsePosition(hipCenter, skeleton.Joints[JointType.HipCenter]);
-            }
-        }
-
-       
+        }      
 
         private void SetEllipsePosition(Ellipse ellipse, Joint joint)
         {
@@ -157,12 +158,6 @@ namespace KineticMath.SubControls
                 byte val = (byte)(Math.Floor((joint.Position.Z - 0.8) * 255 / 2));
                 ellipse.Fill = new SolidColorBrush(Color.FromRgb(val, val, val));
             }
-        }
-
-        void kinectService_ImageFrameReady(object sender, ColorImageFrameReadyEventArgs e)
-        {
-            //Automagically create BitmapSource for Video
-            //uxKinectImage.Source = e.OpenColorImageFrame().ToBitmapSource();
         }
     }
 }

@@ -16,11 +16,39 @@ namespace KineticMath.Controllers
     /// </summary>
     public class BalanceGame : Game
     {
-        public static int MINUTE = 60;
-        public static int TEN_SECOND = 10;
+        /// <summary>
+        /// Total time for a challenge game
+        /// </summary>
+        private const int CHALLENGE_TIME = 60;
+        /// <summary>
+        /// Time for a classic level
+        /// </summary>
+        private const int CLASSIC_LEVEL_TIME = 10;
 
-        DispatcherTimer timer;
-        public Mode mode;
+        /// <summary>
+        /// The timer that keeps track of time left for each level
+        /// </summary>
+        private DispatcherTimer gameTimer;
+        /// <summary>
+        /// The current mode of the game
+        /// </summary>
+        private Mode currentMode;
+
+        /// <summary>
+        /// The current mode of the game
+        /// </summary>
+        public Mode CurrentMode
+        {
+            get
+            {
+                return this.currentMode;
+            }
+            set
+            {
+                this.currentMode = value;
+                this.NewGame();
+            }
+        }
 
         public enum Mode
         {
@@ -29,20 +57,26 @@ namespace KineticMath.Controllers
             Classic
         }
 
-        public int Score { get; set; }
+        /// <summary>
+        /// The score of the current player
+        /// </summary>
+        public int Score { get; protected set; }
 
         /// <summary>
         /// The time left in the challenge mode in seconds
         /// </summary>
-        public int TimeLeft { get; set; }
+        public int TimeLeft { get; protected set; }
 
+        /// <summary>
+        /// The number of lives left of the player
+        /// </summary>
         public int LivesLeft { get; protected set; }
 
         public BalanceGame()
         {
-            timer = new DispatcherTimer();
-            timer.Tick += new EventHandler(timerHandler);
-            mode = Mode.Classic;
+            gameTimer = new DispatcherTimer();
+            gameTimer.Tick += new EventHandler(timerHandler);
+            currentMode = Mode.Classic;
             HeldBalls = new ObservableCollection<SeesawObject>();
             LeftBalanceBalls = new ObservableCollection<SeesawObject>();
             RightBalanceBalls = new ObservableCollection<SeesawObject>();
@@ -64,8 +98,7 @@ namespace KineticMath.Controllers
 
         public event EventHandler GameOver;
 
-        //Chris: temporarily change it to public to make it work, need to be restored
-        public int currentLevel;
+        private int currentLevel;
 
         /// <summary>
         /// Starts a new game and resets everything
@@ -75,38 +108,33 @@ namespace KineticMath.Controllers
             if (this.TimeLeft >= 0)
             {
                 TimerTicked(this, EventArgs.Empty);
-                timer.Interval = TimeSpan.FromSeconds(1);
-                timer.Start();
+                gameTimer.Interval = TimeSpan.FromSeconds(1);
+                gameTimer.Start();
                 this.TimeLeft--;
             }
             else
             {
-                if (mode == Mode.Classic)
+                if (currentMode == Mode.Classic)
                 {
                     LivesLeft--;
-                    LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
                     if (LivesLeft > 0)
                     {
-                        this.TimeLeft = TEN_SECOND;
+                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
+                        this.TimeLeft = CLASSIC_LEVEL_TIME;
                     }
                     else
                     {
-                        timer.Stop();
+                        gameTimer.Stop();
                         GameOver(this, EventArgs.Empty);
                     }
                 }
-                else if (mode == Mode.Challenge)
+                else if (currentMode == Mode.Challenge)
                 {
                     LivesLeft--;
-                    timer.Stop();
+                    gameTimer.Stop();
                     GameOver(this, EventArgs.Empty);
                 }
             }
-        }
-
-        public void setMode(Mode mode)
-        {
-            this.mode = mode;
         }
 
         /// <summary>
@@ -114,39 +142,39 @@ namespace KineticMath.Controllers
         /// </summary>
         public void NewGame()
         {
-            if (mode == Mode.Challenge)
+            if (currentMode == Mode.Challenge)
             {
-                if (timer.IsEnabled)
+                if (gameTimer.IsEnabled)
                 {
-                    timer.Stop(); // Reset timer
+                    gameTimer.Stop(); // Reset timer
                 }
                 this.LivesLeft = 1;
-                this.TimeLeft = MINUTE;
+                this.TimeLeft = CHALLENGE_TIME;
                 Score = 0;
                 currentLevel = 1;
                 LoadCurrentLevel();
-                timer.Interval = TimeSpan.FromSeconds(1);
-                timer.Start();
+                gameTimer.Interval = TimeSpan.FromSeconds(1);
+                gameTimer.Start();
             }
-            else if (mode == Mode.Classic)
+            else if (currentMode == Mode.Classic)
             {
-                if (timer.IsEnabled)
+                if (gameTimer.IsEnabled)
                 {
-                    timer.Stop(); // Reset timer
+                    gameTimer.Stop(); // Reset timer
                 }
                 this.LivesLeft = 3;
-                this.TimeLeft = TEN_SECOND;
+                this.TimeLeft = CLASSIC_LEVEL_TIME;
                 Score = 0;
                 currentLevel = 1;
                 LoadCurrentLevel();
-                timer.Interval = TimeSpan.FromSeconds(1);
-                timer.Start();
+                gameTimer.Interval = TimeSpan.FromSeconds(1);
+                gameTimer.Start();
             }
             else
             {
-                if (timer.IsEnabled)
+                if (gameTimer.IsEnabled)
                 {
-                    timer.Stop();
+                    gameTimer.Stop();
                 }
                 this.LivesLeft = 1;
                 currentLevel = 1;
@@ -168,26 +196,29 @@ namespace KineticMath.Controllers
                         Score++;
                         LevelCompleted(this, EventArgs.Empty);
                         // Let's make life interesting ;)
-                        if (mode == Mode.Challenge)
+                        if (currentMode == Mode.Challenge)
                         {
-                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * 5);
+                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * 2);
                         }
                         currentLevel++;
                     }
                 }
                 else
                 {
-                    if (mode == Mode.Classic)
+                    if (currentMode == Mode.Classic)
                     {
                         this.LivesLeft--;
                     }
-                    if (LevelLost != null)
+                    if (LivesLeft > 0)
                     {
-                        LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
+                        if (LevelLost != null)
+                        {
+                            LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.WrongAnswer));
+                        }
                     }
-                    if (LivesLeft <= 0)
+                    else
                     {
-                        timer.Stop();
+                        gameTimer.Stop();
                         if (GameOver != null)
                         {
                             GameOver(this, EventArgs.Empty);
@@ -196,8 +227,8 @@ namespace KineticMath.Controllers
                   
                 }
             }
-            if (mode == Mode.Classic)
-                TimeLeft = TEN_SECOND;
+            if (currentMode == Mode.Classic)
+                TimeLeft = CLASSIC_LEVEL_TIME;
         }
 
         private int[] curBalls;
@@ -324,11 +355,11 @@ namespace KineticMath.Controllers
         public void Reset()
         {
             SetupLevel();
-            if (mode == Mode.Classic)
+            if (currentMode == Mode.Classic)
             {
                 if (LivesLeft > 0)
                 {
-                    TimeLeft = TEN_SECOND;
+                    TimeLeft = CLASSIC_LEVEL_TIME;
                 }
             }
         }
