@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="675" d:DesignWidth="1280" Width="1280">
     <Canvas Width="1280" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
-        <KineticMath:Background Height="Auto" Width="Auto" Canvas.Left="-33" Canvas.Top="-2" />
+        <KineticMath:Background Height="Auto" Width="Auto" />
         <my:Seesaw Canvas.Left="662" Canvas.Top="236" x:Name="seesaw" />
         <my:FallingGroup Canvas.Left="0" Canvas.Top="0" x:Name="fallingGroup"/>
         <TextBlock Canvas.Left="0" FontSize="30" Canvas.Top="5" Height="40" x:Name="ValueText" Text="1" Opacity="0" TextAlignment="Center" Width="50" RenderTransformOrigin=".5,.5">
