@@ -20,10 +20,11 @@ namespace KineticMath.Controllers
         /// Total time for a challenge game
         /// </summary>
         private const int CHALLENGE_TIME = 60;
+
         /// <summary>
         /// Time for a classic level
         /// </summary>
-        private const int CLASSIC_LEVEL_TIME = 10;
+        private int _classicLevelTime;
 
         /// <summary>
         /// The timer that keeps track of time left for each level
@@ -135,7 +136,7 @@ namespace KineticMath.Controllers
                     if (LivesLeft > 0)
                     {
                         LevelLost(this, new LevelLostEventArgs(LevelLostEventArgs.Reason.TimeUp));
-                        this.TimeLeft = CLASSIC_LEVEL_TIME;
+                        this.TimeLeft = _classicLevelTime;
                     }
                     else
                     {
@@ -157,6 +158,8 @@ namespace KineticMath.Controllers
         /// </summary>
         public void NewGame()
         {
+            if (_twoPlayerMode) _classicLevelTime = 20;
+            else _classicLevelTime = 10;
             if (currentMode == Mode.Challenge)
             {
                 if (gameTimer.IsEnabled)
@@ -178,9 +181,9 @@ namespace KineticMath.Controllers
                     gameTimer.Stop(); // Reset timer
                 }
                 this.LivesLeft = 3;
-                this.TimeLeft = CLASSIC_LEVEL_TIME;
+                this.TimeLeft = _classicLevelTime;
                 Score = 0;
-                currentLevel = 1;
+                currentLevel = 9;
                 LoadCurrentLevel();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Start();
@@ -218,7 +221,7 @@ namespace KineticMath.Controllers
                         currentLevel++;
                     }
                     if (currentMode == Mode.Classic)
-                        TimeLeft = CLASSIC_LEVEL_TIME;
+                        TimeLeft = _classicLevelTime;
                 }
                 else if (!_twoPlayerMode || RightBalanceBalls.Any(s => s is Bird))
                 {
@@ -242,7 +245,7 @@ namespace KineticMath.Controllers
                         }
                     }
                     if (currentMode == Mode.Classic)
-                        TimeLeft = CLASSIC_LEVEL_TIME;
+                        TimeLeft = _classicLevelTime;
 
                 }
             }
@@ -300,6 +303,8 @@ namespace KineticMath.Controllers
                     break;
                 default:
                     Random rand = new Random();
+                    // If we're starting with no target right side
+                    if (targetRightSide == null) targetRightSide = new int[] { currentLevel * 2 / 3 };
                     int prevAnswer = targetRightSide.Sum();
                     // Generate the answer options
                     int rightSideNum = 2;
@@ -316,7 +321,7 @@ namespace KineticMath.Controllers
                     if (_twoPlayerMode)
                     {
                         // Add second player's parts as well
-                        secondPlayerPart = rand.Next(2, currentLevel * 3);
+                        secondPlayerPart = rand.Next(2, Math.Min(currentLevel - 3, 2) * 2);
 
                         // Second player's answer set
                         List<int> playerTwoAnswers = GetAnswerSet(secondPlayerPart);
@@ -382,11 +387,11 @@ namespace KineticMath.Controllers
             {
                 parts[i] = targetSum / numParts;
             }
-            parts[targetRightSide.Length - 1] = targetSum - targetRightSide.Sum();
+            parts[parts.Length - 1] = targetSum - parts.Sum();
 
             for (int i = 0; i < parts.Length - 1; i++)
             {
-                int randMove = rand.Next(0, Math.Max(targetRightSide[i] / 2, 1));
+                int randMove = rand.Next(0, Math.Max(parts[i] / 2, 1));
                 int side = rand.NextDouble() < 0.5 ? -1 : 1;
                 parts[i] += side * randMove;
                 parts[i + 1] += -side * randMove;
@@ -405,9 +410,12 @@ namespace KineticMath.Controllers
             {
                 PlayerOneHeldBalls.Add(new Bird(weight.ToString(), weight));
             }
-            foreach (var weight in curTwoBalls)
+            if (curTwoBalls != null)
             {
-                PlayerTwoHeldBalls.Add(new Bird(weight.ToString(), weight));
+                foreach (var weight in curTwoBalls)
+                {
+                    PlayerTwoHeldBalls.Add(new Bird(weight.ToString(), weight));
+                }
             }
             foreach (var weight in targetRightSide)
             {
@@ -421,7 +429,7 @@ namespace KineticMath.Controllers
         /// <returns></returns>
         public int GetMaximumValue()
         {
-            return Math.Max(curOneBalls.Sum(), targetRightSide.Sum() + curTwoBalls.Sum());
+            return Math.Max(curOneBalls.Sum(), targetRightSide.Sum() + (curTwoBalls ?? new int[] {}).Sum());
         }
 
         /// <summary>
@@ -451,7 +459,7 @@ namespace KineticMath.Controllers
             {
                 if (LivesLeft > 0)
                 {
-                    TimeLeft = CLASSIC_LEVEL_TIME;
+                    TimeLeft = _classicLevelTime;
                 }
             }
         }

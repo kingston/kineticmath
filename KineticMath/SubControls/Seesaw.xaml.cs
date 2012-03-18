@@ -209,7 +209,6 @@ namespace KineticMath.SubControls
                 child.UpdateLayout();
                 Canvas.SetLeft(child, (rightBallPanel.Width - child.ActualWidth) / 2);
                 Canvas.SetTop(child, rightBallPanel.Height - bottom - child.ActualHeight);
-                child.Opacity = 0.5;
                 bottom += child.Height;
             }
             // Work out rotation

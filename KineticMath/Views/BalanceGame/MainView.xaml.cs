@@ -319,12 +319,16 @@ namespace KineticMath.Views
             _twoPlayerMode = twoPlayer;
             if (_twoPlayerMode)
             {
-                Canvas.SetLeft(seesaw, 462);
+                Canvas.SetLeft(uxPlayerOneRect, 20);
+                Canvas.SetTop(seesaw, 286);
+                Canvas.SetLeft(seesaw, 422);
                 uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Visible;
                 _sharedData.SkeletonController.TotalPlayers = 2;
             }
             else
             {
+                Canvas.SetLeft(uxPlayerOneRect, 127);
+                Canvas.SetTop(seesaw, 236);
                 Canvas.SetLeft(seesaw, 662);
                 uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Collapsed;
                 _sharedData.SkeletonController.TotalPlayers = 1;

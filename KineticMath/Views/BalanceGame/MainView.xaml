@@ -13,7 +13,7 @@
         <my:Seesaw Canvas.Left="462" Canvas.Top="236" x:Name="seesaw" />
         <Rectangle Canvas.Left="127" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPlayerOneRect" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerOneSkeleton" />
-        <Rectangle Canvas.Left="777" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPlayerTwoRect" Stroke="Black" Opacity="0" />
+        <Rectangle Canvas.Left="696" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPlayerTwoRect" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerTwoSkeleton" />
         
         <Canvas Name="OverlayCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Canvas.Left="0" Canvas.Top="0" DataContext="{Binding}" Canvas.ZIndex="100">
