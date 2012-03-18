@@ -102,7 +102,7 @@ namespace KineticMath.Controllers
 
         private int currentLevel;
 
-        private bool _twoPlayerMode;
+        private bool _twoPlayerMode = false;
 
         public bool TwoPlayerMode
         {
@@ -183,7 +183,7 @@ namespace KineticMath.Controllers
                 this.LivesLeft = 3;
                 this.TimeLeft = _classicLevelTime;
                 Score = 0;
-                currentLevel = 9;
+                currentLevel = 1;
                 LoadCurrentLevel();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Start();
@@ -334,6 +334,7 @@ namespace KineticMath.Controllers
                             playerTwoAnswers.RemoveAt(index);
                         }
                     }
+                    else curTwoBalls = new int[0];
 
                     int answer = targetRightSide.Sum() + secondPlayerPart;
 

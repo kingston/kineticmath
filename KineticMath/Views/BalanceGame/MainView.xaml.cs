@@ -55,7 +55,7 @@ namespace KineticMath.Views
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeGameController();
-            SetTwoPlayerMode(true);
+            SetTwoPlayerMode(false);
         }
 
         private void InitializeGameController()

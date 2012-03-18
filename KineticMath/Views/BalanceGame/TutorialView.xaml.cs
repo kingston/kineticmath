@@ -30,7 +30,7 @@ namespace KineticMath.Views
     {
         private BodyRelativePointConverter bodyConverter;
 
-        enum TutorialState { HITME, HITMEAGAIN };
+        enum TutorialState { HITME, HITMEAGAIN, END };
         TutorialState currentState;
 
         public TutorialView()
@@ -66,6 +66,11 @@ namespace KineticMath.Views
             }
             _sharedData.PlayerOneController.AddGesture(this, hitGesture);
             uxPlayerSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, bodyConverter);
+        }
+
+        public override void OnViewDeactivated()
+        {
+            uxPlayerSkeleton.DeactivateSkeletonProcessing();
         }
 
         private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
@@ -107,6 +112,7 @@ namespace KineticMath.Views
                     {
                         startBrickAnimation();
                     }
+                    currentState = TutorialState.END;
                     break;
             }
             
