@@ -344,15 +344,15 @@ namespace KineticMath.Views
 
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
+            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.PlayerOneController);
 
             if (hitGesture == null)
             {
                 hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
-            _sharedData.GestureController.AddGesture(this, hitGesture);
-            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
+            _sharedData.PlayerOneController.AddGesture(this, hitGesture);
+            uxPlayerSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, bodyConverter);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)

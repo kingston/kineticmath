@@ -44,10 +44,12 @@ namespace KineticMath
                 sharedViewData.KinectService = new DummyKinectService();
                 uxNoKinectDetected.Visibility = System.Windows.Visibility.Visible;
             }
-            sharedViewData.GestureController = new GestureController(sharedViewData.KinectService);
-
-            // Set up skeleton control
-            // uxKinectSkeleton.InitializeSkeleton(sharedViewData.KinectService);
+            sharedViewData.PlayerOneController = new GestureController();
+            sharedViewData.PlayerTwoController = new GestureController();
+            var skelController = new SkeletonController(sharedViewData.KinectService);
+            skelController.RegisterGestureController(1, sharedViewData.PlayerOneController);
+            skelController.RegisterGestureController(2, sharedViewData.PlayerTwoController);
+            sharedViewData.SkeletonController = skelController;
 
             // Set up views
             viewCollection = new Dictionary<string, IView>();

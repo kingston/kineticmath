@@ -40,7 +40,7 @@ namespace KineticMath.Views
             //_sharedData.GestureController.AddGesture(jumper);
             HoldGesture holder = new HoldGesture();
             holder.UserHolded += new EventHandler(Holder_hold);
-            _sharedData.GestureController.AddGesture(this, holder);
+            _sharedData.PlayerOneController.AddGesture(this, holder);
         }
 
         void Holder_hold(object sender, EventArgs e)
