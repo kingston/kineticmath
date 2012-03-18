@@ -67,11 +67,9 @@
         <Rectangle Canvas.Left="50" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
         <Rectangle Canvas.Left="400" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerSkeleton" />
-        <Thumb x:Name="uxLeftHand" Height="50" Canvas.Left="212" Style="{DynamicResource ThumbStyle1}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
-        <Thumb x:Name="uxRightHand" Height="50" Canvas.Left="422" Style="{DynamicResource ThumbStyle2}" Canvas.Top="300" Width="50" Panel.ZIndex="1" />
         <my:Bird Opacity="1" Canvas.Left="60" Canvas.Top="200" Height="110" x:Name="bird1" Panel.ZIndex="1" />
         <my:Bird Opacity="0" Canvas.Left="407" Canvas.Top="200" Height="110" x:Name="bird2" Panel.ZIndex="1" />
-        <my1:Background Canvas.Left="0" Canvas.Top="0" Height="675" x:Name="background1" Width="1280" Panel.ZIndex="0" />
+        <my1:Background Canvas.Left="0" Canvas.Top="0" Height="675" x:Name="background1" Width="1280" Panel.ZIndex="-1" />
         <Rectangle Fill="White" Height="98" Canvas.Left="312" Stroke="#FF272727" StrokeThickness="0" Canvas.Top="48" Width="592" RadiusX="15" RadiusY="15"/>
         <Path Data="M-54.503333,22.166667 L-81.006641,102.33333 -110.75358,20.370007" Fill="White" Height="81.964" Stretch="Fill" Stroke="#FF272727" StrokeThickness="0" Width="56.25" Canvas.Left="910" Canvas.Top="56.036" RenderTransformOrigin="0.5,0.5">
         	<Path.RenderTransform>

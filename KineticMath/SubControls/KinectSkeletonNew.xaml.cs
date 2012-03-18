@@ -45,6 +45,7 @@ namespace KineticMath.SubControls
         void gestureController_SkeletonPreProcessed(object sender, SkeletonPreProcessedEventArgs e)
         {
             Skeleton skeleton = e.Skeleton;
+            // Seralize
             List<JointType[]> jointChains = new List<JointType[]>();
             jointChains.Add(new JointType[] { JointType.ShoulderLeft, JointType.ElbowLeft, JointType.HandLeft });
             jointChains.Add(new JointType[] { JointType.ShoulderRight, JointType.ElbowRight, JointType.HandRight });

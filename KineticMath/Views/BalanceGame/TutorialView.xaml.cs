@@ -59,9 +59,6 @@ namespace KineticMath.Views
         {
             bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
 
-            handGestures = new JointMoveGestures(JointType.HandLeft, JointType.HandRight, JointType.Head);
-            handGestures.JointMoved += new EventHandler<JointMovedEventArgs>(handGesture_JointMoved);
-            _sharedData.GestureController.AddGesture(this, handGestures);
             setHitZone();
             if (hitGesture == null)
             {
@@ -93,14 +90,6 @@ namespace KineticMath.Views
             }
         }
 
-        void handGesture_JointMoved(object sender, JointMovedEventArgs e)
-        {
-            // Show the movement on the screen
-            SkeletonPoint pt = bodyConverter.ConvertPoint(e.NewPosition);
-            // TODO2: Make pretty way to reflect hand movements
-            if (e.JointType == JointType.HandLeft) SetCanvasLocationCentered(uxLeftHand, pt);
-            else if (e.JointType == JointType.HandRight) SetCanvasLocationCentered(uxRightHand, pt);
-        }
         private void HitBall(int index, Vector velocity)
         {
             //this.SendMessage(new ChangeViewMessage(typeof(MainView)));
