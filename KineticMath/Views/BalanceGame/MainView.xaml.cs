@@ -37,12 +37,15 @@ namespace KineticMath.Views
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
         private BalanceGame game;
-        private BodyRelativePointConverter bodyConverter;
+        private BodyRelativePointConverter playerOneConverter;
+        private BodyRelativePointConverter playerTwoConverter;
         public static int labelDisplayTime = 750;
         private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
         private bool gameActive = false;
+        private bool _twoPlayerMode;
+
         public MainView()
         {
             InitializeComponent();
@@ -52,6 +55,7 @@ namespace KineticMath.Views
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeGameController();
+            SetTwoPlayerMode(true);
         }
 
         private void InitializeGameController()
@@ -263,8 +267,8 @@ namespace KineticMath.Views
                     canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
                     PointCanvas.SetTopLeft(canvas, new Point(
-                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - canvas.Width / 2,
-                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - canvas.Height / 2)
+                        holderPositions[i].X * uxPlayerOneRect.ActualWidth + Canvas.GetLeft(uxPlayerOneRect) - canvas.Width / 2,
+                        holderPositions[i].Y * uxPlayerOneRect.ActualHeight + Canvas.GetTop(uxPlayerOneRect) - canvas.Height / 2)
                     );
                     BallHolders[i] = canvas;
                     Rect boundaryRect = canvas.GetBoundaryRect();
@@ -292,7 +296,28 @@ namespace KineticMath.Views
                 case Key.D3:
                     startNewMode(BalanceGame.Mode.Practice);
                     break;
+                case Key.T:
+                    SetTwoPlayerMode(!_twoPlayerMode);
+                    break;
             }
+        }
+
+        private void SetTwoPlayerMode(bool twoPlayer)
+        {
+            _twoPlayerMode = twoPlayer;
+            if (_twoPlayerMode)
+            {
+                Canvas.SetLeft(seesaw, 462);
+                uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Visible;
+                _sharedData.SkeletonController.TotalPlayers = 2;
+            }
+            else
+            {
+                Canvas.SetLeft(seesaw, 662);
+                uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Collapsed;
+                _sharedData.SkeletonController.TotalPlayers = 1;
+            }
+            game.NewGame();
         }
 
         private void startNewMode(BalanceGame.Mode mode) {
@@ -330,6 +355,8 @@ namespace KineticMath.Views
         {
             base.OnViewActivated();
             RegisterGestures();
+            // Reset our skeleton IDs
+            _sharedData.SkeletonController.ResetSkeletonIDs();
             ParentWindow.AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
         }
 
@@ -344,15 +371,18 @@ namespace KineticMath.Views
 
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.PlayerOneController);
+            playerOneConverter = new BodyRelativePointConverter(uxPlayerOneRect.GetBoundaryRect(), this._sharedData.PlayerOneController);
+            playerTwoConverter = new BodyRelativePointConverter(uxPlayerTwoRect.GetBoundaryRect(), this._sharedData.PlayerTwoController);
 
             if (hitGesture == null)
             {
-                hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
+                hitGesture = new HitGesture(_hitZones, playerOneConverter, JointType.HandRight, JointType.HandLeft);
                 hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
             _sharedData.PlayerOneController.AddGesture(this, hitGesture);
-            uxPlayerSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, bodyConverter);
+
+            uxPlayerOneSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, playerOneConverter);
+            uxPlayerTwoSkeleton.InitializeSkeleton(_sharedData.PlayerTwoController, playerTwoConverter);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)
@@ -470,7 +500,7 @@ namespace KineticMath.Views
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Rect rect = uxPersonRectangle.GetBoundaryRect();
+            Rect rect = uxPlayerOneRect.GetBoundaryRect();
             Point pt = e.GetPosition(uxMainCanvas);
             if (rect.Contains(e.GetPosition(uxMainCanvas))) {
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
