@@ -12,6 +12,8 @@ namespace KineticMath.Views
     public class SharedViewData
     {
         public IKinectService KinectService { get; set; }
-        public GestureController GestureController { get; set; }
+        public SkeletonController SkeletonController { get; set; }
+        public GestureController PlayerOneController { get; set; }
+        public GestureController PlayerTwoController { get; set; }
     }
 }

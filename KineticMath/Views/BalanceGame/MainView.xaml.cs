@@ -37,12 +37,15 @@ namespace KineticMath.Views
         public static Color DESELECTED_COLOR = Colors.Yellow; //Color.FromRgb(0xE2, 0x51, 0x51);
 
         private BalanceGame game;
-        private BodyRelativePointConverter bodyConverter;
+        private BodyRelativePointConverter playerOneConverter;
+        private BodyRelativePointConverter playerTwoConverter;
         public static int labelDisplayTime = 750;
         private static TimeSpan RESET_DELAY = TimeSpan.FromSeconds(0.5);
         private List<Storyboard> runningAnimations = new List<Storyboard>();
         private bool selectingBall = false;
         private bool gameActive = false;
+        private bool _twoPlayerMode;
+
         public MainView()
         {
             InitializeComponent();
@@ -52,12 +55,14 @@ namespace KineticMath.Views
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeGameController();
+            SetTwoPlayerMode(false);
         }
 
         private void InitializeGameController()
         {
             game = new BalanceGame();
-            game.HeldBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(HeldBalls_CollectionChanged);
+            game.PlayerOneHeldBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(HeldBalls_CollectionChanged);
+            game.PlayerTwoHeldBalls.CollectionChanged += new NotifyCollectionChangedEventHandler(HeldBalls_CollectionChanged);
             game.LevelReset += new EventHandler(game_LevelReset);
             game.LevelCompleted += new EventHandler(game_LevelCompleted);
             game.LevelLost += new EventHandler(game_LevelLost);
@@ -216,13 +221,17 @@ namespace KineticMath.Views
         private void HeldBalls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ObservableCollection<SeesawObject> col = (ObservableCollection<SeesawObject>)sender;
-            SetupBallHolders(col.Count);
+            bool isPlayerOne = (sender == game.PlayerOneHeldBalls);
+            SetupBallHolders(col.Count, isPlayerOne);
+            var ballHolders = isPlayerOne ? _playerOneBallHolders : _playerTwoBallHolders;
             for (int i = 0; i < col.Count; i++)
             {
                 if (col[i] == null) {
-                    BallHolders[i].Children.Clear();
-                } else if (BallHolders[i].Children.Count == 0) {
-                    BallHolders[i].Children.Add(col[i]);
+                    ballHolders[i].Children.Clear();
+                }
+                else if (ballHolders[i].Children.Count == 0)
+                {
+                    ballHolders[i].Children.Add(col[i]);
                     Canvas.SetLeft(col[i], 0);
                     Canvas.SetTop(col[i], 0);
                 }
@@ -230,23 +239,27 @@ namespace KineticMath.Views
         }
 
         // TODO2: Use an actual ball holder UI control, not a canvas
-        private PointCanvas[] BallHolders;
+        private PointCanvas[] _playerOneBallHolders;
+        private PointCanvas[] _playerTwoBallHolders;
         private const int HIT_ROUGHNESS = 10; // The amount of rough distance they can hit in between to make it easier to hit
 
-        private void SetupBallHolders(int numHolders)
+        private void SetupBallHolders(int numHolders, bool isPlayerOne)
         {
-            if (BallHolders == null || BallHolders.Length != numHolders)
+            var ballHolders = isPlayerOne ? _playerOneBallHolders : _playerTwoBallHolders;
+            var hitGesture = isPlayerOne ? _playerOneHitGesture : _playerTwoHitGesture;
+            var rect = isPlayerOne ? uxPlayerOneRect : uxPlayerTwoRect;
+            if (ballHolders == null || ballHolders.Length != numHolders)
             {
                 // Remove all the ball holders
-                if (BallHolders != null)
+                if (ballHolders != null)
                 {
-                    foreach (var holder in BallHolders)
+                    foreach (var holder in ballHolders)
                     {
                         holder.Children.Clear();
                         uxMainCanvas.Children.Remove(holder);
                     }
                 }
-                BallHolders = new PointCanvas[numHolders];
+                ballHolders = new PointCanvas[numHolders];
                 // Points relative to the uxPersonCanvas space
                 Point[] holderPositions = new Point[] {
                     new Point(0.15, 0.3),
@@ -263,10 +276,10 @@ namespace KineticMath.Views
                     canvas.Height = 80;
                     uxMainCanvas.Children.Add(canvas);
                     PointCanvas.SetTopLeft(canvas, new Point(
-                        holderPositions[i].X * uxPersonRectangle.ActualWidth + Canvas.GetLeft(uxPersonRectangle) - canvas.Width / 2,
-                        holderPositions[i].Y * uxPersonRectangle.ActualHeight + Canvas.GetTop(uxPersonRectangle) - canvas.Height / 2)
+                        holderPositions[i].X * rect.ActualWidth + Canvas.GetLeft(rect) - canvas.Width / 2,
+                        holderPositions[i].Y * rect.ActualHeight + Canvas.GetTop(rect) - canvas.Height / 2)
                     );
-                    BallHolders[i] = canvas;
+                    ballHolders[i] = canvas;
                     Rect boundaryRect = canvas.GetBoundaryRect();
                     boundaryRect.Inflate(HIT_ROUGHNESS, HIT_ROUGHNESS);
                     _hitZones.Add(boundaryRect);
@@ -277,6 +290,9 @@ namespace KineticMath.Views
                     hitGesture.HitRectangles.AddRange(_hitZones);
                 }
             }
+            // Reassign at the end
+            if (isPlayerOne) _playerOneBallHolders = ballHolders;
+            else _playerTwoBallHolders = ballHolders;
         }
 
         private void HandleKeyDownEvent(object sender, KeyEventArgs e)
@@ -292,7 +308,33 @@ namespace KineticMath.Views
                 case Key.D3:
                     startNewMode(BalanceGame.Mode.Practice);
                     break;
+                case Key.T:
+                    SetTwoPlayerMode(!_twoPlayerMode);
+                    break;
             }
+        }
+
+        private void SetTwoPlayerMode(bool twoPlayer)
+        {
+            _twoPlayerMode = twoPlayer;
+            if (_twoPlayerMode)
+            {
+                Canvas.SetLeft(uxPlayerOneRect, 20);
+                Canvas.SetTop(seesaw, 286);
+                Canvas.SetLeft(seesaw, 422);
+                uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Visible;
+                _sharedData.SkeletonController.TotalPlayers = 2;
+            }
+            else
+            {
+                Canvas.SetLeft(uxPlayerOneRect, 127);
+                Canvas.SetTop(seesaw, 236);
+                Canvas.SetLeft(seesaw, 662);
+                uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Collapsed;
+                _sharedData.SkeletonController.TotalPlayers = 1;
+            }
+            game.TwoPlayerMode = _twoPlayerMode;
+            game.NewGame();
         }
 
         private void startNewMode(BalanceGame.Mode mode) {
@@ -330,6 +372,8 @@ namespace KineticMath.Views
         {
             base.OnViewActivated();
             RegisterGestures();
+            // Reset our skeleton IDs
+            _sharedData.SkeletonController.ResetSkeletonIDs();
             ParentWindow.AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
         }
 
@@ -340,24 +384,36 @@ namespace KineticMath.Views
         }
 
         private List<Rect> _hitZones = new List<Rect>(); // Zones for the hit gesture
-        private HitGesture hitGesture;
+        private HitGesture _playerOneHitGesture;
+        private HitGesture _playerTwoHitGesture;
 
         private void RegisterGestures()
         {
-            bodyConverter = new BodyRelativePointConverter(uxPersonRectangle.GetBoundaryRect(), this._sharedData.GestureController);
+            // TODO: Maybe clean up?
+            playerOneConverter = new BodyRelativePointConverter(uxPlayerOneRect.GetBoundaryRect(), this._sharedData.PlayerOneController);
+            playerTwoConverter = new BodyRelativePointConverter(uxPlayerTwoRect.GetBoundaryRect(), this._sharedData.PlayerTwoController);
 
-            if (hitGesture == null)
+            if (_playerOneHitGesture == null)
             {
-                hitGesture = new HitGesture(_hitZones, bodyConverter, JointType.HandRight, JointType.HandLeft);
-                hitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
+                _playerOneHitGesture = new HitGesture(_hitZones, playerOneConverter, JointType.HandRight, JointType.HandLeft);
+                _playerOneHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             }
-            _sharedData.GestureController.AddGesture(this, hitGesture);
-            uxPlayerSkeleton.InitializeSkeleton(_sharedData.GestureController, bodyConverter);
+            _sharedData.PlayerOneController.AddGesture(this, _playerOneHitGesture);
+
+            if (_playerTwoHitGesture == null)
+            {
+                _playerTwoHitGesture = new HitGesture(_hitZones, playerTwoConverter, JointType.HandRight, JointType.HandLeft);
+                _playerTwoHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
+            }
+            _sharedData.PlayerTwoController.AddGesture(this, _playerTwoHitGesture);
+
+            uxPlayerOneSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, playerOneConverter);
+            uxPlayerTwoSkeleton.InitializeSkeleton(_sharedData.PlayerTwoController, playerTwoConverter);
         }
 
         void hitGesture_RectHit(object sender, RectHitEventArgs e)
         {
-            HitBall(e.RectIdx, e.HitVelocity);
+            HitBall(e.RectIdx, e.HitVelocity, sender == _playerOneHitGesture);
         }
 
         public static PolyBezierSegment ComputeCurve(Point startPoint, Point endPoint, Vector velocity)
@@ -387,14 +443,15 @@ namespace KineticMath.Views
             return points;
         }
 
-        private void HitBall(int index, Vector velocity)
+        private void HitBall(int index, Vector velocity, bool isPlayerOne)
         {
-            var pushedBall = game.HeldBalls[index];
+            var heldBalls = isPlayerOne ? game.PlayerOneHeldBalls : game.PlayerTwoHeldBalls;
+            var ballHolders = isPlayerOne ? _playerOneBallHolders : _playerTwoBallHolders;
+            var pushedBall = heldBalls[index];
             // Check if any running animations to avoid conflicts
             if (this.gameActive && runningAnimations.Count == 0 && game.PushBall(pushedBall))
             {
-                gameActive = false;
-                var ballHolder = this.BallHolders[index];
+                var ballHolder = ballHolders[index];
                 uxMainCanvas.Children.Add(pushedBall);
 
                 // TODO2: Trigger animation for ball and after animation is triggered
@@ -404,9 +461,10 @@ namespace KineticMath.Views
                 PathFigure pFigure = new PathFigure();
                 pFigure.StartPoint = PointCanvas.GetTopLeft(ballHolder);
                 //PathFigureCollection pfc = FindResource("RectanglePathFigureCollection") as PathFigureCollection;
+                UIElement targetPanel = isPlayerOne ? ((UIElement) seesaw.leftBallPanel) : seesaw.rightBallPanel;
                 Point endPoint = new Point(
-                    Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(seesaw.leftBallPanel),
-                    Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(seesaw.leftBallPanel)
+                    Canvas.GetLeft(seesaw) + Canvas.GetLeft(seesaw.uxBalanceCanvas) + Canvas.GetLeft(targetPanel),
+                    Canvas.GetTop(seesaw) + Canvas.GetTop(seesaw.uxBalanceCanvas) + Canvas.GetTop(targetPanel)
                 );
                 pFigure.Segments.Add(ComputeCurve(pFigure.StartPoint, endPoint, velocity));
 
@@ -430,8 +488,10 @@ namespace KineticMath.Views
                     selectingBall = false;
                     uxMainCanvas.Children.Remove(pushedBall);
                     runningAnimations.Remove(ballMove);
-                    game.AddBallToBalance(pushedBall, true); // push ball to left side
                     (pushedBall as Bird).IsFlying = false;
+                    // Reset ball move animation
+                    pushedBall.BeginAnimation(SeesawObject.TopLeftProperty, null);
+                    game.AddBallToBalance(pushedBall, isPlayerOne);
                 };
                 selectingBall = true;
                 ballMove.Begin();
@@ -439,12 +499,14 @@ namespace KineticMath.Views
             }
         }
 
-        private void HandlePushEvent(SkeletonPoint pt)
+        private void HandlePushEvent(SkeletonPoint pt, bool isPlayerOne)
         {
             if (selectingBall) return;
             SeesawObject pushedBall = null;
             PointCanvas ballHolder = null;
-            foreach (var holder in BallHolders)
+            var heldBalls = isPlayerOne ? game.PlayerOneHeldBalls : game.PlayerTwoHeldBalls;
+            var ballHolders = isPlayerOne ? _playerOneBallHolders : _playerTwoBallHolders;
+            foreach (var holder in ballHolders)
             {
                 Rect rect = holder.GetBoundaryRect();
                 if (rect.Contains(pt.To2DPoint()))
@@ -458,8 +520,8 @@ namespace KineticMath.Views
             }
             if (pushedBall != null)
             {
-                int index = game.HeldBalls.IndexOf(pushedBall);
-                HitBall(index, new Vector(0, 0));
+                int index = heldBalls.IndexOf(pushedBall);
+                HitBall(index, new Vector(0, 0), isPlayerOne);
             }
         }
 
@@ -471,11 +533,12 @@ namespace KineticMath.Views
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Rect rect = uxPersonRectangle.GetBoundaryRect();
+            Rect rectOne = uxPlayerOneRect.GetBoundaryRect();
+            Rect rectTwo = uxPlayerTwoRect.GetBoundaryRect();
             Point pt = e.GetPosition(uxMainCanvas);
-            if (rect.Contains(e.GetPosition(uxMainCanvas))) {
+            if (rectOne.Contains(pt) || rectTwo.Contains(pt)) {
                 SkeletonPoint skelPt = new SkeletonPoint() { X = (float) pt.X, Y = (float) pt.Y, Z = 0 };
-                HandlePushEvent(skelPt);
+                HandlePushEvent(skelPt, rectOne.Contains(pt));
             }
         }
     }

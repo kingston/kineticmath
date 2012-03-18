@@ -40,10 +40,24 @@ namespace KineticMath.SubControls
         {
             gestureController.SkeletonPreProcessed += new EventHandler<SkeletonPreProcessedEventArgs>(gestureController_SkeletonPreProcessed);
             this.pointConverter = pointConverter;
+            ActivateSkeletonProcessing();
+        }
+
+        private bool _trackSkeleton;
+
+        public void ActivateSkeletonProcessing()
+        {
+            _trackSkeleton = true;
+        }
+
+        public void DeactivateSkeletonProcessing()
+        {
+            _trackSkeleton = false;
         }
 
         void gestureController_SkeletonPreProcessed(object sender, SkeletonPreProcessedEventArgs e)
         {
+            if (!_trackSkeleton) return;
             Skeleton skeleton = e.Skeleton;
             // Seralize
             List<JointType[]> jointChains = new List<JointType[]>();

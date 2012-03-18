@@ -15,33 +15,27 @@ namespace KineticMath.Kinect
         private List<IGesture> removedGestures = new List<IGesture>();
         private List<IGesture> addedGestures = new List<IGesture>();
         private Dictionary<IView, List<IGesture>> gestureMap = new Dictionary<IView, List<IGesture>>();
-        private IKinectService kinect;
 
         // An event to allow PointControllers to pre-process the skeleton prior to gesture processing
         public event EventHandler<SkeletonPreProcessedEventArgs> SkeletonPreProcessed;
 
-        public GestureController(IKinectService kinect)
+        public GestureController()
         {
-            this.kinect = kinect;
-            this.kinect.SkeletonUpdated += new EventHandler<SkeletonEventArgs>(kinect_SkeletonUpdated);
         }
 
-        void kinect_SkeletonUpdated(object sender, SkeletonEventArgs e)
+        public void ProcessSkeleton(Skeleton skel)
         {
-            Skeleton skel = (from s in e.Skeletons
-                                     where s.TrackingState == SkeletonTrackingState.Tracked
-                                     select s).FirstOrDefault();
-            foreach (var gesture in removedGestures)
-            {
-                gestures.Remove(gesture);
-            }
+            //foreach (var gesture in removedGestures)
+            //{
+            //    gestures.Remove(gesture);
+            //}
 
-            foreach (var gesture in addedGestures)
-            {
-                gestures.Add(gesture);
-            }
-            removedGestures.Clear();
-            addedGestures.Clear();
+            //foreach (var gesture in addedGestures)
+            //{
+            //    gestures.Add(gesture);
+            //}
+            //removedGestures.Clear();
+            //addedGestures.Clear();
             if (skel != null)
             {
                 if (SkeletonPreProcessed != null)
@@ -67,13 +61,14 @@ namespace KineticMath.Kinect
                 if (!gestureMap.ContainsKey(currentView)) gestureMap.Add(currentView, new List<IGesture>());
                 gestureMap[currentView].Add(gesture);
             }
-            addedGestures.Add(gesture);
+            //addedGestures.Add(gesture);
+            gestures.Add(gesture);
         }
 
         public void RemoveGesture(IGesture gesture)
         {
-            removedGestures.Add(gesture);
-            //gestures.Remove(gesture);
+            //removedGestures.Add(gesture);
+            gestures.Remove(gesture);
         }
 
         public void ClearViewGestures(IView view)

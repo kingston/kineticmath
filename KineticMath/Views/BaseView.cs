@@ -52,7 +52,8 @@ namespace KineticMath.Views
         {
             this.IsActive = false;
             // Clear all gestures associated with this view
-            _sharedData.GestureController.ClearViewGestures(this);
+            _sharedData.PlayerOneController.ClearViewGestures(this);
+            _sharedData.PlayerTwoController.ClearViewGestures(this);
             this.OnViewDeactivated();
         }
 

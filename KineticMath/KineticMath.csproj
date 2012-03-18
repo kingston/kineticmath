@@ -106,6 +106,7 @@
     <Compile Include="Kinect\IKinectService.cs" />
     <Compile Include="Kinect\PointConverters\BodyRelativePointConverter.cs" />
     <Compile Include="Kinect\PointConverters\IPointConverter.cs" />
+    <Compile Include="Kinect\SkeletonController.cs" />
     <Compile Include="Kinect\SkeletonEventArgs.cs" />
     <Compile Include="Messaging\ChangeViewMessage.cs" />
     <Compile Include="Messaging\IMessage.cs" />

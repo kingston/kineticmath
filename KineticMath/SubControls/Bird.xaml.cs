@@ -20,7 +20,7 @@ namespace KineticMath.SubControls
     /// </summary>
     public partial class Bird : SeesawObject
     {
-        public static double BIRD_HEIGHT = 110;
+        public static double BIRD_HEIGHT = 75;
 
         private bool _onLeftSeeSaw;
         public bool OnLeftSeeSaw

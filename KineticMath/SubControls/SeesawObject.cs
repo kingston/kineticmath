@@ -12,7 +12,6 @@ namespace KineticMath.SubControls
         protected String text;
         protected bool onLeftSeeSaw;
 
-        public virtual bool OnLeftSeesaw { get; set; }
         public virtual double Weight { get; set; }
         //public virtual double Height { get; set; }
 
