@@ -62,7 +62,7 @@
     </views:BaseView.Resources>
     <Canvas>
 
-        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Canvas.Top="75" Canvas.Left="338" Height="121" Width="540" Panel.ZIndex="1" TextAlignment="Center" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF0003C2" ><Run FontWeight="Bold" Text="Move your hands and hit the block!"/></TextBlock>
+        <TextBlock TextWrapping="Wrap" x:Name="instructionBlock" FontSize="30" Canvas.Top="55" Canvas.Left="338" Height="121" Width="540" Panel.ZIndex="1" TextAlignment="Center" FontFamily="/KineticMath;component/Fonts/#Kristen ITC" Foreground="#FF0003C2" ><Run FontWeight="Bold" Text="Move your hands and hit the block!"/></TextBlock>
         <Rectangle Canvas.Left="50" Canvas.Top="50" Height="600" Width="480" x:Name="uxPersonRectangle" Stroke="Black" Opacity="0" />
         <Rectangle Canvas.Left="50" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect1" Stroke="Black" Opacity="0" />
         <Rectangle Canvas.Left="400" Canvas.Top="200" Height="125" Width="161" x:Name="hitRect2" Stroke="Black" Opacity="0" />

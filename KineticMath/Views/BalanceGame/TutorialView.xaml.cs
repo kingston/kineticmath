@@ -30,8 +30,8 @@ namespace KineticMath.Views
     {
         private BodyRelativePointConverter bodyConverter;
 
-        enum State { HITME, RULES, HITMEAGAIN };
-        State currentState;
+        enum TutorialState { HITME, HITMEAGAIN };
+        TutorialState currentState;
 
         public TutorialView()
         {
@@ -42,7 +42,7 @@ namespace KineticMath.Views
         private void TutorialView_Loaded(object sender, RoutedEventArgs e)
         {
             RegisterGestures();
-            currentState = State.HITME;
+            currentState = TutorialState.HITME;
         }
 
         private void BaseView_MouseUp(object sender, MouseButtonEventArgs e)
@@ -52,7 +52,6 @@ namespace KineticMath.Views
 
         private List<Rect> _hitZones = new List<Rect>(); // Zones for the hit gesture
         private HitGesture hitGesture;
-        private JointMoveGestures handGestures;
         private DateTime lastAction = DateTime.Now;
 
         private void RegisterGestures()
@@ -92,34 +91,22 @@ namespace KineticMath.Views
 
         private void HitBall(int index, Vector velocity)
         {
-            //this.SendMessage(new ChangeViewMessage(typeof(MainView)));
             switch (currentState)
             {
-                case State.HITME:
+                case TutorialState.HITME:
                     if (index == 0)
                     {
-                        instructionBlock.Text = "You're doing so well! \nHit the block again to start the game.";
+                        instructionBlock.Text = "Great!\nHit the block to start!";
                         bird1.Opacity = 0;
                         bird2.Opacity = 1;
-                        currentState = State.RULES;
+                        currentState = TutorialState.HITMEAGAIN;
                     }
                     break;
-                case State.RULES:
+                case TutorialState.HITMEAGAIN:
                     if (index == 1)
                     {
                         startBrickAnimation();
                     }
-                    break;
-                    
-                    /*instructionBlock.Text = "The game is simple, you just need to hit the bird.\n" + 
-                                            "Choose the bird with number equal to sum of numbers on righthand side of the sea-saw.\n"+
-                                            "Ready? Hit me again to play the game!";
-                    currentState = State.HITMEAGAIN;
-                    break;*/
-                case State.HITMEAGAIN:
-                    //_sharedData.GestureController.RemoveGesture(handGestures);
-                    //_sharedData.GestureController.RemoveGesture(hitGesture);
-                    this.SendMessage(new ChangeViewMessage(typeof(MainView)));
                     break;
             }
             
@@ -158,12 +145,5 @@ namespace KineticMath.Views
             };
             ballMove.Begin();
         }
-
-        private void SetCanvasLocationCentered(FrameworkElement element, SkeletonPoint pt)
-        {
-            Canvas.SetLeft(element, pt.X - element.ActualWidth / 2);
-            Canvas.SetTop(element, pt.Y - element.ActualHeight / 2);
-        }
-
     }
 }
