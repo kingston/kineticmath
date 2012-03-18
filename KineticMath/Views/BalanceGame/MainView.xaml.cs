@@ -68,8 +68,16 @@ namespace KineticMath.Views
             game.LevelLost += new EventHandler(game_LevelLost);
             game.GameOver += new EventHandler(game_GameOver);
             game.TimerTicked += new EventHandler(timerCallback);
+            game.NewGameStarted += new EventHandler(game_NewGameStarted);
             seesaw.RegisterGame(game);
             startNewMode(BalanceGame.Mode.Classic);
+        }
+
+        void game_NewGameStarted(object sender, EventArgs e)
+        {
+            // Reset houses
+            house1.Opacity = 0.0;
+            house2.Opacity = 0.0;
         }
 
         void timerCallback(object sender, EventArgs e)
@@ -210,7 +218,23 @@ namespace KineticMath.Views
         {
             soundEffect.Play();
             seesaw.IsHappy = true;
-            showStatusLabel("Correct!", Brushes.Green, delegate
+            gameActive = false;
+            String congratsLabel;
+            if (game.CurrentLevel == 9)
+            {
+                congratsLabel = "Awesome! Level 2!";
+                house1.Opacity = 1.0;
+            }
+            else if (game.CurrentLevel == 19)
+            {
+                congratsLabel = "Wow!  Level 3!";
+                house2.Opacity = 1.0;
+            }
+            else
+            {
+                congratsLabel = "Correct!";
+            }
+            showStatusLabel(congratsLabel, Brushes.Green, delegate
             {
                 soundEffect.Stop();
                 game.LoadCurrentLevel();

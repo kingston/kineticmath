@@ -10,6 +10,8 @@
              d:DesignHeight="675" d:DesignWidth="1280" Width="1280">
     <Canvas Width="1280" Height="675" x:Name="uxMainCanvas" MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
         <KineticMath:Background Height="Auto" Width="Auto" />
+        <my:House Canvas.Left="356" Canvas.Top="430" x:Name="house1" Opacity="0" />
+        <my:House Canvas.Left="996" Canvas.Top="425" x:Name="house2" Opacity="0" />
         <my:Seesaw Canvas.Left="462" Canvas.Top="236" x:Name="seesaw" />
         <Rectangle Canvas.Left="127" Canvas.Top="120" Height="457.5" Width="480" x:Name="uxPlayerOneRect" Stroke="Black" Opacity="0" />
         <my:KinectSkeletonNew Canvas.Left="0" Canvas.Top="0" x:Name="uxPlayerOneSkeleton" />
@@ -39,6 +41,5 @@
         <MediaElement Name="notime" Source="../../Media/notime.wma" LoadedBehavior="Manual" Volume="5" />
         <MediaElement Name="soundEffect" Source="../../Media/tada.mp3" LoadedBehavior="Manual" Volume="1" />
         <KineticMath:PlayAgainControl Canvas.Left="464" Canvas.Top="157" x:Name="playAgain" Opacity="0" />
-       
     </Canvas>
 </views:BaseView>

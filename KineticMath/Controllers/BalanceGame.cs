@@ -88,6 +88,8 @@ namespace KineticMath.Controllers
 
         public event EventHandler LevelCompleted;
 
+        public event EventHandler NewGameStarted;
+
         /// <summary>
         /// Called when they got the wrong answer
         /// </summary>
@@ -101,6 +103,8 @@ namespace KineticMath.Controllers
         public event EventHandler GameOver;
 
         private int currentLevel;
+
+        public int CurrentLevel { get { return currentLevel; } }
 
         private bool _twoPlayerMode = false;
 
@@ -198,6 +202,7 @@ namespace KineticMath.Controllers
                 currentLevel = 1;
                 LoadCurrentLevel();
             };
+            if (NewGameStarted != null) NewGameStarted(this, EventArgs.Empty);
         }
 
         /// <summary>

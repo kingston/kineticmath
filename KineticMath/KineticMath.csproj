@@ -116,6 +116,9 @@
     <Compile Include="SubControls\Bird.xaml.cs">
       <DependentUpon>Bird.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubControls\House.xaml.cs">
+      <DependentUpon>House.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubControls\KinectSkeletonNew.xaml.cs">
       <DependentUpon>KinectSkeletonNew.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Page Include="SubControls\Bird.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SubControls\House.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SubControls\KinectSkeletonNew.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -329,6 +336,7 @@
     <Resource Include="Images\bird.png" />
     <Resource Include="Images\pig.png" />
     <Resource Include="Images\heart.png" />
+    <Resource Include="Images\house.png" />
     <Content Include="Media\ding.wav" />
     <Content Include="Media\notime.wma" />
     <Content Include="Media\tada.wav">
