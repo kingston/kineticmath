@@ -221,7 +221,7 @@ namespace KineticMath.Controllers
                         // Let's make life interesting ;)
                         if (currentMode == Mode.Challenge)
                         {
-                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * 2);
+                            TimeLeft += Convert.ToInt32(Math.Log(currentLevel) * (_twoPlayerMode ? 6 : 2));
                         }
                         currentLevel++;
                     }

@@ -357,8 +357,12 @@ namespace KineticMath.Views
                 uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Collapsed;
                 _sharedData.SkeletonController.TotalPlayers = 1;
             }
+            // Re-register gestures
+            this._sharedData.PlayerOneController.ClearViewGestures(this);
+            this._sharedData.PlayerTwoController.ClearViewGestures(this);
+            RegisterGestures();
             game.TwoPlayerMode = _twoPlayerMode;
-            game.NewGame();
+            startNewMode(game.CurrentMode);
         }
 
         private void startNewMode(BalanceGame.Mode mode) {
@@ -417,18 +421,12 @@ namespace KineticMath.Views
             playerOneConverter = new BodyRelativePointConverter(uxPlayerOneRect.GetBoundaryRect(), this._sharedData.PlayerOneController);
             playerTwoConverter = new BodyRelativePointConverter(uxPlayerTwoRect.GetBoundaryRect(), this._sharedData.PlayerTwoController);
 
-            if (_playerOneHitGesture == null)
-            {
-                _playerOneHitGesture = new HitGesture(_hitZones, playerOneConverter, JointType.HandRight, JointType.HandLeft);
-                _playerOneHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
-            }
+            _playerOneHitGesture = new HitGesture(_hitZones, playerOneConverter, JointType.HandRight, JointType.HandLeft);
+            _playerOneHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             _sharedData.PlayerOneController.AddGesture(this, _playerOneHitGesture);
 
-            if (_playerTwoHitGesture == null)
-            {
-                _playerTwoHitGesture = new HitGesture(_hitZones, playerTwoConverter, JointType.HandRight, JointType.HandLeft);
-                _playerTwoHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
-            }
+            _playerTwoHitGesture = new HitGesture(_hitZones, playerTwoConverter, JointType.HandRight, JointType.HandLeft);
+            _playerTwoHitGesture.RectHit += new EventHandler<RectHitEventArgs>(hitGesture_RectHit);
             _sharedData.PlayerTwoController.AddGesture(this, _playerTwoHitGesture);
 
             uxPlayerOneSkeleton.InitializeSkeleton(_sharedData.PlayerOneController, playerOneConverter);
