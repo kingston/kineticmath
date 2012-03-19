@@ -135,8 +135,8 @@ namespace KineticMath.Views
                 finalScore.Opacity = 0;
             });
 
-            playAgain.BeginAnimation(UIElement.OpacityProperty, null);
-            playAgain.Opacity = 1;
+            //playAgain.BeginAnimation(UIElement.OpacityProperty, null);
+            //playAgain.Opacity = 1;
         }
 
         void game_LevelLost(object sender, EventArgs e)
@@ -344,7 +344,7 @@ namespace KineticMath.Views
             if (_twoPlayerMode)
             {
                 Canvas.SetLeft(uxPlayerOneRect, 20);
-                Canvas.SetTop(seesaw, 286);
+                Canvas.SetTop(seesaw, 336);
                 Canvas.SetLeft(seesaw, 422);
                 uxPlayerTwoSkeleton.Visibility = System.Windows.Visibility.Visible;
                 _sharedData.SkeletonController.TotalPlayers = 2;

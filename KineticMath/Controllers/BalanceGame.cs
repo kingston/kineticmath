@@ -326,10 +326,10 @@ namespace KineticMath.Controllers
                     if (_twoPlayerMode)
                     {
                         // Add second player's parts as well
-                        secondPlayerPart = rand.Next(2, Math.Min(currentLevel - 3, 2) * 2);
+                        secondPlayerPart = rand.Next(2, Math.Max(currentLevel - 3, 2) * 2);
 
                         // Second player's answer set
-                        List<int> playerTwoAnswers = GetAnswerSet(secondPlayerPart);
+                        List<int> playerTwoAnswers = GetAnswerSet(secondPlayerPart, true); // Want more randomness
 
                         curTwoBalls = new int[4];
                         for (int i = 0; i < 4; i++)
@@ -358,7 +358,7 @@ namespace KineticMath.Controllers
             SetupLevel();
         }
 
-        private List<int> GetAnswerSet(int answer)
+        private List<int> GetAnswerSet(int answer, bool moreRandomness = false)
         {
             Random rand = new Random();
             List<int> answerSet = new List<int>();
@@ -366,15 +366,15 @@ namespace KineticMath.Controllers
             // 0: the real answer
             answerSet.Add(answer);
             // 1: answer +- 1~3
-            randOffset = rand.Next(1, 3);
+            randOffset = rand.Next(1, moreRandomness ? 10 : 3);
             sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
             answerSet.Add(answer + sign * randOffset);
             // 2: answer +- 10
-            randOffset = 10;
+            randOffset = moreRandomness ? 10 : rand.Next(8, 12);
             sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
             answerSet.Add(answer + sign * randOffset);
             // 3: answer +- 10 +- 1~3
-            randOffset += rand.Next(1, 3);
+            randOffset += rand.Next(1, moreRandomness ? 10 : 3);
             sign = answer - randOffset > 1 ? (rand.Next(1, 100) < 50 ? -1 : 1) : 1;
             answerSet.Add(answer + sign * randOffset);
             return answerSet;
